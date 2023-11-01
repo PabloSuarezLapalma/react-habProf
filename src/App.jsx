@@ -5,6 +5,7 @@ import './App.css'
 import Form from './components/Form'
 
 function App() {
+  "use strict";
   return (
     <>
       <Form/>
