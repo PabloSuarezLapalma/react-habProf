@@ -27,20 +27,21 @@ const Form = () => {
 
     return (
         <>
-        <div className="bg-white pt-4 pb-4 pl-2 pr-2 color-black rounded-md text-black sm:w-fit md:w-fit lg:w-fit">
-            <div className="bg-red-500 ml-96 mr-96 rounded-md sm:w-1/4  ">
-             <h1 className="text-3xl font-bold mt-5 text-center mb-10 pt-4 pb-4  text-white ">Registrar Ingreso</h1>
+        <div className="bg-white pt-4 pb-4 pl-2 pr-2 color-black rounded-md text-black sm:w-fit md:w-fit lg:w-fit xl:w-fit">
+            <div className="bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Registrar Ingreso</h1>
             </div>
+
         <form onSubmit={handleSubmit} >
             <div className='flex flex-wrap'>
-                <div className='w-full sm:w-auto '>
+                <div className='w-full sm:w-auto'>
                     <label className='left-0 text-lg'> 
                         ID Cliente:
                         <input type="text" className='ml-2 rounded-md pl-2 bg-gray-500 text-white border-2 border-black' value={idCliente} onChange={(e) => setIDCliente(e.target.value)}  />
                     </label>
                 </div>
-                <div className='w-full sm:w-auto '>
-                    <label className='ml-10 text-lg '>
+                <div className='w-full sm:w-auto'>
+                    <label className='ml-10 text-lg'>
                         Código BWS:
                         <input type="text" className='ml-2 rounded-md pl-2 bg-gray-500 text-white border-2 border-black' value={codigoBWS} onChange={(e) => setCodigoBWS(e.target.value)}  />
                     </label>
