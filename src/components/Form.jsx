@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Form = () => {
+const Form = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -22,10 +22,51 @@ const Form = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        //Objeto movimiento        
+        const objetoMovimiento = {
+            fecha,
+            hora,
+            nroRemito,
+            transporte,
+            tipoTransporte,
+            chofer,
+            chasis,
+            acoplado,
+            cantidad,
+            descripcion,
+            posicion,
+            sector,
+            altura,
+            ancho,
+            largo,
+            alto,
+            codigoBWS,
+            idCliente
+        };
+        setMovimientos([...movimientos, objetoMovimiento]);
+
+        //Reiniciar el formulario
+        setFecha('');
+        setHora('');
+        setNroRemito('');
+        setTransporte('');
+        setTipoTransporte('');
+        setChofer('');
+        setChasis('');
+        setAcoplado('');
+        setCantidad('');
+        setDescripcion('');
+        setPosicion('');
+        setSector('');
+        setAltura('');
+        setAncho('');
+        setLargo('');
+        setAlto('');
+        setCodigoBWS('');
+        setIDCliente('');
     };
 
     return (
-        <>
         <div className="bg-white pt-4 pb-4 pl-2 pr-2 rounded-lg shadow-md text-black sm:w-fit md:w-fit lg:w-fit xl:w-fit">
             <div className="bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Registrar Ingreso</h1>
@@ -313,15 +354,16 @@ const Form = () => {
                     />
                 </div>
             </div>
-            <button 
-                type="submit" 
-                className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'>
-                Guardar
-            </button>
+            <input 
+                type="submit"
+                id="movimientos"
+                value="Registrar Ingreso" 
+                className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
+            />
+            
         </form>
     </div>
-        </>
-    );
-    }
+);
+}
 
-    export default Form;
+export default Form;

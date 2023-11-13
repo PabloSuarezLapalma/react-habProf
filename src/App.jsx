@@ -4,11 +4,15 @@ import Form from './components/Form'
 import Matrix from './components/Matrix'
 import Login from './Login';
 
+
 function App() {
-  "use strict";
+  const [movimientos, setMovimientos] = useState([])
   return (
     <>
-      <Form/>
+      <Form
+        setMovimientos={setMovimientos}
+        movimientos={movimientos}
+      />
     </>
   )
 }
