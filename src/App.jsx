@@ -8,7 +8,6 @@ function App() {
   "use strict";
   return (
     <>
-      <Login/>
       <Form/>
     </>
   )
