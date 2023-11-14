@@ -22,6 +22,16 @@ const Form = ({movimientos, setMovimientos}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Obtener el valor actual de la fecha
+          
+        const fechaActual = new Date();
+        const fechaInput = new Date(fecha);
+        const horaActual = fechaActual.getHours();
+        //Falta implementar la comparación de hora y segundos
+        if ((fechaInput > fechaActual)) {
+            alert("La fecha no puede ser mayor a la actual");
+            return;
+        }
         //Objeto movimiento        
         const objetoMovimiento = {
             fecha,
@@ -76,7 +86,7 @@ const Form = ({movimientos, setMovimientos}) => {
             <div className='flex flex-wrap '>
             <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5 '>
                     <label htmlFor='idCliente' className='block text-md font-medium leading-6 text-gray-900'> 
-                        ID Cliente
+                        ID del Cliente
                     </label>
                         <input
                             id='idCliente'
@@ -107,7 +117,7 @@ const Form = ({movimientos, setMovimientos}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='fecha' className='block text-md font-medium leading-6 text-gray-900'>
-                        Fecha:
+                        Fecha de Ingreso
                     </label>
                     <input
                         id='fecha'
@@ -115,13 +125,13 @@ const Form = ({movimientos, setMovimientos}) => {
                         type="date" 
                         className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
                         value={fecha} 
-                        required 
+                        required
                         onChange={(e) => setFecha(e.target.value)} 
                     />
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='hora' className='block text-md font-medium leading-6 text-gray-900'>
-                        Hora aproximada de ingreso
+                        Hora de ingreso
                     </label>
                     <input
                         id='hora'
@@ -136,7 +146,7 @@ const Form = ({movimientos, setMovimientos}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='nroRemito' className='block text-md font-medium leading-6 text-gray-900'>
-                        Nro Remito
+                        Número de Remito
                     </label>
                     <input
                         id='nroRemito'
@@ -198,7 +208,7 @@ const Form = ({movimientos, setMovimientos}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='chasis' className='block text-md font-medium leading-6 text-gray-900'>
-                        Chasis
+                        Chásis
                     </label>
                     <input
                         id='chasis'
@@ -327,7 +337,7 @@ const Form = ({movimientos, setMovimientos}) => {
                     <input
                         id='alto'
                         name="alto" 
-                        type="text"
+                        type="number"
                         className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
                         value={alto}
                         required
@@ -348,11 +358,12 @@ const Form = ({movimientos, setMovimientos}) => {
                         required
                         placeholder='Descripcion'
                         rows={3}
-                        cols={50}
+                        cols={80}
                         resize = 'none'
                         onChange={(e) => setDescripcion(e.target.value)} 
                     />
                 </div>
+
             </div>
             <input 
                 type="submit"
