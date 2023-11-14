@@ -1,17 +1,42 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Form from './components/Form'
 import Matrix from './components/Matrix'
+import Login from './Login';
+import DescripcionMovimiento from './components/DescripcionMovimiento';
 
 function App() {
-  "use strict";
+  const [movimientos, setMovimientos] = useState([])
   return (
     <>
-      <Form/>
+      <Form
+        setMovimientos={setMovimientos}
+        movimientos={movimientos}
+      />
+      {movimientos.map((movimiento) => (
+        <DescripcionMovimiento key={movimiento.codigoBWS} movimiento={movimiento} />
+      ))}
+
     </>
   )
 }
 
 export default App
+
+/* Esto va debajo de descripcion Movimiento
+<Form
+        setMovimientos={setMovimientos}
+        movimientos={movimientos}
+      />
+
+*/
+
+/*
+{movimientos.map((movimiento) => (
+        <DescripcionMovimiento key={movimiento.codigoBWS} movimiento={movimiento} />
+      ))}
+*/
+
+/*
+<Login/>
+*/
