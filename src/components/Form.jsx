@@ -22,16 +22,23 @@ const Form = ({movimientos, setMovimientos}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Obtener el valor actual de la fecha
-          
+
+        // Obtener el valor actual de la fecha y hora actual     
         const fechaActual = new Date();
-        const fechaInput = new Date(fecha);
         const horaActual = fechaActual.getHours();
-        //Falta implementar la comparación de hora y segundos
-        if ((fechaInput > fechaActual)) {
-            alert("La fecha no puede ser mayor a la actual");
-            return;
-        }
+        const minActual = fechaActual.getMinutes();
+        const fechaInput = new Date(fecha);
+        const [horas,mins] = hora.split(':');
+        const horaInput = parseInt(horas);
+        const minInput = parseInt(mins);
+
+        //No anda la comparación de hora y segundos
+        if ((fechaInput > fechaActual) ||
+        (fechaInput == fechaActual && horaInput > horaActual) ||
+        (fechaInput == fechaActual && horaInput == horaActual && minInput >= minActual)) {
+        alert("La fecha no puede ser mayor a la actual");
+        return;
+      }
         //Objeto movimiento        
         const objetoMovimiento = {
             fecha,
