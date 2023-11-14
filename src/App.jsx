@@ -14,7 +14,7 @@ function App() {
         movimientos={movimientos}
       />
       {movimientos.map((movimiento) => (
-        <DescripcionMovimiento key={movimiento.id} movimiento={movimiento} />
+        <DescripcionMovimiento key={movimiento.codigoBWS} movimiento={movimiento} />
       ))}
 
     </>

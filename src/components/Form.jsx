@@ -31,7 +31,7 @@ const Form = ({movimientos, setMovimientos}) => {
         const [horas,mins] = hora.split(':');
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
-
+        const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
         //No anda la comparación de hora y segundos
         if ((fechaInput > fechaActual) ||
         (fechaInput == fechaActual && horaInput > horaActual) ||
@@ -116,8 +116,8 @@ const Form = ({movimientos, setMovimientos}) => {
                             type="text" 
                             className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
                             value={codigoBWS}
-                            readOnly
-                            placeholder='Código BWS' 
+                            disabled
+                            placeholder=' Se genera automático' 
                             onChange={(e) => setCodigoBWS(e.target.value)}  
                         />
 
