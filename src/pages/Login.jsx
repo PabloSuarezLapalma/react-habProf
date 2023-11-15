@@ -1,4 +1,5 @@
     import { useState } from 'react';
+  
 
     const Login = () => {
         const [username, setUsername] = useState('');
@@ -14,12 +15,18 @@
 
         const handleSubmit = (event) => {
             event.preventDefault();
-            // TODO: handle form submission
+            const validUsername = 'demo';
+            const validPassword = 'demo';  
+            if (username === validUsername && password === validPassword) {
+                  window.location.href = '/Home';
+                } else {
+                  alert('Invalid username or password');
+                }
         };
 
         return (
             <>
-                <div className="flex flex-grow-0.25 flex-col justify-center px-6 py-6 pt-1 lg:px-6">
+                <div className="flex flex-grow-0.25 flex-col justify-center py-6 p-8 lg:px-6  max-w-7xl mx-auto px-8 text-center" >
 
                     <div className=" bg-white shadow-md rounded-lg min-h-full sm:mx-auto sm:w-full sm:max-w-sm">
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-red-500 rounded-t-md">

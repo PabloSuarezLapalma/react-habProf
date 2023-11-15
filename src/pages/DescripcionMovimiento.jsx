@@ -1,6 +1,6 @@
 export default function DescripcionMovimiento({movimiento}) {
   return (
-    <div className="px-4 sm:px-0 bg-white pt-4 pb-4 pl-2 pr-2 rounded-lg shadow-md text-black sm:w-full md:w-full lg:w-full xl:w-full">
+    <div className="sm:px-0 bg-white pt-4 pb-4 pl-2 pr-2 rounded-lg shadow-md text-black sm:w-full md:w-full lg:w-full xl:w-full max-w-7xl mx-auto px-8 p-8 text-center">
     <div className="bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12 shadow-md">
         <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Información del movimiento</h1>
     </div>
