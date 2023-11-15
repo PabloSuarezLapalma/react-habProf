@@ -32,9 +32,11 @@
 
                         <form className="space-y-6 py-10 px-10" onSubmit={handleSubmit}>
                             <div>
-                                <label htmlFor="username" className="block text-md font-medium leading-6 text-gray-900">
-                                    Usuario
-                                </label>
+                                <div className="flex items-center justify-between">
+                                    <label htmlFor="username" className="block ml  text-md font-medium leading-6 text-gray-900">
+                                        Usuario
+                                    </label>
+                                </div>
                                 <div className="mt-2">
                                     <input
                                         id="username"

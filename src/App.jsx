@@ -1,22 +1,25 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import Form from './components/Form'
+import Login from './pages/Login'
+import Form from './pages/Form'
+import DescripcionMovimiento from './pages/DescripcionMovimiento'
+
 import Matrix from './components/Matrix'
-import Login from './Login';
-import DescripcionMovimiento from './components/DescripcionMovimiento';
 
 function App() {
   const [movimientos, setMovimientos] = useState([])
   return (
     <>
-      <Form
+      <BrowserRouter>
+      <Routes>
+        <Route index element={<Login/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/form" element={<Form
         setMovimientos={setMovimientos}
-        movimientos={movimientos}
-      />
-      {movimientos.map((movimiento) => (
-        <DescripcionMovimiento key={movimiento.codigoBWS} movimiento={movimiento} />
-      ))}
-
+        movimientos={movimientos}/>}/>
+      </Routes>
+      </BrowserRouter>
     </>
   )
 }
