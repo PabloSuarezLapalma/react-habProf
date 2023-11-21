@@ -186,13 +186,12 @@
         </Dialog>
       </header>
 
-      <img
-        className=" mx-auto my-auto max-h-screen max-w-screen"
-        src="src\assets\images\BaciAfuera.jpeg"
-        alt="Baci Logo"
-      />
-
+      <div className=" box  my-28">
+                <h1 className="text-2xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-3xl lg:w-1/2 lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-600 ">- BACI WAREHOUSE SERVICE -</h1>
+                <h2 className="text-xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-2xl lg:text-3xl xl:text-5xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-500 "> Nos encargamos de cuidar tu almacenamiento y tu negocio</h2>
+      </div>
       </body>
+      
       
     )
   }

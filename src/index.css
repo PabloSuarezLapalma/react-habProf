@@ -9,4 +9,13 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-y: hidden;
+  }
+
+  .box{
+    height: 800px;
+    width: 100%;
+    stop-opacity: 0.5;
+    background:linear-gradient(to top,#c4747486,transparent);
+    background-color:#eef2f5 /*this your primary color*/
   }
