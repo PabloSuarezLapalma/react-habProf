@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Form = ({movimientos, setMovimientos}) => {
+const FormIngreso = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -18,7 +18,10 @@ const Form = ({movimientos, setMovimientos}) => {
     const [largo, setLargo] = useState('');
     const [alto, setAlto] = useState('');
     const [codigoBWS, setCodigoBWS] = useState('');
-    const [idCliente, setIDCliente]= useState('');  
+    const [idCliente, setIDCliente]= useState('');
+    const [destino, setDestino] = useState('');
+    const [estado, setEstado] = useState('');
+    const [tipoUnidad, setTipoUnidad] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -58,7 +61,10 @@ const Form = ({movimientos, setMovimientos}) => {
             largo,
             alto,
             codigoBWS,
-            idCliente
+            idCliente,
+            destino,
+            estado,
+            tipoUnidad
         };
         setMovimientos([...movimientos, objetoMovimiento]);
 
@@ -81,6 +87,9 @@ const Form = ({movimientos, setMovimientos}) => {
         setAlto('');
         setCodigoBWS('');
         setIDCliente('');
+        setDestino('');
+        setEstado('');
+        setTipoUnidad('');
     };
 
     return (
@@ -371,7 +380,6 @@ const Form = ({movimientos, setMovimientos}) => {
                         onChange={(e) => setDescripcion(e.target.value)} 
                     />
                 </div>
-
             </div>
             <input 
                 type="submit"
@@ -386,4 +394,4 @@ const Form = ({movimientos, setMovimientos}) => {
 );
 }
 
-export default Form;
+export default FormIngreso;

@@ -78,6 +78,18 @@ export default function DescripcionMovimiento({movimiento}) {
             <dt className="text-md font-medium leading-6 text-gray-900">Alto</dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.alto}</dd>
           </div>
+          {movimiento.destino === '' ? <p></p> : <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                                    <dt className="text-md font-medium leading-6 text-gray-900">Destino</dt>
+                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.destino}</dd>
+                                                  </div>}
+          {movimiento.estado === '' ? <p></p> : <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                                  <dt className="text-md font-medium leading-6 text-gray-900">Estado</dt>
+                                                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.estado}</dd>
+                                                </div>}
+          {movimiento.tipoUnidad === '' ? <p ></p> : <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                                  <dt className="text-md font-medium leading-6 text-gray-900">Tipo de unidad</dt>
+                                                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.tipoUnidad}</dd>
+                                                </div>}
         </dl>
       </div>
     </div>

@@ -11,7 +11,7 @@
   } from '@heroicons/react/24/outline'
   import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
   const movimientos = [
-    { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/form', icon: PlusIcon },
+    { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/formIngreso', icon: PlusIcon },
     { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '#', icon: MinusIcon },
     { name: 'Ver movimientos', description: 'Ver todos los movimientos', href: '#', icon: ListBulletIcon },
     { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
