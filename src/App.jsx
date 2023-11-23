@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login'
-import Form from './pages/Form'
+import FormIngreso from './pages/FormIngreso'
 import DescripcionMovimiento from './pages/DescripcionMovimiento'
 import Home from './pages/Home'
-import Error404 from './pages/error404'
+import Error404 from './pages/Error404'
 
 
 
@@ -18,7 +18,7 @@ function App() {
         <Route index element={<Login/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/Form" element={<Form
+        <Route path="/formIngreso" element={<FormIngreso
         setMovimientos={setMovimientos}
         movimientos={movimientos}/>}/>
         <Route path='*' element={<Error404/>}/>
