@@ -28,24 +28,30 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
 
         // Obtener el valor actual de la fecha y hora actual     
         const fechaActual = new Date();
+        const anioActual = fechaActual.getFullYear();
+        const diaActual = fechaActual.getDate();
+        const mesActual = fechaActual.getMonth() + 1;
         const horaActual = fechaActual.getHours();
         const minActual = fechaActual.getMinutes();
-        const fechaInput = new Date(fecha);
+
+        // Obtener el valor actual de la fecha y hora actual en formato string y luego a número
+        const fechaInput = fecha;
+        const [anio,mes,dia] = fecha.split('-');
         const [horas,mins] = hora.split(':');
+        const anioInput =  parseInt(anio);
+        const mesInput = parseInt(mes);
+        const diaInput = parseInt(dia);
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
-
-
+        
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = 'Egreso';
+        const estado = 'Ingreso';
 
         //No anda la comparación de hora y segundos
-        if ((fechaInput > fechaActual) ||
-        (fechaInput == fechaActual && horaInput > horaActual) ||
-        (fechaInput == fechaActual && horaInput == horaActual && minInput >= minActual)) {
-        alert("La fecha no puede ser mayor a la actual");
+        if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
+        alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual');
         return;
-      }
+        }
         //Objeto movimiento        
         const objetoMovimiento = {
             fecha,
