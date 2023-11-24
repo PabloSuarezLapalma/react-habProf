@@ -50,7 +50,7 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
-        alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual')
+        alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual');
         return;
         }
         //Objeto movimiento        
