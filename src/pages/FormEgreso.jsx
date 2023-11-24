@@ -35,7 +35,6 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
         const minActual = fechaActual.getMinutes();
 
         // Obtener el valor actual de la fecha y hora actual en formato string y luego a número
-        const fechaInput = fecha;
         const [anio,mes,dia] = fecha.split('-');
         const [horas,mins] = hora.split(':');
         const anioInput =  parseInt(anio);
@@ -45,7 +44,7 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
         const minInput = parseInt(mins);
         
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = 'Ingreso';
+        const estado = 'Egreso';
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
@@ -427,7 +426,7 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
             <input 
                 type="submit"
                 id="movimientos"
-                value="Registrar Ingreso" 
+                value="Registrar Egreso" 
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
             />
             

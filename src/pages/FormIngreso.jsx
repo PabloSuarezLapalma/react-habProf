@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ErrorAlert from '../components/ErrorAlert';
 
 const FormIngreso = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
@@ -36,7 +35,6 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
         const minActual = fechaActual.getMinutes();
 
         // Obtener el valor actual de la fecha y hora actual en formato string y luego a número
-        const fechaInput = fecha;
         const [anio,mes,dia] = fecha.split('-');
         const [horas,mins] = hora.split(':');
         const anioInput =  parseInt(anio);
