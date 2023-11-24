@@ -42,8 +42,8 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
         const anioInput =  parseInt(anio);
         const mesInput = parseInt(mes);
         const diaInput = parseInt(dia);
-        const horaInput = horas;
-        const minInput = mins;
+        const horaInput = parseInt(horas);
+        const minInput = parseInt(mins);
         
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
         const estado = 'Ingreso';
