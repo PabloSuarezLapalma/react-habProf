@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ErrorAlert from '../components/ErrorAlert';
 
 const FormIngreso = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
@@ -28,20 +29,30 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
 
         // Obtener el valor actual de la fecha y hora actual     
         const fechaActual = new Date();
+        const anioActual = fechaActual.getFullYear();
+        const diaActual = fechaActual.getDate();
+        const mesActual = fechaActual.getMonth() + 1;
         const horaActual = fechaActual.getHours();
         const minActual = fechaActual.getMinutes();
-        const fechaInput = new Date(fecha);
+
+        // Obtener el valor actual de la fecha y hora actual en formato string y luego a número
+        const fechaInput = fecha;
+        const [anio,mes,dia] = fecha.split('-');
         const [horas,mins] = hora.split(':');
-        const horaInput = parseInt(horas);
-        const minInput = parseInt(mins);
+        const anioInput =  parseInt(anio);
+        const mesInput = parseInt(mes);
+        const diaInput = parseInt(dia);
+        const horaInput = horas;
+        const minInput = mins;
+        
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
+        const estado = 'Ingreso';
+
         //No anda la comparación de hora y segundos
-        if ((fechaInput > fechaActual) ||
-        (fechaInput == fechaActual && horaInput > horaActual) ||
-        (fechaInput == fechaActual && horaInput == horaActual && minInput >= minActual)) {
-        alert("La fecha no puede ser mayor a la actual");
+        if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
+        alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual')
         return;
-      }
+        }
         //Objeto movimiento        
         const objetoMovimiento = {
             fecha,
@@ -313,7 +324,7 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
                         className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
                         value={altura} 
                         required
-                        placeholder='Altura (cm)'
+                        placeholder='Altura'
                         onChange={(e) => setAltura(e.target.value)} 
                     />
                 </div>

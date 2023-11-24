@@ -30,7 +30,7 @@
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     return (
-      <body className="">
+      <body className=" overflow-y-hidden">
       <header className="bg-white shadow-sm">
         <nav className="mx-auto  flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">

@@ -9,7 +9,6 @@ import Home from './pages/Home'
 import Error404 from './pages/Error404'
 
 
-
 function App() {
   const [movimientos, setMovimientos] = useState([])
   return (
@@ -38,7 +37,7 @@ function App() {
 export default App
 
 /* Esto va debajo de descripcion Movimiento
-<Form
+<FormIngreso
         setMovimientos={setMovimientos}
         movimientos={movimientos}
       />
