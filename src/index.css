@@ -13,9 +13,10 @@
   }
 
   .box{
-    height: 800px;
+    height: 1080px;
     width: 100%;
-    stop-opacity: 0.5;
-    background:linear-gradient(to top,#c4747486,transparent);
-    background-color:#eef2f5 /*this your primary color*/
+    background-image: url("/src/assets/images/BaciBlur.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #eef2f5;
   }
