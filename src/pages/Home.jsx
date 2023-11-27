@@ -31,7 +31,7 @@
 
     return (
       <div className="">
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-lg z-10">
         <nav className="mx-auto  flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <a href="/home" className="-m-1.5 p-1.5">
@@ -186,9 +186,9 @@
         </Dialog>
       </header>
 
-      <div className=" -my-8 box">
+      <div className=" -my-8 box -z-10">
                 <h1 className="  text-2xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-3xl lg:w-1/2 lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-72 pb-4 text-red-600 ">- BACI WAREHOUSE SERVICE -</h1>
-                <h2 className=" text-xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-2xl lg:text-3xl xl:text-5xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-500 "> Nos encargamos de cuidar tu almacenamiento y tu negocio</h2>
+                <h2 className=" text-xl sm:w-3/4  xl:w-11/12 md:w-3/4 mx-auto md:text-2xl lg:text-3xl xl:text-5xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-500 "> Nos encargamos de cuidar tu almacenamiento y tu negocio</h2>
       </div>
       </div>
       
