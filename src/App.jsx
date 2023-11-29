@@ -10,6 +10,7 @@ import Home from './pages/Home'
 import Error404 from './pages/Error404'
 import AgregarRack from './pages/AgregarRack'
 import AgregarHangar from './pages/AgregarHangar'
+import ListarMovimientos from './pages/ListarMovimientos'
 
 function App() {
   const [movimientos, setMovimientos] = useState([])
@@ -34,6 +35,7 @@ function App() {
         <Route path="/agregarHangar" element={<AgregarHangar
         setHangar={setHangar}
         hangar={hangar}/>}/>
+        <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>
