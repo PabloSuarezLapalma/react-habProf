@@ -11,12 +11,3 @@
     -moz-osx-font-smoothing: grayscale;
     /*overflow-y: hidden;*/
   }
-
-  .box{
-    height: 1080px;
-    width: 100%;
-    background-image: url("/src/assets/images/BaciBlur.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-color: #eef2f5;
-  }

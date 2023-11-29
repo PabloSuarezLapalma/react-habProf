@@ -10,6 +10,9 @@
     XMarkIcon,
   } from '@heroicons/react/24/outline'
   import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+  import { Typography } from "@material-tailwind/react";
+
+  
   const movimientos = [
     { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/formIngreso', icon: PlusIcon },
     { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '/formEgreso', icon: MinusIcon },
@@ -35,7 +38,7 @@
         <nav className="mx-auto  flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <a href="/home" className="-m-1.5 p-1.5">
-              <span className="sr-only">BACI BWS</span>
+              <Typography className="sr-only">BACI BWS</Typography>
               <img className="h-8 w-auto" src="src\assets\images\BACI.png" alt="Baci logo" />
             </a>
           </div>
@@ -51,7 +54,7 @@
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
             <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+              <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
                 Movimiento
                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
               </Popover.Button>
@@ -76,7 +79,7 @@
                           <item.icon className="h-6 w-6 text-gray-600 group-hover:text-red-500" aria-hidden="true" />
                         </div>
                         <div className="flex-auto">
-                          <a href={item.href} className="block font-semibold text-gray-900">
+                          <a href={item.href} className="block font-semibold  text-blue-gray-900">
                             {item.name}
                             <span className="absolute inset-0" />
                           </a>
@@ -185,11 +188,27 @@
           </Dialog.Panel>
         </Dialog>
       </header>
+      
 
-      <div className=" -my-8 box -z-10">
-                <h1 className="  text-2xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-3xl lg:w-1/2 lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-72 pb-4 text-red-600 ">- BACI WAREHOUSE SERVICE -</h1>
-                <h2 className=" text-xl sm:w-3/4  xl:w-11/12 md:w-3/4 mx-auto md:text-2xl lg:text-3xl xl:text-5xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-500 "> Nos encargamos de cuidar tu almacenamiento y tu negocio</h2>
-      </div>
+      <figure className="relative h-96 w-full">
+      <img
+        className=" h-screen w-screen object-cover object-center"
+        src="src/assets/images/BaciBlur.png" //aca va la imagen de baci blur;
+        alt="imagen de baci"
+      />
+      <figcaption className="absolute bottom-8 left-2/4 flex -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
+        <div>
+          <Typography variant="h1" color="blue-gray">
+            BACI WAREHOUSE SERVICE
+          </Typography>
+          <Typography color="gray" variant="h5" className="mt-2 font-normal">
+          Nos encargamos de cuidar tu almacenamiento y tu negocio
+          </Typography>
+        </div>
+      </figcaption>
+    </figure>
+
+
       </div>
       
       
