@@ -110,7 +110,7 @@ import React,{useState,useMemo} from "react";
   const [selectedTab, setSelectedTab] = useState("todos"); // Por defecto, mostrar todos
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
 
-  const itemsPerPage = 7;
+  const itemsPerPage = 5;
 
   const totalItems = TABLE_ROWS.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
