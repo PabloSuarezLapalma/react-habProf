@@ -2,7 +2,7 @@ import {
     MagnifyingGlassIcon,
     ChevronUpDownIcon,
   } from "@heroicons/react/24/outline";
-  import { PencilIcon, UserPlusIcon, ArrowRightIcon} from "@heroicons/react/24/solid";
+  import {UserPlusIcon, ArrowRightIcon} from "@heroicons/react/24/solid";
   import {
     Card,
     CardHeader,
@@ -10,16 +10,15 @@ import {
     Typography,
     Button,
     CardBody,
-    Chip,
     CardFooter,
     Tabs,
     TabsHeader,
     Tab,
-    Avatar,
     IconButton,
     Tooltip,
   } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import React,{useState,useMemo} from "react";
   const TABS = [
     {
       label: "Todos",
@@ -40,37 +39,95 @@ import { Link } from "react-router-dom";
   const TABLE_ROWS = [
     {
       tipo:"Ingreso",
-      codigo:"12-AB1-123",
+      codigo:"1",
       fecha:"12/12/2021",
       descripcion:"Ingreso de cajas de vino",
     },
     {
       tipo:"Egreso",
-      codigo:"02-KL1-777",
+      codigo:"2",
       fecha:"02/11/2019",
       descripcion:"Egreso de cajas de vino",
     },
     {
       tipo:"Ingreso",
-      codigo:"45-FG2-742",
+      codigo:"3",
       fecha:"10/06/2020",
       descripcion:"Ingreso de cajas de zapatos",
     },
     {
       tipo:"Egreso",
-      codigo:"21-CD3-321",
+      codigo:"4",
       fecha:"01/08/2023",
       descripcion:"Egreso de cajas de mesas",
     },
     {
       tipo:"Ingreso",
-      codigo:"12-CABJ-567",
+      codigo:"5",
+      fecha:"06/02/2002",
+      descripcion:"Ingreso de cajas de teclados",
+    },
+    {
+      tipo:"Ingreso",
+      codigo:"6",
+      fecha:"06/02/2002",
+      descripcion:"Ingreso de cajas de teclados",
+    },
+    {
+      tipo:"Ingreso",
+      codigo:"7",
+      fecha:"06/02/2002",
+      descripcion:"Ingreso de cajas de teclados",
+    },
+    {
+      tipo:"Ingreso",
+      codigo:"8",
+      fecha:"06/02/2002",
+      descripcion:"Ingreso de cajas de teclados",
+    },
+    {
+      tipo:"Ingreso",
+      codigo:"9",
+      fecha:"06/02/2002",
+      descripcion:"Ingreso de cajas de teclados",
+    },
+    {
+      tipo:"Ingreso",
+      codigo:"10",
+      fecha:"06/02/2002",
+      descripcion:"Ingreso de cajas de teclados",
+    },
+    {
+      tipo:"Ingreso",
+      codigo:"11",
       fecha:"06/02/2002",
       descripcion:"Ingreso de cajas de teclados",
     },
   ];
    
   export default function SortableTable() {
+    const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7;
+
+  const totalItems = TABLE_ROWS.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) =>
+      prevPage < totalPages ? prevPage + 1 : prevPage
+    );
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
+  };
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+    return TABLE_ROWS.slice(startIndex, endIndex);
+  }, [currentPage, totalItems]);
+
     return (
       <Card className="h-full w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -87,14 +144,14 @@ import { Link } from "react-router-dom";
               <Button variant="outlined" size="sm">
                 Ver todos
               </Button>
-              <Button className="flex items-center gap-3" size="sm">
+              <Button className="flex items-center gap-3 bg-red-500" size="sm">
                 <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Añadir movimiento
               </Button>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row ">
             <Tabs value="all" className="w-full md:w-max">
-              <TabsHeader>
+              <TabsHeader className=" bg-red-500">
                 {TABS.map(({ label, value }) => (
                   <Tab key={value} value={value}>
                     &nbsp;&nbsp;{label}&nbsp;&nbsp;
@@ -113,7 +170,7 @@ import { Link } from "react-router-dom";
         <CardBody className="overflow-scroll px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
-              <tr>
+              <tr className="">
                 {TABLE_HEAD.map((head, index) => (
                   <th
                     key={head}
@@ -133,89 +190,80 @@ import { Link } from "react-router-dom";
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {TABLE_ROWS.map(
-                ({ tipo,codigo,fecha,descripcion }, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
-   
-                  return (
-                    <tr key={codigo}>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <div className="flex flex-col">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {tipo}
-                            </Typography>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <div className="flex flex-col">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal opacity-70"
-                            >
-                              {codigo}
-                            </Typography>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {fecha}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal opacity-70"
-                          >
-                            {descripcion}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <Tooltip content="Ver inormación detallada">
-                          <Link to="/descripcionMovimiento">
-                          <IconButton variant="text" >
-                            <ArrowRightIcon className="h-4 w-4" />
-                          </IconButton>
-                          </Link>
-                        </Tooltip>
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
-            </tbody>
+ <tbody>
+        {paginatedData.map(({ tipo, codigo, fecha, descripcion }) => (
+          <tr key={codigo} className="border-b border-blue-gray-50">
+            <td className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {tipo}
+                  </Typography>
+                </div>
+              </div>
+            </td>
+            <td className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col">
+                  <Typography
+                    variant="small"
+                    color="red"
+                    className="font-normal"
+                  >
+                    {codigo}
+                  </Typography>
+                </div>
+              </div>
+            </td>
+            <td className="p-4">
+              <div className="flex flex-col">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal"
+                >
+                  {fecha}
+                </Typography>
+              </div>
+            </td>
+            <td className="p-4">
+              <div className="flex flex-col">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal"
+                >
+                  {descripcion}
+                </Typography>
+              </div>
+            </td>
+            <td className="p-4">
+              <Tooltip content="Ver información detallada">
+                <Link to="/descripcionMovimiento">
+                  <IconButton variant="text">
+                    <ArrowRightIcon className="h-4 w-4" />
+                  </IconButton>
+                </Link>
+              </Tooltip>
+            </td>
+          </tr>
+        ))}
+      </tbody>
           </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página 1 de 10
+            Página {currentPage} de {Math.ceil(TABLE_ROWS.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
-            <Button variant="outlined" size="sm">
+            <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>
               Atrás
             </Button>
-            <Button variant="outlined" size="sm">
+            <Button variant="outlined" className="bg-red-400 text-white" size="sm"onClick={handleNextPage} disabled={totalPages <= 1 || currentPage === totalPages}>
               Siguiente
             </Button>
           </div>
