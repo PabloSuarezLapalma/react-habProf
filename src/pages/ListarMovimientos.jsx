@@ -108,6 +108,7 @@ import React,{useState,useMemo} from "react";
   export default function SortableTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTab, setSelectedTab] = useState("todos"); // Por defecto, mostrar todos
+  const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
 
   const itemsPerPage = 7;
 
@@ -124,13 +125,24 @@ import React,{useState,useMemo} from "react";
     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
   };
 
+  const handleSearch = (value) => {
+    setSearchText(value);
+    setCurrentPage(1); // Reiniciar a la primera página al cambiar el texto de búsqueda
+  };
+
   const filteredRows = useMemo(() => {
     if (selectedTab === "todos") {
-      return TABLE_ROWS;
+      return TABLE_ROWS.filter((row) =>
+        row.codigo.toLowerCase().includes(searchText.toLowerCase())
+      );
     } else {
-      return TABLE_ROWS.filter((row) => row.tipo === selectedTab);
+      return TABLE_ROWS.filter(
+        (row) =>
+          row.tipo === selectedTab &&
+          row.codigo.toLowerCase().includes(searchText.toLowerCase())
+      );
     }
-  }, [selectedTab]);
+  }, [selectedTab, searchText]);
   
   const handleTabChange = (value) => {
     setSelectedTab(value);
@@ -142,6 +154,8 @@ import React,{useState,useMemo} from "react";
     const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
     return filteredRows.slice(startIndex, endIndex);
   }, [currentPage, filteredRows]);
+
+
 
     return (
       <Card className="h-full w-full">
@@ -178,6 +192,8 @@ import React,{useState,useMemo} from "react";
               <Input
                 label="Buscar"
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                value={searchText}
+                onChange={(e) => handleSearch(e.target.value)}
               />
             </div>
           </div>
