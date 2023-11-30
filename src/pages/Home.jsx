@@ -1,4 +1,5 @@
   import { Fragment, useState } from 'react'
+  import { Link } from 'react-router-dom'
   import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
   import {
     ArrowPathIcon,
@@ -10,12 +11,15 @@
     XMarkIcon,
   } from '@heroicons/react/24/outline'
   import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+  import { Typography } from "@material-tailwind/react";
+
+  
   const movimientos = [
     { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/formIngreso', icon: PlusIcon },
-    { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '#', icon: MinusIcon },
-    { name: 'Ver movimientos', description: 'Ver todos los movimientos', href: '#', icon: ListBulletIcon },
-    { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-    { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
+    { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '/formEgreso', icon: MinusIcon },
+    { name: 'Ver movimientos', description: 'Ver todos los movimientos', href: '/listarMovimientos', icon: ListBulletIcon },
+    { name: 'Agregar rack', description: 'Connect with third-party tools', href: '/agregarRack', icon: SquaresPlusIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
+    { name: 'Agregar hangar', description: 'Build strategic funnels that will convert', href: '/agregarHangar', icon: ArrowPathIcon }, //en este const van todos los de mov aca puse de hangar para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
   ]
   const callsToAction = [
     { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
@@ -30,14 +34,14 @@
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     return (
-      <body className="">
-      <header className="bg-white shadow-sm">
+      <div className="">
+      <header className="bg-white shadow-lg z-10">
         <nav className="mx-auto  flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="/home" className="-m-1.5 p-1.5">
-              <span className="sr-only">BACI BWS</span>
+            <Link to="/home" className="-m-1.5 p-1.5">
+              <Typography className="sr-only">BACI BWS</Typography>
               <img className="h-8 w-auto" src="src\assets\images\BACI.png" alt="Baci logo" />
-            </a>
+            </Link>
           </div>
           <div className="flex lg:hidden">
             <button
@@ -51,7 +55,7 @@
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
             <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+              <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
                 Movimiento
                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
               </Popover.Button>
@@ -76,10 +80,10 @@
                           <item.icon className="h-6 w-6 text-gray-600 group-hover:text-red-500" aria-hidden="true" />
                         </div>
                         <div className="flex-auto">
-                          <a href={item.href} className="block font-semibold text-gray-900">
+                          <Link to={item.href} className="block font-semibold  text-blue-gray-900">
                             {item.name}
                             <span className="absolute inset-0" />
-                          </a>
+                          </Link>
                           <p className="mt-1 text-gray-600">{item.description}</p>
                         </div>
                       </div>
@@ -87,43 +91,43 @@
                   </div>
                   <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
                     {callsToAction.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
                       >
                         <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </Popover.Panel>
               </Transition>
             </Popover>
 
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
               Features
-            </a>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            </Link>
+            <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
               Marketplace
-            </a>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            </Link>
+            <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
               Company
-            </a>
+            </Link>
           </Popover.Group>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
           <div className="fixed inset-0 z-10" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <a href="/home" className="-m-1.5 p-1.5">
+              <Link to="/home" className="-m-1.5 p-1.5">
                 <span className="sr-only">Baci BWS</span>
                 <img
                   className="h-8 w-auto"
                   src="src\assets\images\BACI.png"
                   alt=""
                 />
-              </a>
+              </Link>
               <button
                 type="button"
                 className="-m-2.5 rounded-md p-2.5 text-red-500"
@@ -161,36 +165,52 @@
                       </>
                     )}
                   </Disclosure>
-                  <a
-                    href="#"
+                  <Link
+                    to="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Features
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Marketplace
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Company
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
           </Dialog.Panel>
         </Dialog>
       </header>
+      
 
-      <div className=" box  my-28">
-                <h1 className="text-2xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-3xl lg:w-1/2 lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-600 ">- BACI WAREHOUSE SERVICE -</h1>
-                <h2 className="text-xl sm:w-3/4   xl:w-11/12 md:w-3/4 mx-auto md:text-2xl lg:text-3xl xl:text-5xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-red-500 "> Nos encargamos de cuidar tu almacenamiento y tu negocio</h2>
+      <figure className="relative h-96 w-full">
+      <img
+        className=" h-screen w-screen object-cover object-center"
+        src="src/assets/images/BaciBlur.png" //aca va la imagen de baci blur;
+        alt="imagen de baci"
+      />
+      <figcaption className="absolute bottom-8 left-2/4 flex -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
+        <div>
+          <Typography variant="h1" color="blue-gray">
+            BACI WAREHOUSE SERVICE
+          </Typography>
+          <Typography color="gray" variant="h5" className="mt-2 font-normal">
+          Nos encargamos de cuidar tu almacenamiento y tu negocio
+          </Typography>
+        </div>
+      </figcaption>
+    </figure>
+
+
       </div>
-      </body>
       
       
     )
