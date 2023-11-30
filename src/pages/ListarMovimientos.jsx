@@ -26,11 +26,11 @@ import React,{useState,useMemo} from "react";
     },
     {
       label: "Ingreso",
-      value: "ingreso",
+      value: "Ingreso",
     },
     {
       label: "Egreso",
-      value: "egreso",
+      value: "Egreso",
     },
   ];
    
@@ -106,7 +106,9 @@ import React,{useState,useMemo} from "react";
   ];
    
   export default function SortableTable() {
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedTab, setSelectedTab] = useState("todos"); // Por defecto, mostrar todos
+
   const itemsPerPage = 7;
 
   const totalItems = TABLE_ROWS.length;
@@ -122,11 +124,24 @@ import React,{useState,useMemo} from "react";
     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
   };
 
+  const filteredRows = useMemo(() => {
+    if (selectedTab === "todos") {
+      return TABLE_ROWS;
+    } else {
+      return TABLE_ROWS.filter((row) => row.tipo === selectedTab);
+    }
+  }, [selectedTab]);
+  
+  const handleTabChange = (value) => {
+    setSelectedTab(value);
+    setCurrentPage(1); // Reiniciar a la primera página al cambiar de pestaña
+  };
+
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-    return TABLE_ROWS.slice(startIndex, endIndex);
-  }, [currentPage, totalItems]);
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
+    return filteredRows.slice(startIndex, endIndex);
+  }, [currentPage, filteredRows]);
 
     return (
       <Card className="h-full w-full">
@@ -150,10 +165,10 @@ import React,{useState,useMemo} from "react";
             </div>
           </div>
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row ">
-            <Tabs value="all" className="w-full md:w-max">
-              <TabsHeader className=" bg-red-500">
+            <Tabs value="all" className="w-full md:w-max ">
+              <TabsHeader className=" bg-red-500 ">
                 {TABS.map(({ label, value }) => (
-                  <Tab key={value} value={value}>
+                  <Tab key={value} value={value} onClick={() => handleTabChange(value)}>
                     &nbsp;&nbsp;{label}&nbsp;&nbsp;
                   </Tab>
                 ))}
@@ -161,7 +176,7 @@ import React,{useState,useMemo} from "react";
             </Tabs>
             <div className="w-full md:w-72">
               <Input
-                label="Search"
+                label="Buscar"
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
               />
             </div>
