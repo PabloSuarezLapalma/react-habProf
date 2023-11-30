@@ -34,7 +34,7 @@ import React,{useState,useMemo} from "react";
     },
   ];
    
-  const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", ""];
+  const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", "Detalles"];
    
   const TABLE_ROWS = [
     {
@@ -158,14 +158,14 @@ import React,{useState,useMemo} from "react";
 
 
     return (
-      <Card className="h-full w-full">
+      <Card className="lg:h-full lg:w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-8 flex items-center justify-between  gap-8">
-            <div className="shadow-md bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12">
+            <div className="shadow-md bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
                 Lista de movimientos
               </Typography>
-              <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-3xl lg:text-4xl xl:text-6xl text-center mb-10 text-white ">
+              <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
                 Ve información sobre todos los movimientos
               </Typography>
             </div>
@@ -187,8 +187,8 @@ import React,{useState,useMemo} from "react";
                 ))}
               </TabsHeader>
             </Tabs>
-            
           </div>
+          <Button>Hola</Button>
           </div>
         </CardHeader>
         <CardBody className="overflow-scroll px-0 -mt-6">
