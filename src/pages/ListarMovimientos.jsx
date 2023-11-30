@@ -160,25 +160,24 @@ import React,{useState,useMemo} from "react";
     return (
       <Card className="h-full w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
-          <div className="mb-8 flex items-center justify-between gap-8">
-            <div>
-              <Typography variant="h5" color="blue-gray">
+          <div className="mb-8 flex items-center justify-between  gap-8">
+            <div className="shadow-md bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12">
+              <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
                 Lista de movimientos
               </Typography>
-              <Typography color="gray" className="mt-1 font-normal">
+              <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-3xl lg:text-4xl xl:text-6xl text-center mb-10 text-white ">
                 Ve información sobre todos los movimientos
               </Typography>
             </div>
-            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <Button variant="outlined" size="sm">
-                Ver todos
-              </Button>
-              <Button className="flex items-center gap-3 bg-red-500" size="sm">
-                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Añadir movimiento
-              </Button>
+            <div className="w-full md:w-72 sm:w-11/12 ">
+              <Input
+                label="Buscar"
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                value={searchText}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
             </div>
-          </div>
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row ">
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row ">
             <Tabs value="all" className="w-full md:w-max ">
               <TabsHeader className=" bg-red-500 ">
                 {TABS.map(({ label, value }) => (
@@ -188,17 +187,11 @@ import React,{useState,useMemo} from "react";
                 ))}
               </TabsHeader>
             </Tabs>
-            <div className="w-full md:w-72">
-              <Input
-                label="Buscar"
-                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                value={searchText}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
-            </div>
+            
+          </div>
           </div>
         </CardHeader>
-        <CardBody className="overflow-scroll px-0">
+        <CardBody className="overflow-scroll px-0 -mt-6">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
