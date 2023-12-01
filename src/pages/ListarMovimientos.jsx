@@ -1,118 +1,59 @@
-import {
-    MagnifyingGlassIcon,
-    ChevronUpDownIcon,
-  } from "@heroicons/react/24/outline";
-  import {UserPlusIcon, ArrowRightIcon} from "@heroicons/react/24/solid";
-  import {
-    Card,
-    CardHeader,
-    Input,
-    Typography,
-    Button,
-    CardBody,
-    CardFooter,
-    Tabs,
-    TabsHeader,
-    Tab,
-    IconButton,
-    Tooltip,
-  } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import React,{useState,useMemo} from "react";
-  const TABS = [
-    {
-      label: "Todos",
-      value: "todos",
-    },
-    {
-      label: "Ingreso",
-      value: "Ingreso",
-    },
-    {
-      label: "Egreso",
-      value: "Egreso",
-    },
-  ];
-   
-  const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", "Detalles"];
-   
-  const TABLE_ROWS = [
-    {
-      tipo:"Ingreso",
-      codigo:"1",
-      fecha:"12/12/2021",
-      descripcion:"Ingreso de cajas de vino",
-    },
-    {
-      tipo:"Egreso",
-      codigo:"2",
-      fecha:"02/11/2019",
-      descripcion:"Egreso de cajas de vino",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"3",
-      fecha:"10/06/2020",
-      descripcion:"Ingreso de cajas de zapatos",
-    },
-    {
-      tipo:"Egreso",
-      codigo:"4",
-      fecha:"01/08/2023",
-      descripcion:"Egreso de cajas de mesas",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"5",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"6",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"7",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"8",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"9",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"10",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-    {
-      tipo:"Ingreso",
-      codigo:"11",
-      fecha:"06/02/2002",
-      descripcion:"Ingreso de cajas de teclados",
-    },
-  ];
-   
+import {MagnifyingGlassIcon,ChevronUpDownIcon,} from "@heroicons/react/24/outline";
+import {ArrowRightIcon} from "@heroicons/react/24/solid";
+import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
+import {Link} from "react-router-dom";
+import React,{useState,useMemo,useEffect} from "react";
+import {obtenerMovimientos} from "../scripts/movimientos";
+import {obtenerMercaderias} from "../scripts/mercaderia";
+  
+const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO",},{label: "Egreso",value: "EGRESO",},];
+const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", "Detalles"];
+
   export default function SortableTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTab, setSelectedTab] = useState("todos"); // Por defecto, mostrar todos
+  const [selectedTab, setSelectedTab] = useState("Todos"); // Por defecto, mostrar todos
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
+  const [movimientos, setMovimientos] = useState([]);
+  const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [mercaderias, setMercaderias] = useState([]); // Estado para almacenar las mercaderías
+
+
+  useEffect(() => {
+    async function fetchMovimientos() {
+      try {
+        const movimientosFromDB = await obtenerMovimientos();
+        setMovimientos(movimientosFromDB || []);
+      } catch (error) {
+        console.error('Error al obtener movimientos:', error);
+      } finally {
+        setLoading(false); // Se establece a falso independientemente del resultado de la obtención de datos
+      }
+    }
+    fetchMovimientos();
+  }, []);
+
+  useEffect(() => {
+    async function fetchMercaderias() {
+      try {
+        const mercaderiasFromDB = await obtenerMercaderias(); // Obtener todas las mercaderías
+        setMercaderias(mercaderiasFromDB || []);
+      } catch (error) {
+        console.error('Error al obtener mercaderías:', error);
+      }
+    }
+    fetchMercaderias();
+  }, []);
+
+  const buscarDescripcion = (mercaderias, idMercaderia) => {
+    const mercaderiaEncontrada = mercaderias.find(
+      (mercaderia) => mercaderia.idMercaderia === idMercaderia
+    );
+    return mercaderiaEncontrada ? mercaderiaEncontrada.descripcion : 'No hay nada';
+  };
 
   const itemsPerPage = 5;
 
-  const totalItems = TABLE_ROWS.length;
+  const totalItems = movimientos.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleNextPage = () => {
@@ -131,18 +72,18 @@ import React,{useState,useMemo} from "react";
   };
 
   const filteredRows = useMemo(() => {
-    if (selectedTab === "todos") {
-      return TABLE_ROWS.filter((row) =>
-        row.codigo.toLowerCase().includes(searchText.toLowerCase())
+    if (selectedTab === "Todos") {
+      return movimientos.filter((row) =>
+        row.codigoBWS.toLowerCase().includes(searchText.toLowerCase())
       );
     } else {
-      return TABLE_ROWS.filter(
+      return movimientos.filter(
         (row) =>
-          row.tipo === selectedTab &&
-          row.codigo.toLowerCase().includes(searchText.toLowerCase())
+          row.estado === selectedTab &&
+          row.codigoBWS.toLowerCase().includes(searchText.toLowerCase())
       );
     }
-  }, [selectedTab, searchText]);
+  }, [selectedTab, searchText, movimientos]);
   
   const handleTabChange = (value) => {
     setSelectedTab(value);
@@ -196,31 +137,32 @@ import React,{useState,useMemo} from "react";
           </div>
         </CardHeader>
         <CardBody className="overflow-scroll px-0 -mt-6">
+        {!loading ? ( // Si NO está cargando, se muestra un mensaje o un indicador de carga
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
                 {TABLE_HEAD.map((head, index) => (
-                  <th
-                    key={head}
-                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                  >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
-                    >
-                      {head}{" "}
-                      {index !== TABLE_HEAD.length - 1 && (
-                        <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
-                      )}
-                    </Typography>
-                  </th>
+            <th
+            key={head}
+            className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+            > 
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+            >
+              {head}{" "}
+              {index !== TABLE_HEAD.length - 1 && (
+                <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
+              )}
+            </Typography>
+            </th>
                 ))}
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map(({ tipo, codigo, fecha, descripcion }) => (
-          <tr key={codigo} className="border-b border-blue-gray-50">
+        {paginatedData.map((movimiento) => (
+          <tr key={movimiento.codigoBWS} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -229,7 +171,7 @@ import React,{useState,useMemo} from "react";
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {tipo}
+                    {movimiento.estado}
                   </Typography>
                 </div>
               </div>
@@ -242,7 +184,7 @@ import React,{useState,useMemo} from "react";
                     color="red"
                     className="font-normal"
                   >
-                    {codigo}
+                    {movimiento.codigoBWS}
                   </Typography>
                 </div>
               </div>
@@ -254,7 +196,7 @@ import React,{useState,useMemo} from "react";
                   color="blue-gray"
                   className="font-normal"
                 >
-                  {fecha}
+                {movimiento.fecha}
                 </Typography>
               </div>
             </td>
@@ -265,7 +207,7 @@ import React,{useState,useMemo} from "react";
                   color="blue-gray"
                   className="font-normal"
                 >
-                  {descripcion}
+                {buscarDescripcion(mercaderias, movimiento.idMercaderia)}
                 </Typography>
               </div>
             </td>
@@ -282,10 +224,13 @@ import React,{useState,useMemo} from "react";
         ))}
       </tbody>
           </table>
+           ) : (
+            <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
+        )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página {currentPage} de {Math.ceil(TABLE_ROWS.length / itemsPerPage)}
+            Página {currentPage} de {Math.ceil(movimientos.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>
