@@ -82,6 +82,26 @@ export  async function filtrarMovimiento(codigoBWS){
 }
 }
 
+export  async function filtrarMovimientoxCliente(codigoCliente){
+    let code=0;
+    try{
+        let { data: Clientes, error } = await supabase
+        .from('Clientes')
+        .select("*")
+        .ilike('codigo', codigoCliente)
+        if (error) {
+            code=1;
+            throw new Error(error.message);}   
+        let listaFiltrada = Clientes.map(item => {
+            return item;});
+        return listaFiltrada; 
+    }
+    catch (error){
+       code=1;
+       console.log(error)
+}
+}
+
 //deleteMovimiento("PBC-BJ1-3212");
 
 //?Si se descomenta esto para probar por consola, cambiar el valor del codigoBWS, porque sino no deja hacer el insert porque existen claves primarias duplicadas
