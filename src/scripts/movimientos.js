@@ -82,6 +82,8 @@ export  async function filtrarMovimiento(codigoBWS){
 }
 }
 
+
+//!MODIFICAR PARA QUE OBTENGA LOS MOVIMIENTOS FILTRANDO POR EL ID DEL CLIENTE- Probablemente la base de datos cambie tmb
 export  async function filtrarMovimientoxCliente(codigoCliente){
     let code=0;
     try{
