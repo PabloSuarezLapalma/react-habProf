@@ -9,18 +9,16 @@ export  async function obtenerMercaderias() {
         let { data: Mercaderias, error } = await supabase
             .from('Mercaderias')
             .select('*');
-
         if (error) {
             throw new Error(error.message);
         }
-
-        let listaMercaderias = Mercaderias.map(item => {
-            return item;});
+        let listaMercaderias = Mercaderias.map(item => {return item;});
         return listaMercaderias;
     } catch (error) {
         console.error(error);
     }
 }
+//console.log(obtenerMercaderias())
 export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho, idPosicion, cantidad){
     let code=0;
     try {
@@ -56,42 +54,46 @@ export  async function borrarMercaderia(idMercaderia){
         code=1;
         console.error(error);
     }
+    return code
 }
 
 export  async function buscarMercaderia(idMercaderia){
-    let code=0;
     try{
         let { data: Mercaderias, error } = await supabase
         .from('Mercaderias')
         .select("*")
         .ilike('idMercaderia', idMercaderia)
         if (error) {
-            code=1;
             throw new Error(error.message);}   
-        let listaFiltrada = Mercaderias.map(item => {
-            return item;});
+        let listaFiltrada = Mercaderias.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
-       code=1;
        console.log(error)
 }
 }
 
+//console.log(buscarMercaderia("cajasMate"))
+
+
 export  async function actualizarMercaderia(idMercaderia,columnaModificar, nuevoValor) {
+    let code=1;
     try {
         const { data, error } = await supabase
             .from('Mercaderias')
             .update({ [columnaModificar]: nuevoValor })
             .eq("idMercaderia", idMercaderia)
             .select();
-
         if (error) {
+            code=1;
             console.error("Error updating Mercaderia:", error.message);
         } else {
+            code=1;
             console.log("Mercaderia updated successfully:", data);
         }
     } catch (error) {
+        code=1;
         console.error("Unexpected error:", error.message);
     }
+    return code
 }

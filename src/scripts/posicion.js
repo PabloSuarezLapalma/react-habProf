@@ -9,13 +9,10 @@ export  async function obtenerPosiciones() {
         let { data: Posiciones, error } = await supabase
             .from('Posiciones')
             .select('*');
-
         if (error) {
             throw new Error(error.message);
         }
-
-        let listaPosiciones = Posiciones.map(item => {
-            return item;});
+        let listaPosiciones = Posiciones.map(item => {return item;});
         return listaPosiciones;
     } catch (error) {
         console.error(error);
@@ -57,29 +54,27 @@ export  async function borrarPosicion(idPosicion){
         code=1;
         console.error(error);
     }
+    return code
 }
 
 export  async function buscarPosicion(idPosicion){
-    let code=0;
     try{
         let { data: Posiciones, error } = await supabase
         .from('Posiciones')
         .select("*")
         .ilike('idPosicion', idPosicion)
         if (error) {
-            code=1;
             throw new Error(error.message);}   
-        let listaFiltrada = Posiciones.map(item => {
-            return item;});
+        let listaFiltrada = Posiciones.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
-       code=1;
        console.log(error)
-}
+    }
 }
 
 export  async function actualizarPosicion(idPosicion,columnaModificar, nuevoValor) {
+    let code=0;
     try {
         const { data, error } = await supabase
             .from('Posiciones')
@@ -88,11 +83,15 @@ export  async function actualizarPosicion(idPosicion,columnaModificar, nuevoValo
             .select();
 
         if (error) {
+            code=1;
             console.error("Error updating Posicion:", error.message);
         } else {
+            code=1;
             console.log("Posicion updated successfully:", data);
         }
     } catch (error) {
+        code=1;
         console.error("Unexpected error:", error.message);
     }
+    return code
 }

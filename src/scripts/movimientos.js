@@ -9,29 +9,26 @@ export  async function obtenerMovimientos() {
         let { data: Movimientos, error } = await supabase
             .from('Movimientos')
             .select('*');
-
         if (error) {
             throw new Error(error.message);
         }
-
-        let listaDeMovimientos = Movimientos.map(item => {
-            return item;});
+        let listaDeMovimientos = Movimientos.map(item => {return item;});
         return listaDeMovimientos;
     } catch (error) {
         console.error(error);
     }
 }
 //?Descomentar para ver por consola el listado de movimientos
-//const listaDeMovimientos = getMovimientos();
+//const listaDeMovimientos = obtenerMovimientos();
 //console.log(listaDeMovimientos);
 
-export  async function insertarMovimiento(codigo, fechaHora, nroRemito, estado, responsable, transporte, chasis, chofer, acoplado, costo, idMercaderia){
+export  async function insertarMovimiento(codigo, fecha,hora, nroRemito, estado, responsable, transporte, chasis, chofer, acoplado, costo, idMercaderia,codigoCliente){
     let code=0;
     try {
         const { data, error } = await supabase
             .from('Movimientos')
             .insert([
-                { codigoBWS: codigo, fechaHora: fechaHora, nroRemito: nroRemito, estado: estado, nombreResponsable: responsable, descripTransporte: transporte, chasis: chasis, chofer: chofer, acoplado: acoplado, costo: costo, idMercaderia: idMercaderia},
+                { codigoBWS: codigo, fecha:fecha,hora:hora, nroRemito: nroRemito, estado: estado, nombreResponsable: responsable, descripTransporte: transporte, chasis: chasis, chofer: chofer, acoplado: acoplado, costo: costo, idMercaderia: idMercaderia,codigoCliente:codigoCliente},
             ])
             .select()
         if (error) {
@@ -60,50 +57,62 @@ export  async function borrarMovimiento(codigoBWS){
         code=1;
         console.error(error);
     }
+    return code
 }
 
-export  async function filtrarMovimiento(codigoBWS){
-    let code=0;
+//*Esto debe usarse en conjunto con la funcion obtenerCodigoCliente de clientes.js ya que se obtiene el codigo a partir del nombre y luego se busca el movimiento con ese codigo
+export  async function filtrarMovimiento(codigoCliente){
     try{
         let { data: Movimientos, error } = await supabase
         .from('Movimientos')
         .select("*")
-        .ilike('codigoBWS', codigoBWS)
+        .ilike('codigoCliente', codigoCliente)
         if (error) {
-            code=1;
             throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {
-            return item;});
+        let listaFiltrada = Movimientos.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
-       code=1;
        console.log(error)
 }
 }
 
-
-//!MODIFICAR PARA QUE OBTENGA LOS MOVIMIENTOS FILTRANDO POR EL ID DEL CLIENTE- Probablemente la base de datos cambie tmb
-export  async function filtrarMovimientoxCliente(codigoCliente){
-    let code=0;
+export async function filtrarMovimientosEntreFechas(fechaInicio, fechaFin){
     try{
-        let { data: Clientes, error } = await supabase
-        .from('Clientes')
+        let { data: Movimientos, error } = await supabase
+        .from('Movimientos')
         .select("*")
-        .ilike('codigo', codigoCliente)
+        .gte('fecha', fechaInicio)
+        .lte('fecha', fechaFin)
         if (error) {
-            code=1;
             throw new Error(error.message);}   
-        let listaFiltrada = Clientes.map(item => {
-            return item;});
+        let listaFiltrada = Movimientos.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
-       code=1;
-       console.log(error)
-}
+           console.log(error)
+    }
 }
 
+/*
+filtrarMovimientosEntreFechas("2021-10-01","2024-10-31").then(resultado=> {
+    if (Array.isArray(resultado)) {
+        // Itera sobre cada elemento del array
+        resultado.forEach(elemento => {
+            console.log("Código BWS:", elemento.codigoBWS);
+            console.log("Fecha y Hora:", elemento.fechaHora);
+            console.log("Responsable:", elemento.nombreResponsable);
+            console.log("idMercaderia:", elemento.idMercaderia);
+            console.log("Descripcion:", elemento.descripcionTransporte);
+            console.log("Codigo del Cliente: ", elemento.codigoCliente);
+            // ... y así sucesivamente para otros campos
+        });
+    } else {
+        console.error("El resultado no es un array.");
+    }  
+    }
+)
+*/
 //deleteMovimiento("PBC-BJ1-3212");
 
 //?Si se descomenta esto para probar por consola, cambiar el valor del codigoBWS, porque sino no deja hacer el insert porque existen claves primarias duplicadas
@@ -122,6 +131,7 @@ filtrarMovimiento("PBC-BJ1-3212").then(resultado=> {
             console.log("Responsable:", elemento.nombreResponsable);
             console.log("idMercaderia:", elemento.idMercaderia);
             console.log("Descripcion:", elemento.descripcionTransporte);
+            console.log("Codigo del Cliente: ", elemento.codigoCliente);
             // ... y así sucesivamente para otros campos
         });
     } else {

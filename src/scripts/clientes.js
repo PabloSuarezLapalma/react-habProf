@@ -10,13 +10,10 @@ export  async function obtenerClientes() {
         let { data: Clientes, error } = await supabase
             .from('Clientes')
             .select('*');
-
         if (error) {
             throw new Error(error.message);
         }
-
-        let listaClientes = Clientes.map(item => {
-            return item;});
+        let listaClientes = Clientes.map(item => {return item;});
         return listaClientes;
     } catch (error) {
         console.error(error);
@@ -63,31 +60,45 @@ export  async function borrarCliente(codigo){
         code=1;
         console.error(error);
     }
+    return code
 }
 
 //console.log(deleteCliente("FEP2"))
 
 export  async function buscarCliente(nombreCliente){
-    let code=0;
     try{
         let { data: Movimientos, error } = await supabase
         .from('Clientes')
         .select("*")
         .ilike('nombreCliente', nombreCliente)
         if (error) {
-            code=1;
             throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {
-            return item;});
+        let listaFiltrada = Movimientos.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
-       code=1;
+       console.log(error)
+}
+}
+
+export async function obtenerCodigoCliente(nombreCliente){
+    try{
+        let { data: Clientes, error } = await supabase
+        .from('Clientes')
+        .select("*")
+        .ilike('nombreCliente', nombreCliente)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Clientes.map(item => {return item;});
+        return listaFiltrada[0].codigo; 
+    }
+    catch (error){
        console.log(error)
 }
 }
 
 export  async function actualizarCliente(codigo,columnaModificar, nuevoValor) {
+    let code=0;
     try {
         const { data, error } = await supabase
             .from('Clientes')
@@ -96,13 +107,17 @@ export  async function actualizarCliente(codigo,columnaModificar, nuevoValor) {
             .select();
 
         if (error) {
+            code=1;
             console.error("Error updating Cliente:", error.message);
         } else {
+            code=1;
             console.log("Cliente updated successfully:", data);
         }
     } catch (error) {
+        code=1;
         console.error("Unexpected error:", error.message);
     }
+    return code
 }
 
 
