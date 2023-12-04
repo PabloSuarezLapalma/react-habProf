@@ -20,10 +20,26 @@ export  async function obtenerCienPrimerasMercaderias() {
     }
 }
 
+export async function obtenerDescripcionMercaderia(idMercaderia){
+    try{
+        let { data: Mercaderias, error } = await supabase
+        .from('Mercaderias')
+        .select("*")
+        .ilike('idMercaderia', idMercaderia)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Mercaderias.map(item => {return item;});
+        return listaFiltrada[0].descripcion; 
+    }
+    catch (error){
+       console.log(error)
+}
+}
+
 export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho, idPosicion, cantidad){
     let code=0;
     try {
-        const { data, error } = await supabase
+        const {error } = await supabase
             .from('Posiciones')
             .insert([
                 {idMercaderia:idMercaderia, descripcion:descripcion, largo:largo, ancho:ancho, idPosicion:idPosicion,cantidad:cantidad},

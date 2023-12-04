@@ -4,10 +4,11 @@ import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHea
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import {obtenerCienPrimerosMovimientos} from "../scripts/movimientos";
-import {obtenerCienPrimerasMercaderias} from "../scripts/mercaderia";
-  
+import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
+import {obtenerNombreCliente} from "../scripts/clientes";
+
 const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO",},{label: "Egreso",value: "EGRESO",},];
-const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", "Detalles"];
+const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "Detalles"];
 
   export default function SortableTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,13 +17,30 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
   const [movimientos, setMovimientos] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [mercaderias, setMercaderias] = useState([]); // Estado para almacenar las mercaderías
-
+  const [clientes, setClientes] = useState([]); // Estado para almacenar los nombres de los Clientes
 
   useEffect(() => {
     async function fetchMovimientos() {
       try {
-        const movimientosFromDB = await obtenerCienPrimerosMovimientos();
+        const movimientosFromDB = await obtenerCienPrimerosMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
         setMovimientos(movimientosFromDB || []);
+
+        // Obtenemos los nombres de los clientes para cada movimiento
+        const clientes = {};
+        for (const movimiento of movimientosFromDB) {
+            const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
+            clientes[movimiento.codigoCliente] = nombreCliente;
+        }
+        setClientes(clientes);
+
+        // Obtenemos la descripcion de cada mercaderia para cada movimiento
+        const mercaderias={};
+        for (const movimiento of movimientosFromDB) {
+          const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
+          mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
+        }
+        setMercaderias(mercaderias);
+
       } catch (error) {
         console.error('Error al obtener movimientos:', error);
       } finally {
@@ -32,24 +50,6 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
     fetchMovimientos();
   }, []);
 
-  useEffect(() => {
-    async function fetchMercaderias() {
-      try {
-        const mercaderiasFromDB = await obtenerCienPrimerasMercaderias(); // Obtener todas las mercaderías
-        setMercaderias(mercaderiasFromDB || []);
-      } catch (error) {
-        console.error('Error al obtener mercaderías:', error);
-      }
-    }
-    fetchMercaderias();
-  }, []);
-
-  const buscarDescripcion = (mercaderias, idMercaderia) => {
-    const mercaderiaEncontrada = mercaderias.find(
-      (mercaderia) => mercaderia.idMercaderia === idMercaderia
-    );
-    return mercaderiaEncontrada ? mercaderiaEncontrada.descripcion : 'No hay nada';
-  };
 
   const itemsPerPage = 5;
 
@@ -74,13 +74,13 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
       return movimientos.filter((row) =>
-        row.codigoBWS.toLowerCase().includes(searchText.toLowerCase())
+        row.codigoCliente.toLowerCase().includes(searchText.toLowerCase())
       );
     } else {
       return movimientos.filter(
         (row) =>
           row.estado === selectedTab &&
-          row.codigoBWS.toLowerCase().includes(searchText.toLowerCase())
+          row.codigoCliente.toLowerCase().includes(searchText.toLowerCase())
       );
     }
   }, [selectedTab, searchText, movimientos]);
@@ -162,7 +162,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
             </thead>
  <tbody>
         {paginatedData.map((movimiento) => (
-          <tr key={movimiento.codigoBWS} className="border-b border-blue-gray-50">
+          <tr key={movimiento.nombreCliente} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -171,7 +171,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {movimiento.estado}
+                    {clientes[movimiento.codigoCliente]}
                   </Typography>
                 </div>
               </div>
@@ -184,7 +184,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
                     color="red"
                     className="font-normal"
                   >
-                    {movimiento.codigoBWS}
+                    {movimiento.estado}
                   </Typography>
                 </div>
               </div>
@@ -207,7 +207,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
                   color="blue-gray"
                   className="font-normal"
                 >
-                {buscarDescripcion(mercaderias, movimiento.idMercaderia)}
+                {mercaderias[movimiento.idMercaderia]}  
                 </Typography>
               </div>
             </td>

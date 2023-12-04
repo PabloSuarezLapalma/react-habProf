@@ -23,7 +23,7 @@ export  async function obtenerCienPrimerosMovimientos() {
 export  async function insertarMovimiento(codigo, fecha,hora, nroRemito, estado, responsable, transporte, chasis, chofer, acoplado, costo, idMercaderia,codigoCliente){
     let code=0;
     try {
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('Movimientos')
             .insert([
                 { codigoBWS: codigo, fecha:fecha,hora:hora, nroRemito: nroRemito, estado: estado, nombreResponsable: responsable, descripTransporte: transporte, chasis: chasis, chofer: chofer, acoplado: acoplado, costo: costo, idMercaderia: idMercaderia,codigoCliente:codigoCliente},
