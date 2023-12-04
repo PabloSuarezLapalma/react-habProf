@@ -5,11 +5,12 @@ const SUPABASE_URL = 'https://ewathdqpvxumtxwrmwgw.supabase.co'
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY  )
 
 
-export  async function obtenerClientes() {
+export  async function obtenerCienPrimerosClientes() {
     try {
         let { data: Clientes, error } = await supabase
             .from('Clientes')
-            .select('*');
+            .select('*')
+            .range(0, 100)
         if (error) {
             throw new Error(error.message);
         }
@@ -19,9 +20,6 @@ export  async function obtenerClientes() {
         console.error(error);
     }
 }
-
-//const listaClientes = getClientes();
-//console.log(listaClientes);
 
 export  async function agregarCliente(codigo, nombreCliente, responsable, cuit, telefono, email, username, password){
     let code=0;
@@ -43,8 +41,6 @@ export  async function agregarCliente(codigo, nombreCliente, responsable, cuit, 
     return code
 }
 
-//console.log(insertarCliente("FEP2","Fepasa","Franco Pasa","19-12345678-0","424242","contacto@cedal.com.ar","fepasa","fepasa123"))
-
 export  async function borrarCliente(codigo){
     let code=0;
     try{
@@ -62,8 +58,6 @@ export  async function borrarCliente(codigo){
     }
     return code
 }
-
-//console.log(deleteCliente("FEP2"))
 
 export  async function buscarCliente(nombreCliente){
     try{

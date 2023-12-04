@@ -4,29 +4,28 @@ const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 const SUPABASE_URL = 'https://ewathdqpvxumtxwrmwgw.supabase.co'
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY  )
 
-export  async function obtenerCienPrimerasMercaderias() {
+export  async function obtenerPosiciones() {
     try {
-        let { data: Mercaderias, error } = await supabase
-            .from('Mercaderias')
-            .select('*')
-            .range(0, 100)
+        let { data: Posiciones, error } = await supabase
+            .from('Posiciones')
+            .select('*');
         if (error) {
             throw new Error(error.message);
         }
-        let listaMercaderias = Mercaderias.map(item => {return item;});
-        return listaMercaderias;
+        let listaPosiciones = Posiciones.map(item => {return item;});
+        return listaPosiciones;
     } catch (error) {
         console.error(error);
     }
 }
 
-export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho, idPosicion, cantidad){
+export  async function agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen, idAlquiler){
     let code=0;
     try {
         const { data, error } = await supabase
             .from('Posiciones')
             .insert([
-                {idMercaderia:idMercaderia, descripcion:descripcion, largo:largo, ancho:ancho, idPosicion:idPosicion,cantidad:cantidad},
+                {idPosicion:idPosicion, letraPosicion:letraPosicion, sector:sector, altura:altura, volumen:volumen,idAlquiler:idAlquiler},
             ])
             .select()
         if (error) {
@@ -40,13 +39,13 @@ export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho
     return code
 }
 
-export  async function borrarMercaderia(idMercaderia){
+export  async function borrarPosicion(idPosicion){
     let code=0;
     try{
         const { error } = await supabase
-            .from('Mercaderias')
+            .from('Posicion')
             .delete()
-            .eq('idMercaderia', idMercaderia)
+            .eq('idPosicion', idPosicion)
         if (error) {
             code=1;
             throw new Error(error.message);}
@@ -58,36 +57,37 @@ export  async function borrarMercaderia(idMercaderia){
     return code
 }
 
-export  async function buscarMercaderia(idMercaderia){
+export  async function buscarPosicion(idPosicion){
     try{
-        let { data: Mercaderias, error } = await supabase
-        .from('Mercaderias')
+        let { data: Posiciones, error } = await supabase
+        .from('Posiciones')
         .select("*")
-        .ilike('idMercaderia', idMercaderia)
+        .ilike('idPosicion', idPosicion)
         if (error) {
             throw new Error(error.message);}   
-        let listaFiltrada = Mercaderias.map(item => {return item;});
+        let listaFiltrada = Posiciones.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
        console.log(error)
-}
+    }
 }
 
-export  async function actualizarMercaderia(idMercaderia,columnaModificar, nuevoValor) {
-    let code=1;
+export  async function actualizarPosicion(idPosicion,columnaModificar, nuevoValor) {
+    let code=0;
     try {
         const { data, error } = await supabase
-            .from('Mercaderias')
+            .from('Posiciones')
             .update({ [columnaModificar]: nuevoValor })
-            .eq("idMercaderia", idMercaderia)
+            .eq("idPosicion", idPosicion)
             .select();
+
         if (error) {
             code=1;
-            console.error("Error updating Mercaderia:", error.message);
+            console.error("Error updating Posicion:", error.message);
         } else {
             code=1;
-            console.log("Mercaderia updated successfully:", data);
+            console.log("Posicion updated successfully:", data);
         }
     } catch (error) {
         code=1;

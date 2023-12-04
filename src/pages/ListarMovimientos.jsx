@@ -2,9 +2,9 @@ import {MagnifyingGlassIcon,ChevronUpDownIcon,} from "@heroicons/react/24/outlin
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
-import React,{useState,useMemo,useEffect} from "react";
-import {obtenerMovimientos} from "../scripts/movimientos";
-import {obtenerMercaderias} from "../scripts/mercaderia";
+import {useState,useMemo,useEffect} from "react";
+import {obtenerCienPrimerosMovimientos} from "../scripts/movimientos";
+import {obtenerCienPrimerasMercaderias} from "../scripts/mercaderia";
   
 const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO",},{label: "Egreso",value: "EGRESO",},];
 const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", "Detalles"];
@@ -21,7 +21,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
   useEffect(() => {
     async function fetchMovimientos() {
       try {
-        const movimientosFromDB = await obtenerMovimientos();
+        const movimientosFromDB = await obtenerCienPrimerosMovimientos();
         setMovimientos(movimientosFromDB || []);
       } catch (error) {
         console.error('Error al obtener movimientos:', error);
@@ -35,7 +35,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
   useEffect(() => {
     async function fetchMercaderias() {
       try {
-        const mercaderiasFromDB = await obtenerMercaderias(); // Obtener todas las mercaderías
+        const mercaderiasFromDB = await obtenerCienPrimerasMercaderias(); // Obtener todas las mercaderías
         setMercaderias(mercaderiasFromDB || []);
       } catch (error) {
         console.error('Error al obtener mercaderías:', error);
