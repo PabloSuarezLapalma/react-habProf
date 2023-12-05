@@ -20,13 +20,13 @@ export  async function obtenerCienPrimerosMovimientos() {
     }
 }
 
-export  async function insertarMovimiento(codigo, fecha,hora, nroRemito, estado, responsable, transporte, chasis, chofer, acoplado, costo, idMercaderia,codigoCliente){
+export  async function insertarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,descripcionTransporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad){
     let code=0;
     try {
         const { error } = await supabase
             .from('Movimientos')
             .insert([
-                { codigoBWS: codigo, fecha:fecha,hora:hora, nroRemito: nroRemito, estado: estado, nombreResponsable: responsable, descripTransporte: transporte, chasis: chasis, chofer: chofer, acoplado: acoplado, costo: costo, idMercaderia: idMercaderia,codigoCliente:codigoCliente},
+                { codigoBWS:codigoBWS,nroRemito:nroRemito,estado:estado,nombreResponsable:nombreResponsable,descripcionTransporte:descripcionTransporte,chasis:chasis,chofer:chofer,acoplado:acoplado,costo:costo,idMercaderia:idMercaderia,fecha:fecha,hora:hora,codigoCliente:codigoCliente,destino:destino,tipoUnidad:tipoUnidad},
             ])
             .select()
         if (error) {
