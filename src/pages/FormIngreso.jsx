@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import Alerta from '../components/Alerta';
+import { agregarMovimiento } from '../scripts/movimientos';
+import { agregarPosicion } from '../scripts/posiciones';
+import { agregarMercaderia } from '../scripts/mercaderias';
+
 
 const FormIngreso = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
@@ -58,7 +62,7 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
             hora,
             nroRemito,
             transporte,
-            tipoTransporte,
+
             chofer,
             chasis,
             acoplado,
@@ -396,6 +400,10 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
                 id="movimientos"
                 value="Registrar Ingreso" 
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
+                /*onClick={() => 
+                    insertarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
+                }
+                */
             />
             
         </form>

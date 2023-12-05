@@ -20,7 +20,7 @@ export  async function obtenerCienPrimerosMovimientos() {
     }
 }
 
-export  async function insertarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,descripcionTransporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipo){
+export  async function agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,descripcionTransporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipo){
     let code=0;
     try {
         const { error } = await supabase
