@@ -9,7 +9,7 @@ export  async function obtenerCienPrimerosMovimientos() {
         let { data: Movimientos, error } = await supabase
             .from('Movimientos')
             .select('*')
-            .range(0, 100)
+            .range(0, 99)
         if (error) {
             throw new Error(error.message);
         }

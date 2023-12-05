@@ -22,7 +22,7 @@ export  async function obtenerPosiciones() {
 export  async function agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen, idAlquiler){
     let code=0;
     try {
-        const { data, error } = await supabase
+        const {error } = await supabase
             .from('Posiciones')
             .insert([
                 {idPosicion:idPosicion, letraPosicion:letraPosicion, sector:sector, altura:altura, volumen:volumen,idAlquiler:idAlquiler},

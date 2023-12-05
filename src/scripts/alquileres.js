@@ -23,7 +23,7 @@ export  async function obtenerCienPrimerosAlquileres() {
 export  async function agregarAlquiler(idAlquiler, fechaIngreso, estado, fechaFin, codigoCliente){
     let code=0;
     try {
-        const { data, error } = await supabase
+        const {error } = await supabase
             .from('Alquileres')
             .insert([
                 {idAlquiler:idAlquiler, fechaIngreso:fechaIngreso, estado:estado, fechaFin:fechaFin, codigoCliente:codigoCliente},
