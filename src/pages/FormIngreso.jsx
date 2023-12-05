@@ -109,8 +109,8 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
                 <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Registrar Ingreso</h1>
             </div>
 
-        <form className= 'py-10 sm:ml-10 md:ml-10 lg:ml-10 xl:px-30 2xl:ml-50 sm:px-5' onSubmit={handleSubmit} >
-            <div className='flex flex-wrap '>
+        <form className= 'py-10  sm:px-5' onSubmit={handleSubmit} >
+            <div className='flex justify-center flex-wrap '>
             <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5 '>
                     <label htmlFor='idCliente' className='block text-md font-medium leading-6 text-gray-900'> 
                         ID del Cliente
