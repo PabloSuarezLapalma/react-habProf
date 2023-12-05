@@ -58,23 +58,7 @@ export  async function borrarMovimiento(codigoBWS){
     return code
 }
 
-export  async function filtrarMovimiento(codigoCliente){
-    try{
-        let { data: Movimientos, error } = await supabase
-        .from('Movimientos')
-        .select("*")
-        .ilike('codigoCliente', codigoCliente)
-        if (error) {
-            throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {return item;});
-        return listaFiltrada; 
-    }
-    catch (error){
-       console.log(error)
-}
-}
-  
-export async function filtrarMovimientosxCodigo(codigoBWS) {
+export async function filtrarMovimientoxCodigo(codigoBWS) {
     try {
       let { data: Movimientos, error } = await supabase
         .from('Movimientos')
