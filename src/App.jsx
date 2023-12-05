@@ -36,12 +36,10 @@ function App() {
         setHangar={setHangar}
         hangar={hangar}/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
+        <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>
-      {movimientos.map((movimiento) => (
-        <DescripcionMovimiento key={movimiento.codigoBWS} movimiento={movimiento} />
-      ))}
     </>
   )
 }
