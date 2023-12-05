@@ -241,7 +241,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
             </td>
             <td className="p-4">
               <Tooltip content="Ver información detallada">
-                <Link to="/descripcionMovimiento">
+                <Link to={`/descripcionMovimiento/${movimiento.codigoBWS}`}>
                   <IconButton variant="text">
                     <ArrowRightIcon className="h-4 w-4" />
                   </IconButton>
