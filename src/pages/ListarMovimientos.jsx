@@ -18,6 +18,9 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [mercaderias, setMercaderias] = useState([]); // Estado para almacenar las mercaderías
   const [clientes, setClientes] = useState([]); // Estado para almacenar los nombres de los Clientes
+  const [fechaDesde, setFechaDesde] = useState();
+  const [fechaHasta, setFechaHasta] = useState();
+
 
   useEffect(() => {
     async function fetchMovimientos() {
@@ -74,16 +77,20 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
       return movimientos.filter((row) =>
-        row.codigoCliente.toLowerCase().includes(searchText.toLowerCase())
+        row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+        (!fechaDesde || row.fecha >= fechaDesde) &&
+        (!fechaHasta || row.fecha <= fechaHasta)
       );
     } else {
       return movimientos.filter(
         (row) =>
           row.estado === selectedTab &&
-          row.codigoCliente.toLowerCase().includes(searchText.toLowerCase())
+          row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+          (!fechaDesde || row.fecha >= fechaDesde) &&
+          (!fechaHasta || row.fecha <= fechaHasta)
       );
     }
-  }, [selectedTab, searchText, movimientos]);
+  }, [selectedTab, searchText, movimientos, fechaDesde, fechaHasta]);
   
   const handleTabChange = (value) => {
     setSelectedTab(value);
@@ -129,6 +136,27 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
               </TabsHeader>
             </Tabs>
           </div>
+          <label htmlFor='fecha' className='block text-md font-medium leading-6 text-gray-900'>
+                        Filtrar por fechas:
+                    </label>
+          <input
+                        id='fechaDesde'
+                        name="fechaDesde"  
+                        type="date" 
+                        className="block rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={fechaDesde} 
+                        required
+                        onChange={(e) => setFechaDesde(e.target.value)} 
+                    />
+                <input
+                        id='fechaHasta'
+                        name="fechaHasta"  
+                        type="date" 
+                        className="block rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={fechaHasta} 
+                        required
+                        onChange={(e) => setFechaHasta(e.target.value)} 
+                    />
           <Link to="/home" className="mx-auto -mt-20"> 
           <Button>
             Volver al inicio
