@@ -2,12 +2,13 @@ import {MagnifyingGlassIcon,ChevronUpDownIcon,} from "@heroicons/react/24/outlin
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
-import React,{useState,useMemo,useEffect} from "react";
-import {obtenerMovimientos} from "../scripts/movimientos";
-import {obtenerMercaderias} from "../scripts/mercaderia";
-  
+import {useState,useMemo,useEffect} from "react";
+import {obtenerCienPrimerosMovimientos} from "../scripts/movimientos";
+import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
+import {obtenerNombreCliente} from "../scripts/clientes";
+
 const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO",},{label: "Egreso",value: "EGRESO",},];
-const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion", "Detalles"];
+const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "Detalles"];
 
   export default function SortableTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,13 +17,33 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
   const [movimientos, setMovimientos] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [mercaderias, setMercaderias] = useState([]); // Estado para almacenar las mercaderías
+  const [clientes, setClientes] = useState([]); // Estado para almacenar los nombres de los Clientes
+  const [fechaDesde, setFechaDesde] = useState();
+  const [fechaHasta, setFechaHasta] = useState();
 
 
   useEffect(() => {
     async function fetchMovimientos() {
       try {
-        const movimientosFromDB = await obtenerMovimientos();
+        const movimientosFromDB = await obtenerCienPrimerosMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
         setMovimientos(movimientosFromDB || []);
+
+        // Obtenemos los nombres de los clientes para cada movimiento
+        const clientes = {};
+        for (const movimiento of movimientosFromDB) {
+            const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
+            clientes[movimiento.codigoCliente] = nombreCliente;
+        }
+        setClientes(clientes);
+
+        // Obtenemos la descripcion de cada mercaderia para cada movimiento
+        const mercaderias={};
+        for (const movimiento of movimientosFromDB) {
+          const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
+          mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
+        }
+        setMercaderias(mercaderias);
+
       } catch (error) {
         console.error('Error al obtener movimientos:', error);
       } finally {
@@ -32,24 +53,6 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
     fetchMovimientos();
   }, []);
 
-  useEffect(() => {
-    async function fetchMercaderias() {
-      try {
-        const mercaderiasFromDB = await obtenerMercaderias(); // Obtener todas las mercaderías
-        setMercaderias(mercaderiasFromDB || []);
-      } catch (error) {
-        console.error('Error al obtener mercaderías:', error);
-      }
-    }
-    fetchMercaderias();
-  }, []);
-
-  const buscarDescripcion = (mercaderias, idMercaderia) => {
-    const mercaderiaEncontrada = mercaderias.find(
-      (mercaderia) => mercaderia.idMercaderia === idMercaderia
-    );
-    return mercaderiaEncontrada ? mercaderiaEncontrada.descripcion : 'No hay nada';
-  };
 
   const itemsPerPage = 5;
 
@@ -74,16 +77,20 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
       return movimientos.filter((row) =>
-        row.codigoBWS.toLowerCase().includes(searchText.toLowerCase())
+        row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+        (!fechaDesde || row.fecha >= fechaDesde) &&
+        (!fechaHasta || row.fecha <= fechaHasta)
       );
     } else {
       return movimientos.filter(
         (row) =>
           row.estado === selectedTab &&
-          row.codigoBWS.toLowerCase().includes(searchText.toLowerCase())
+          row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+          (!fechaDesde || row.fecha >= fechaDesde) &&
+          (!fechaHasta || row.fecha <= fechaHasta)
       );
     }
-  }, [selectedTab, searchText, movimientos]);
+  }, [selectedTab, searchText, movimientos, fechaDesde, fechaHasta]);
   
   const handleTabChange = (value) => {
     setSelectedTab(value);
@@ -129,6 +136,27 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
               </TabsHeader>
             </Tabs>
           </div>
+          <label htmlFor='fecha' className='block text-md font-medium leading-6 text-gray-900'>
+                        Filtrar por fechas:
+                    </label>
+          <input
+                        id='fechaDesde'
+                        name="fechaDesde"  
+                        type="date" 
+                        className="block rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={fechaDesde} 
+                        required
+                        onChange={(e) => setFechaDesde(e.target.value)} 
+                    />
+                <input
+                        id='fechaHasta'
+                        name="fechaHasta"  
+                        type="date" 
+                        className="block rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={fechaHasta} 
+                        required
+                        onChange={(e) => setFechaHasta(e.target.value)} 
+                    />
           <Link to="/home" className="mx-auto -mt-20"> 
           <Button>
             Volver al inicio
@@ -162,7 +190,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
             </thead>
  <tbody>
         {paginatedData.map((movimiento) => (
-          <tr key={movimiento.codigoBWS} className="border-b border-blue-gray-50">
+          <tr key={movimiento.nombreCliente} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -171,7 +199,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {movimiento.estado}
+                    {clientes[movimiento.codigoCliente]}
                   </Typography>
                 </div>
               </div>
@@ -184,7 +212,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
                     color="red"
                     className="font-normal"
                   >
-                    {movimiento.codigoBWS}
+                    {movimiento.estado}
                   </Typography>
                 </div>
               </div>
@@ -207,7 +235,7 @@ const TABLE_HEAD = ["Tipo de movimiento", "Código BWS", "Fecha", "Descripcion",
                   color="blue-gray"
                   className="font-normal"
                 >
-                {buscarDescripcion(mercaderias, movimiento.idMercaderia)}
+                {mercaderias[movimiento.idMercaderia]}  
                 </Typography>
               </div>
             </td>
