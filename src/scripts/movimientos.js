@@ -75,6 +75,33 @@ export  async function filtrarMovimiento(codigoCliente){
 }
 }
 
+export async function filtrarMovimientoxCodigo(codigoBWS) {
+    let code = 0;
+    try {
+      let { data: Movimientos, error } = await supabase
+        .from('Movimientos')
+        .select('*')
+        .ilike('codigoBWS', codigoBWS);
+  
+      if (error) {
+        code = 1;
+        throw new Error(error.message);
+      }
+  
+      if (Movimientos && Movimientos.length > 0) {
+        // Devolver solo el primer elemento del array (asumiendo que solo debería haber uno)
+        return Movimientos[0];
+      } else {
+        // Si no se encuentra ningún movimiento, devolver null o un objeto vacío según sea necesario
+        return null; // O puedes devolver un objeto vacío: return {}
+      }
+    } catch (error) {
+      code = 1;
+      console.log(error);
+    }
+  }
+
+
 export async function filtrarMovimientosEntreFechas(fechaInicio, fechaFin){
     try{
         let { data: Movimientos, error } = await supabase
