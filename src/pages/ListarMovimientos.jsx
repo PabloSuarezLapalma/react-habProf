@@ -1,11 +1,11 @@
-import {MagnifyingGlassIcon,ChevronUpDownIcon,} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon,ChevronUpDownIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {obtenerCienPrimerosMovimientos} from "../scripts/movimientos";
+import {filtrarMovimiento, obtenerCienPrimerosMovimientos} from "../scripts/movimientos";
 import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
-import {obtenerNombreCliente} from "../scripts/clientes";
+import {obtenerNombreCliente,obtenerCodigoCliente} from "../scripts/clientes";
 
 const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO",},{label: "Egreso",value: "EGRESO",},];
 const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "Detalles"];
@@ -21,40 +21,40 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const [fechaDesde, setFechaDesde] = useState();
   const [fechaHasta, setFechaHasta] = useState();
 
+  async function fetchMovimientos() {
+    try {
+      const movimientosFromDB = await obtenerCienPrimerosMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
+      setMovimientos(movimientosFromDB || []);
+
+      // Obtenemos los nombres de los clientes para cada movimiento
+      const clientes = {};
+      for (const movimiento of movimientosFromDB) {
+          const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
+          clientes[movimiento.codigoCliente] = nombreCliente;
+      }
+      setClientes(clientes);
+
+      // Obtenemos la descripcion de cada mercaderia para cada movimiento
+      const mercaderias={};
+      for (const movimiento of movimientosFromDB) {
+        const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
+        mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
+      }
+      setMercaderias(mercaderias);
+
+    } catch (error) {
+      console.error('Error al obtener movimientos:', error);
+    } finally {
+      setLoading(false); // Se establece a falso independientemente del resultado de la obtención de datos
+    }
+  }
 
   useEffect(() => {
-    async function fetchMovimientos() {
-      try {
-        const movimientosFromDB = await obtenerCienPrimerosMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
-        setMovimientos(movimientosFromDB || []);
-
-        // Obtenemos los nombres de los clientes para cada movimiento
-        const clientes = {};
-        for (const movimiento of movimientosFromDB) {
-            const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
-            clientes[movimiento.codigoCliente] = nombreCliente;
-        }
-        setClientes(clientes);
-
-        // Obtenemos la descripcion de cada mercaderia para cada movimiento
-        const mercaderias={};
-        for (const movimiento of movimientosFromDB) {
-          const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
-          mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
-        }
-        setMercaderias(mercaderias);
-
-      } catch (error) {
-        console.error('Error al obtener movimientos:', error);
-      } finally {
-        setLoading(false); // Se establece a falso independientemente del resultado de la obtención de datos
-      }
-    }
     fetchMovimientos();
   }, []);
 
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 7; //Numero de movimientos por pagina
 
   const totalItems = movimientos.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -74,20 +74,62 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
     setCurrentPage(1); // Reiniciar a la primera página al cambiar el texto de búsqueda
   };
 
+  const cargarNuevosDatos = async () => {
+    const codigoCliente = await obtenerCodigoCliente(searchText);
+    console.log(codigoCliente);
+    const nuevosMovimientos = await filtrarMovimiento(codigoCliente);
+    console.log(nuevosMovimientos);
+    setMovimientos(nuevosMovimientos || []);
+     // Obtenemos los nombres de los clientes para cada movimiento
+     const clientes = {};
+     for (const movimiento of nuevosMovimientos) {
+         const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
+         clientes[movimiento.codigoCliente] = nombreCliente;
+     }
+     setClientes(clientes);
+
+     // Obtenemos la descripcion de cada mercaderia para cada movimiento
+     const mercaderias={};
+     for (const movimiento of nuevosMovimientos) {
+       const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
+       mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
+     }
+     setMercaderias(mercaderias);
+
+  };
+
+  const handleSearchClick = () => {
+    if (searchText.trim() === "") {
+      // searchText is an empty string
+      console.log("Busqueda vacia, cargando los 100 primeros movimientos");
+      fetchMovimientos();
+    } else {
+      console.log(searchText);
+      cargarNuevosDatos();
+    }
+  };
+
+  
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
-      return movimientos.filter((row) =>
+      return movimientos
+      /*
+      .filter((row) =>
         row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
         (!fechaDesde || row.fecha >= fechaDesde) &&
         (!fechaHasta || row.fecha <= fechaHasta)
       );
+      */
     } else {
       return movimientos.filter(
         (row) =>
-          row.estado === selectedTab &&
+          row.estado === selectedTab 
+         /*
+          &&
           row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
           (!fechaDesde || row.fecha >= fechaDesde) &&
           (!fechaHasta || row.fecha <= fechaHasta)
+          */
       );
     }
   }, [selectedTab, searchText, movimientos, fechaDesde, fechaHasta]);
@@ -120,7 +162,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
             <div className="w-full md:w-72 sm:w-11/12  ">
               <Input
                 label="Buscar"
-                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                icon={<MagnifyingGlassIcon className="h-5 w-5 cursor-pointer hover:text-red-600" onClick={handleSearchClick}/> }
                 value={searchText}
                 onChange={(e) => handleSearch(e.target.value)}
               />
@@ -157,10 +199,13 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
                         required
                         onChange={(e) => setFechaHasta(e.target.value)} 
                     />
-          <Link to="/home" className="mx-auto -mt-20"> 
-          <Button>
-            Volver al inicio
+         <Button>
+            Filtrar
           </Button>
+          <Link to="/home" className="mx-auto -mt-28 "> 
+                  <IconButton variant="text">
+                    <HomeIcon className="h-8 w-8 text-red-500" />
+                  </IconButton>   
           </Link>
           </div>
         </CardHeader>

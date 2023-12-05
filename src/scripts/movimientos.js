@@ -20,13 +20,13 @@ export  async function obtenerCienPrimerosMovimientos() {
     }
 }
 
-export  async function insertarMovimiento(codigo, fecha,hora, nroRemito, estado, responsable, transporte, chasis, chofer, acoplado, costo, idMercaderia,codigoCliente){
+export  async function insertarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,descripcionTransporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipo){
     let code=0;
     try {
         const { error } = await supabase
             .from('Movimientos')
             .insert([
-                { codigoBWS: codigo, fecha:fecha,hora:hora, nroRemito: nroRemito, estado: estado, nombreResponsable: responsable, descripTransporte: transporte, chasis: chasis, chofer: chofer, acoplado: acoplado, costo: costo, idMercaderia: idMercaderia,codigoCliente:codigoCliente},
+                { codigoBWS:codigoBWS,nroRemito:nroRemito,estado:estado,nombreResponsable:nombreResponsable,descripcionTransporte:descripcionTransporte,chasis:chasis,chofer:chofer,acoplado:acoplado,costo:costo,idMercaderia:idMercaderia,fecha:fecha,hora:hora,codigoCliente:codigoCliente,destino:destino,tipoUnidad:tipoUnidad, tipo:tipo},
             ])
             .select()
         if (error) {
@@ -56,29 +56,6 @@ export  async function borrarMovimiento(codigoBWS){
         console.error(error);
     }
     return code
-}
-
-export async function filtrarMovimiento(codigoBWS) {
-    try {
-      let { data: Movimientos, error } = await supabase
-        .from('Movimientos')
-        .select('*')
-        .ilike('codigoBWS', codigoBWS);
-  
-      if (error) {
-        throw new Error(error.message);
-      }
-  
-      if (Movimientos && Movimientos.length > 0) {
-        // Devolver solo el primer elemento del array (asumiendo que solo debería haber uno)
-        return Movimientos[0];
-      } else {
-        // Si no se encuentra ningún movimiento, devolver null o un objeto vacío según sea necesario
-        return null; // O puedes devolver un objeto vacío: return {}
-      }
-    } catch (error) {
-      console.log(error);
-    }
 }
 
 export async function filtrarMovimientoxCodigo(codigoBWS) {
