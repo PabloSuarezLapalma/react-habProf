@@ -122,6 +122,8 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   };
 
   const handleSearchClick = () => {
+    setFechaDesde("");
+    setFechaHasta("");
     if (searchText.trim() === "") {
       fetchMovimientos();
     } else {
