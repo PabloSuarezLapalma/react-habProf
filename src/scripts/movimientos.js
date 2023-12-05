@@ -79,21 +79,41 @@ export async function filtrarMovimientoxCodigo(codigoBWS) {
 }
 }
   
-export async function filtrarMovimientosEntreFechas(fechaInicio, fechaFin){
+export  async function filtrarMovimiento(codigoCliente){
     try{
         let { data: Movimientos, error } = await supabase
         .from('Movimientos')
         .select("*")
-        .gte('fecha', fechaInicio)
-        .lte('fecha', fechaFin)
+        .ilike('codigoCliente', codigoCliente)
         if (error) {
             throw new Error(error.message);}   
         let listaFiltrada = Movimientos.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){
-           console.log(error)
-    }
+       console.log(error)
+}
+}
+  
+export async function filtrarMovimientosxCodigo(codigoBWS) {
+    try {
+      let { data: Movimientos, error } = await supabase
+        .from('Movimientos')
+        .select('*')
+        .ilike('codigoBWS', codigoBWS);
+      if (error) {
+        throw new Error(error.message);
+      }
+      if (Movimientos && Movimientos.length > 0) {
+        // Devolver solo el primer elemento del array (asumiendo que solo debería haber uno)
+        return Movimientos[0];
+      } else {
+        // Si no se encuentra ningún movimiento, devolver null o un objeto vacío según sea necesario
+        return null; // O puedes devolver un objeto vacío: return {}
+      }
+    } catch (error) {
+      console.log(error);
+}
 }
 
 /*
