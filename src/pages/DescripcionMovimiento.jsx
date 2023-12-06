@@ -32,22 +32,22 @@ export default function DescripcionMovimiento() {
           setAncho(mercaderia[0].ancho);
           setLargo(mercaderia[0].largo);
           setAlto(mercaderia[0].alto);
-        }
-      });
-      // Obtener la posición sector altura correspondiente al ID de la posición en el movimiento
-      buscarPosicion(movimientoFiltrado.idPosicion).then((posicion) => {
-        // Asignar la descripción de la posicion al estado para mostrarla en los campos
-        if (posicion.length > 0) {
-          setSector(posicion[0].sector);
-          setPosicion(posicion[0].posicion);
-          setAltura(posicion[0].altura);
+          // Obtener la posición correspondiente al ID de la posición en la mercadería
+          buscarPosicion(mercaderia[0].idPosicion).then((posiciones) => {
+            // Asignar la información de la posición al estado
+            if (posiciones.length > 0) {
+              setSector(posiciones[0].sector);
+              setPosicion(posiciones[0].posicion);
+              setAltura(posiciones[0].altura);
+            }
+          });
+          console.log(mercaderia[0].idPosicion);
+          console.log(sector);
         }
       });
 
     });
-    
   }, [codigoBWS]);
-
 
 
   return (
@@ -224,7 +224,7 @@ export default function DescripcionMovimiento() {
                   readOnly
                   type="text" 
                   className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                  value={ancho}
+                  value={ancho || ''}
                 />
               </div>
               <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -235,7 +235,7 @@ export default function DescripcionMovimiento() {
                   readOnly
                   type="text" 
                   className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                  value={largo}
+                  value={largo || ''}
                 />
               </div>
               <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -246,7 +246,7 @@ export default function DescripcionMovimiento() {
                   readOnly
                   type="text" 
                   className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                  value={alto}
+                  value={alto || ''}
                 />
               </div>
               <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -268,7 +268,7 @@ export default function DescripcionMovimiento() {
                   readOnly
                   type="text" 
                   className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                  value={sector}
+                  value={sector || ''}
                 />
               </div>
               <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -279,7 +279,7 @@ export default function DescripcionMovimiento() {
                   readOnly
                   type="text" 
                   className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                  value={posicion}
+                  value={posicion || ''}
                 />
               </div>
               <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -290,7 +290,7 @@ export default function DescripcionMovimiento() {
                   readOnly
                   type="text" 
                   className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                  value={altura}
+                  value={altura || ''}
                 />
               </div>              
             </div>

@@ -79,21 +79,25 @@ export async function filtrarMovimientoxCodigo(codigoBWS) {
 }
 }
   
-export  async function filtrarMovimiento(codigoCliente){
-    try{
-        let { data: Movimientos, error } = await supabase
+export async function filtrarMovimiento(textoBusqueda) {
+    try {
+      let { data: Movimientos, error } = await supabase
         .from('Movimientos')
         .select("*")
-        .ilike('codigoCliente', codigoCliente)
-        if (error) {
-            throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {return item;});
-        return listaFiltrada; 
+        .ilike('codigoCliente', `%${textoBusqueda}%`); // Usamos `%` para buscar coincidencias parciales
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      let listaFiltrada = Movimientos.map((item) => {
+        return item;
+      });
+      return listaFiltrada;
+    } catch (error) {
+      console.log(error);
     }
-    catch (error){
-       console.log(error)
-}
-}
+  }
   
 export async function filtrarMovimientosxCodigo(codigoBWS) {
     try {

@@ -72,6 +72,16 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const handleSearch = (value) => {
     setSearchText(value);
     setCurrentPage(1); // Reiniciar a la primera página al cambiar el texto de búsqueda
+  
+    if (value.trim() === "") {
+      // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
+      console.log("Búsqueda vacía, cargando los 100 primeros movimientos");
+      fetchMovimientos();
+    } else {
+      // Si hay texto en el campo de búsqueda, filtramos los movimientos
+      console.log(value);
+      filtrarMovimiento(value); // Esta función debería filtrar los movimientos en función del texto ingresado
+    }
   };
 
   const cargarNuevosDatos = async () => {
@@ -113,23 +123,21 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
       return movimientos
-      /*
       .filter((row) =>
         row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
         (!fechaDesde || row.fecha >= fechaDesde) &&
         (!fechaHasta || row.fecha <= fechaHasta)
       );
-      */
     } else {
       return movimientos.filter(
         (row) =>
           row.estado === selectedTab 
-         /*
+         
           &&
           row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
           (!fechaDesde || row.fecha >= fechaDesde) &&
           (!fechaHasta || row.fecha <= fechaHasta)
-          */
+          
       );
     }
   }, [selectedTab, searchText, movimientos, fechaDesde, fechaHasta]);
