@@ -1,9 +1,4 @@
-import React, { useState } from 'react';
-import Alerta from '../components/Alerta';
-import { agregarMovimiento } from '../scripts/movimientos';
-import { agregarPosicion } from '../scripts/posiciones';
-import { agregarMercaderia } from '../scripts/mercaderias';
-
+import { useState } from 'react';
 
 const FormIngreso = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
@@ -49,7 +44,7 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
         const minInput = parseInt(mins);
         
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = 'Ingreso';
+        const estado = setEstado('Ingreso');
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
@@ -62,7 +57,6 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
             hora,
             nroRemito,
             transporte,
-
             chofer,
             chasis,
             acoplado,

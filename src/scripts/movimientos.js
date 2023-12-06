@@ -73,8 +73,8 @@ export  async function filtrarMovimiento(codigoCliente){
        console.log(error)
 }
 }
-  
-export async function filtrarMovimientosxCodigo(codigoBWS) {
+
+export async function filtrarMovimientoxCodigo(codigoBWS) {
     try {
       let { data: Movimientos, error } = await supabase
         .from('Movimientos')
