@@ -75,6 +75,27 @@ export  async function buscarCliente(nombreCliente){
 }
 }
 
+export  async function existeUsername(username){
+    let encontrado=false;
+    try{
+        let { data: Movimientos, error } = await supabase
+        .from('Clientes')
+        .select("*")
+        .ilike('username', username)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Movimientos.map(item => {return item;});
+        if (listaFiltrada.length>0){
+            encontrado=true;
+        }
+        return encontrado;
+    }
+    catch (error){
+       console.log(error)
+}
+}
+
+
 export async function obtenerCodigoCliente(nombreCliente){
     let nombre='';
     try{

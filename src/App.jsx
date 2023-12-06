@@ -24,10 +24,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
         <Route path="/formIngreso" element={<FormIngreso
-        setMovimientos={setMovimientos}
         movimientos={movimientos}/>}/>
         <Route path="/formEgreso" element={<FormEgreso
-        setMovimientos={setMovimientos}
         movimientos={movimientos}/>}/>
         <Route path="/agregarRack" element={<AgregarRack
         setRacks={setRacks}
