@@ -37,12 +37,10 @@ export default function DescripcionMovimiento() {
             // Asignar la información de la posición al estado
             if (posiciones.length > 0) {
               setSector(posiciones[0].sector);
-              setPosicion(posiciones[0].posicion);
+              setPosicion(posiciones[0].letraPosicion);
               setAltura(posiciones[0].altura);
             }
-          });
-          console.log(mercaderia[0].idPosicion);
-          console.log(sector);
+          });          
         }
       });
 
