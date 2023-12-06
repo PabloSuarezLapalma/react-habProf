@@ -294,11 +294,11 @@ export default function DescripcionMovimiento() {
                 />
               </div>              
             </div>
-            <Button>
-                <Link to="/listarMovimientos" className="mx-auto -mt-20"> 
+            <Link to="/listarMovimientos" className="mx-auto -mt-20">
+              <Button>
                   Volver atrás
-                </Link>
-                </Button>
+              </Button>
+            </Link>
           </div>
         </div>
       )}
