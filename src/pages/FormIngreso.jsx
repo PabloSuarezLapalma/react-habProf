@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import React, { useState } from 'react';
+
 
 const FormIngreso = ({movimientos, setMovimientos}) => {
     const [fecha, setFecha] = useState('');
@@ -72,7 +74,8 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
             idCliente,
             destino,
             estado,
-            tipoUnidad
+            tipoUnidad,
+            
         };
         setMovimientos([...movimientos, objetoMovimiento]);
 
