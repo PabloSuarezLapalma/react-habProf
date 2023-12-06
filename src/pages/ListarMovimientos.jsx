@@ -3,7 +3,7 @@ import {ArrowRightIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {filtrarMovimiento, obtenerCienPrimerosMovimientos} from "../scripts/movimientos";
+import {filtrarMovimiento, obtenerCienPrimerosMovimientos,filtrarMovimientosEntreFechas} from "../scripts/movimientos";
 import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
 import {obtenerNombreCliente,obtenerCodigoCliente} from "../scripts/clientes";
 
@@ -84,11 +84,34 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
     }
   };
 
+  const handleDateClick = () => {
+    if (fechaDesde.trim() === "" || fechaHasta.trim() === "") {
+      fetchMovimientos();
+    } else {
+      cargarFiltradoFechas();
+    }
+  };
+
+  const cargarFiltradoFechas = async () => {  
+    const nuevosMovimientos = await filtrarMovimientosEntreFechas(fechaDesde,fechaHasta);
+    setMovimientos(nuevosMovimientos || []);
+    const clientes = {};
+    for (const movimiento of nuevosMovimientos) {
+        const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
+        clientes[movimiento.codigoCliente] = nombreCliente;
+    }
+    setClientes(clientes);
+    const mercaderias={};
+    for (const movimiento of nuevosMovimientos) {
+      const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
+      mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
+    }
+    setMercaderias(mercaderias);
+  };
+
   const cargarNuevosDatos = async () => {
     const codigoCliente = await obtenerCodigoCliente(searchText);
-    console.log(codigoCliente);
     const nuevosMovimientos = await filtrarMovimiento(codigoCliente);
-    console.log(nuevosMovimientos);
     setMovimientos(nuevosMovimientos || []);
      // Obtenemos los nombres de los clientes para cada movimiento
      const clientes = {};
@@ -108,13 +131,14 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
 
   };
 
+
+
   const handleSearchClick = () => {
+    setFechaDesde("");
+    setFechaHasta("");
     if (searchText.trim() === "") {
-      // searchText is an empty string
-      console.log("Busqueda vacia, cargando los 100 primeros movimientos");
       fetchMovimientos();
     } else {
-      console.log(searchText);
       cargarNuevosDatos();
     }
   };
@@ -207,7 +231,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
                         required
                         onChange={(e) => setFechaHasta(e.target.value)} 
                     />
-         <Button>
+         <Button onClick={handleDateClick}>
             Filtrar
           </Button>
           <Link to="/home" className="mx-auto -mt-28 "> 

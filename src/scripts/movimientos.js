@@ -20,7 +20,7 @@ export  async function obtenerCienPrimerosMovimientos() {
     }
 }
 
-export  async function insertarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,descripcionTransporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipo){
+export  async function agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,descripcionTransporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipo){
     let code=0;
     try {
         const { error } = await supabase
@@ -56,6 +56,22 @@ export  async function borrarMovimiento(codigoBWS){
         console.error(error);
     }
     return code
+}
+
+export  async function filtrarMovimiento(codigoCliente){
+    try{
+        let { data: Movimientos, error } = await supabase
+        .from('Movimientos')
+        .select("*")
+        .ilike('codigoCliente', codigoCliente)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Movimientos.map(item => {return item;});
+        return listaFiltrada; 
+    }
+    catch (error){
+       console.log(error)
+}
 }
 
 export async function filtrarMovimientoxCodigo(codigoBWS) {
