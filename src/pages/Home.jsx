@@ -1,15 +1,7 @@
   import { Fragment, useState } from 'react'
   import { Link } from 'react-router-dom'
   import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-  import {
-    ArrowPathIcon,
-    Bars3Icon,
-    PlusIcon,
-    MinusIcon,
-    ListBulletIcon,
-    SquaresPlusIcon,
-    XMarkIcon,
-  } from '@heroicons/react/24/outline'
+  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,UserMinusIcon, UserCircleIcon} from '@heroicons/react/24/outline'
   import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
   import { Typography } from "@material-tailwind/react";
 
@@ -17,15 +9,15 @@
   const movimientos = [
     { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/formIngreso', icon: PlusIcon },
     { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '/formEgreso', icon: MinusIcon },
+    { name: 'Relocalizar movimiento', description: 'Permite modificar un movimiento', href: '#', icon: MapPinIcon },
     { name: 'Ver movimientos', description: 'Ver todos los movimientos', href: '/listarMovimientos', icon: ListBulletIcon },
-    { name: 'Agregar rack', description: 'Connect with third-party tools', href: '/agregarRack', icon: SquaresPlusIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
-    { name: 'Agregar hangar', description: 'Build strategic funnels that will convert', href: '/agregarHangar', icon: ArrowPathIcon }, //en este const van todos los de mov aca puse de hangar para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
   ]
-  const callsToAction = [
-    { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-    { name: 'Contact sales', href: '#', icon: PhoneIcon },
+  const clientes = [
+    { name: 'Registrar cliente', description: 'Registrar un nuevo cliente', href: '/agregarCliente', icon: UserPlusIcon },
+    { name: 'Baja de cliente', description: 'Eliminar un cliente', href: '/#', icon: UserMinusIcon },
+    { name: 'Modificar cliente', description: 'Modificar un cliente', href: '/#', icon: UserCircleIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
+    { name: 'Ver clientes', description: 'Listar todos los clientes', href: '/#', icon: ListBulletIcon },
   ]
-
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -56,7 +48,7 @@
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
             <Popover className="relative">
               <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
-                Movimiento
+                Movimientos
                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
               </Popover.Button>
 
@@ -89,31 +81,49 @@
                       </div>
                     ))}
                   </div>
-                  <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                    {callsToAction.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
-                      >
-                        <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
+
                 </Popover.Panel>
               </Transition>
             </Popover>
+            <Popover className="relative">
+              <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
+                Clientes
+                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              </Popover.Button>
 
-            <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
-              Features
-            </Link>
-            <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
-              Marketplace
-            </Link>
-            <Link to="#" className="text-sm font-semibold leading-6 text-gray-900">
-              Company
-            </Link>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+              >
+                <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-4">
+                    {clientes.map((item) => (
+                      <div
+                        key={item.name}
+                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                      >
+                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                          <item.icon className="h-6 w-6 text-gray-600 group-hover:text-red-500" aria-hidden="true" />
+                        </div>
+                        <div className="flex-auto">
+                          <Link to={item.href} className="block font-semibold  text-blue-gray-900">
+                            {item.name}
+                            <span className="absolute inset-0" />
+                          </Link>
+                          <p className="mt-1 text-gray-600">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                </Popover.Panel>
+              </Transition>
+            </Popover>
           </Popover.Group>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -144,14 +154,14 @@
                     {({ open }) => (
                       <>
                         <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                          Movimiento
+                          Movimientos
                           <ChevronDownIcon
                             className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
                             aria-hidden="true"
                           />
                         </Disclosure.Button>
                         <Disclosure.Panel className="mt-2 space-y-2">
-                          {[...movimientos, ...callsToAction].map((item) => (
+                          {[...movimientos,].map((item) => (
                             <Disclosure.Button
                               key={item.name}
                               as="a"
@@ -165,24 +175,32 @@
                       </>
                     )}
                   </Disclosure>
-                  <Link
-                    to="#"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Features
-                  </Link>
-                  <Link
-                    to="#"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Marketplace
-                  </Link>
-                  <Link
-                    to="#"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Company
-                  </Link>
+                  <Disclosure as="div" className="-mx-3">
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                          Clientes
+                          <ChevronDownIcon
+                            className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
+                            aria-hidden="true"
+                          />
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="mt-2 space-y-2">
+                          {[...clientes,].map((item) => (
+                            <Disclosure.Button
+                              key={item.name}
+                              as="a"
+                              href={item.href}
+                              className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            >
+                              {item.name}
+                            </Disclosure.Button>
+                          ))}
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
+
                 </div>
               </div>
             </div>

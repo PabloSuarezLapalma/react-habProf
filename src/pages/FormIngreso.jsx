@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import React, { useState } from 'react';
 
 
-const FormIngreso = ({movimientos, setMovimientos}) => {
+const FormIngreso = () => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -46,38 +45,13 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
         const minInput = parseInt(mins);
         
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = setEstado('Ingreso');
+        const estado = setEstado('INGRESO');
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
             alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")
             return;
         }
-        //Objeto movimiento        
-        const objetoMovimiento = {
-            fecha,
-            hora,
-            nroRemito,
-            transporte,
-            chofer,
-            chasis,
-            acoplado,
-            cantidad,
-            descripcion,
-            posicion,
-            sector,
-            altura,
-            ancho,
-            largo,
-            alto,
-            codigoBWS,
-            idCliente,
-            destino,
-            estado,
-            tipoUnidad,
-            
-        };
-        setMovimientos([...movimientos, objetoMovimiento]);
 
         //Reiniciar el formulario
         setFecha('');
@@ -395,12 +369,8 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
             <input 
                 type="submit"
                 id="movimientos"
-                value="Registrar Ingreso" 
+                value="Aceptar" 
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
-                /*onClick={() => 
-                    insertarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
-                }
-                */
             />
             
         </form>

@@ -44,7 +44,7 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
         const minInput = parseInt(mins);
         
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = 'Egreso';
+        const estado = 'EGRESO';
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {

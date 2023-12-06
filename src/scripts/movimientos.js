@@ -94,64 +94,20 @@ export async function filtrarMovimientoxCodigo(codigoBWS) {
       console.log(error);
 }
 }
-  
-export async function filtrarMovimiento(textoBusqueda) {
-    try {
-      let { data: Movimientos, error } = await supabase
-        .from('Movimientos')
-        .select("*")
-        .ilike('codigoCliente', `%${textoBusqueda}%`); // Usamos `%` para buscar coincidencias parciales
-  
-      if (error) {
-        throw new Error(error.message);
-      }
-  
-      let listaFiltrada = Movimientos.map((item) => {
-        return item;
-      });
-      return listaFiltrada;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  
-export async function filtrarMovimientosxCodigo(codigoBWS) {
-    try {
-      let { data: Movimientos, error } = await supabase
-        .from('Movimientos')
-        .select('*')
-        .ilike('codigoBWS', codigoBWS);
-      if (error) {
-        throw new Error(error.message);
-      }
-      if (Movimientos && Movimientos.length > 0) {
-        // Devolver solo el primer elemento del array (asumiendo que solo debería haber uno)
-        return Movimientos[0];
-      } else {
-        // Si no se encuentra ningún movimiento, devolver null o un objeto vacío según sea necesario
-        return null; // O puedes devolver un objeto vacío: return {}
-      }
-    } catch (error) {
-      console.log(error);
-}
-}
 
-/*
-filtrarMovimientosEntreFechas("2021-10-01","2024-10-31").then(resultado=> {
-    if (Array.isArray(resultado)) {
-        // Itera sobre cada elemento del array
-        resultado.forEach(elemento => {
-            console.log("Código BWS:", elemento.codigoBWS);
-            console.log("Fecha y Hora:", elemento.fechaHora);
-            console.log("Responsable:", elemento.nombreResponsable);
-            console.log("idMercaderia:", elemento.idMercaderia);
-            console.log("Descripcion:", elemento.descripcionTransporte);
-            console.log("Codigo del Cliente: ", elemento.codigoCliente);
-            // ... y así sucesivamente para otros campos
-        });
-    } else {
-        console.error("El resultado no es un array.");
-    }  
-    }
-)
-*/
+export async function filtrarMovimientosEntreFechas(fechaInicio, fechaFin){
+  try{
+      let { data: Movimientos, error } = await supabase
+      .from('Movimientos')
+      .select("*")
+      .gte('fecha', fechaInicio)
+      .lte('fecha', fechaFin)
+      if (error) {
+          throw new Error(error.message);}   
+      let listaFiltrada = Movimientos.map(item => {return item;});
+      return listaFiltrada; 
+  }
+  catch (error){
+         console.log(error)
+  }
+}

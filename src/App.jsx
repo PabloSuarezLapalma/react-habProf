@@ -11,9 +11,9 @@ import Error404 from './pages/Error404'
 import AgregarRack from './pages/AgregarRack'
 import AgregarHangar from './pages/AgregarHangar'
 import ListarMovimientos from './pages/ListarMovimientos'
+import AgregarCliente from './pages/AgregarCliente'
 
 function App() {
-  const [movimientos, setMovimientos] = useState([])
   const [racks, setRacks] = useState([])
   const [hangar, setHangar] = useState([])
   return (
@@ -23,12 +23,8 @@ function App() {
         <Route index element={<Login/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/formIngreso" element={<FormIngreso
-        setMovimientos={setMovimientos}
-        movimientos={movimientos}/>}/>
-        <Route path="/formEgreso" element={<FormEgreso
-        setMovimientos={setMovimientos}
-        movimientos={movimientos}/>}/>
+        <Route path="/formIngreso" element={<FormIngreso/>}/>
+        <Route path="/formEgreso" element={<FormEgreso/>}/>
         <Route path="/agregarRack" element={<AgregarRack
         setRacks={setRacks}
         racks={racks}/>}/>
@@ -37,6 +33,7 @@ function App() {
         hangar={hangar}/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
+        <Route path="/agregarCliente" element={<AgregarCliente/>}/>
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>
