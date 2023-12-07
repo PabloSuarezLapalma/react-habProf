@@ -12,6 +12,7 @@ import AgregarRack from './pages/AgregarRack'
 import AgregarHangar from './pages/AgregarHangar'
 import ListarMovimientos from './pages/ListarMovimientos'
 import AgregarCliente from './pages/AgregarCliente'
+import BajaCliente from './pages/BajaCliente'
 
 function App() {
   const [racks, setRacks] = useState([])
@@ -34,6 +35,8 @@ function App() {
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
+        <Route path="/bajarCliente" element={<BajaCliente/>}/>
+
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>
