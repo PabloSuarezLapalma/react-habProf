@@ -65,11 +65,17 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
     setClientes(nuevosClientes || []);
   };
 
-  const handleSearchClick = () => {
+  const handleSearchClick = async () => {
     if (searchText.trim() === "") {
+      // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
       fetchClientes();
     } else {
-      cargarNuevosDatos();
+      try {
+        const clientesEncontrados = await buscarCliente(searchText);
+        setClientes(clientesEncontrados || []);
+      } catch (error) {
+        console.error('Error al buscar clientes:', error);
+      }
     }
   };
 

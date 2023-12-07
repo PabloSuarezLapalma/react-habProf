@@ -10,7 +10,7 @@ export  async function obtenerCienPrimerosClientes() {
         let { data: Clientes, error } = await supabase
             .from('Clientes')
             .select('*')
-            .range(0, 100)
+            .range(0, 2)
         if (error) {
             throw new Error(error.message);
         }

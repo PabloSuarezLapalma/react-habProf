@@ -3,7 +3,7 @@ import { existeUsername,existeEmail,agregarCliente } from '../scripts/clientes';
 import {HomeIcon} from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
 import {IconButton} from "@material-tailwind/react";
-/*codigo, nombreCliente, responsable, cuit, telefono, email, username, password*/
+
 const AgregarCliente = () => {
     const [codigo, setCodigo] = useState('');
     const [nombreCliente, setNombreCliente] = useState('');
@@ -17,7 +17,6 @@ const AgregarCliente = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        //No anda la comparación de hora y segundos
         if (!existeUsername(username)) {
             alert("El nombre de usuario ya se encuentra en uso elije otro")
             return;
@@ -79,7 +78,11 @@ const AgregarCliente = () => {
                             value={nombreCliente}
                             required
                             placeholder=' Cliente' 
-                            onChange={(e) => setNombreCliente(e.target.value)}  
+                            onChange={(e) => {
+                                const inputText = e.target.value;
+                                const capitalizedText = inputText.charAt(0).toUpperCase() + inputText.slice(1);
+                                setNombreCliente(capitalizedText);
+                              }} 
                         />
 
                 </div>
