@@ -1,102 +1,305 @@
-export default function DescripcionMovimiento({movimiento}) {
-  return (
-    <div className="sm:px-0 bg-white pt-4 pb-4 pl-2 pr-2 rounded-lg shadow-md text-black sm:w-full md:w-full lg:w-full xl:w-full max-w-7xl mx-auto px-8 p-8 text-center">
-    <div className="bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12 shadow-md">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Información del movimiento</h1>
-    </div>
-      <div className="mt-6 border-t border-gray-300">
-        <dl className="divide-y divide-gray-200">
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">ID del cliente</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.idCliente}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Código BWS</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.codigoBWS}</dd>
-          </div>  
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Fecha de ingreso</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.fecha}</dd> 
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Hora de ingreso</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.hora}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Número de Remito</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.nroRemito}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Transporte</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.transporte}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Tipo de transporte</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.tipoTransporte}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Chofer</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.chofer}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Chásis</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.chasis}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Tipo de acoplado</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.acoplado}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Cantidad</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.cantidad}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Descripción</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.descripcion}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Posición</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.posicion}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Sector</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.sector}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Altura</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.altura}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Ancho</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.ancho}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Largo</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.largo}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Alto</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.alto}</dd>
-          </div>
-          
-          {movimiento.destino === '' ? <p></p> : <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                                    <dt className="text-md font-medium leading-6 text-gray-900">Destino</dt>
-                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.destino}</dd>
-                                                  </div>
-          }
-          
-          {movimiento.tipoUnidad === '' ? <p ></p> : <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                                  <dt className="text-md font-medium leading-6 text-gray-900">Tipo de unidad</dt>
-                                                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.tipoUnidad}</dd>
-                                                </div>
-          }
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { filtrarMovimientoxCodigo } from '../scripts/movimientos';
+import {Link} from "react-router-dom";
+import {Button} from "@material-tailwind/react";
+import { buscarMercaderia } from '../scripts/mercaderia';
+import { buscarPosicion } from '../scripts/posiciones';
 
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-md font-medium leading-6 text-gray-900">Estado</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{movimiento.estado}</dd>
+
+export default function DescripcionMovimiento() {
+  const { codigoBWS } = useParams();
+  const [movimiento, setMovimiento] = useState(null);
+  const [descripcionMercaderia, setDescripcionMercaderia] = useState('');
+  const [cantidad, setCantidad] = useState(0);
+  const [ancho, setAncho] = useState(0);
+  const [largo, setLargo] = useState(0);
+  const [alto, setAlto] = useState(0);
+  const [sector, setSector] = useState('');
+  const [posicion, setPosicion] = useState('');
+  const [altura, setAltura] = useState('');
+
+
+  useEffect(() => {
+    filtrarMovimientoxCodigo(codigoBWS).then((movimientoFiltrado) => {
+      setMovimiento(movimientoFiltrado);
+      // Obtener la mercadería correspondiente al ID de la mercadería en el movimiento
+      buscarMercaderia(movimientoFiltrado.idMercaderia).then((mercaderia) => {
+        // Asignar la descripción de la mercadería al estado para mostrarla en los campos
+        if (mercaderia.length > 0) {
+          setDescripcionMercaderia(mercaderia[0].descripcion);
+          setCantidad(mercaderia[0].cantidad);
+          setAncho(mercaderia[0].ancho);
+          setLargo(mercaderia[0].largo);
+          setAlto(mercaderia[0].alto);
+          // Obtener la posición correspondiente al ID de la posición en la mercadería
+          buscarPosicion(mercaderia[0].idPosicion).then((posiciones) => {
+            // Asignar la información de la posición al estado
+            if (posiciones.length > 0) {
+              setSector(posiciones[0].sector);
+              setPosicion(posiciones[0].letraPosicion);
+              setAltura(posiciones[0].altura);
+            }
+          });          
+        }
+      });
+
+    });
+  }, [codigoBWS]);
+
+
+  return (
+    <div className='max-w-7xl mx-auto px-8 p-8 text-center items-center '>
+      {movimiento && (
+        <div className="bg-white pt-4 pb-4 pl-2 pr-2 rounded-lg shadow-md text-black sm:w-fit md:w-fit lg:w-fit xl:w-fit">
+          <div className="shadow-md bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Detalles del Movimiento</h1>
           </div>
-        </dl>
-      </div>
+
+          <div className='py-10 sm:ml-10 md:ml-10 lg:ml-10 xl:px-30 2xl:ml-50 sm:px-5  '>
+            <div className='flex flex-wrap justify-center'>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'> 
+                  Tipo de movimiento
+                </label>
+                <input
+                  type="text" 
+                  readOnly
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                  value={movimiento.estado || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'> 
+                  Fecha del movimiento
+                </label>
+                <input
+                  type="text" 
+                  readOnly
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                  value={movimiento.fecha || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'> 
+                  Hora del movimiento
+                </label>
+                <input
+                  type="text" 
+                  readOnly
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                  value={movimiento.hora || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'> 
+                  Remito
+                </label>
+                <input
+                  type="text" 
+                  readOnly
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                  value={movimiento.nroRemito || ''}
+                />
+              </div>
+              {movimiento.estado === "EGRESO" && (
+                <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                  <label className='block text-md font-medium leading-6 text-gray-900'> 
+                    Responsable
+                  </label>
+                  <input
+                    type="text" 
+                    readOnly
+                    className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                    value={movimiento.nombreResponsable || ''}
+                  />
+                </div>
+              )}
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Código BWS
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.codigoBWS || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Transporte
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.descripcionTransporte || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Chofer
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.chofer || ''}
+                />
+              </div> 
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Chasis
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.chasis || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Acoplado
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.acoplado || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Cantidad
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={cantidad}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Unidad
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.tipoUnidad || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Descripcion
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={descripcionMercaderia || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Tipo
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={movimiento.tipo || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Ancho (cm)
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={ancho || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Largo (cm)
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={largo || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Alto (cm)
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={alto || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  M3 Ocupados
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={(ancho*largo*alto)/1000000}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Sector
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={sector || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Posicion
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={posicion || ''}
+                />
+              </div>
+              <div className='w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                <label className='block text-md font-medium leading-6 text-gray-900'>
+                  Altura
+                </label>
+                <input
+                  readOnly
+                  type="text" 
+                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                  value={altura || ''}
+                />
+              </div>              
+            </div>
+            <Link to="/listarMovimientos" className="mx-auto -mt-20">
+              <Button>
+                  Volver atrás
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

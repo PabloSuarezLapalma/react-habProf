@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Alerta from '../components/Alerta';
 
-const FormIngreso = ({movimientos, setMovimientos}) => {
+
+const FormIngreso = () => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -45,38 +45,13 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
         const minInput = parseInt(mins);
         
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = 'Ingreso';
+        const estado = setEstado('INGRESO');
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
             alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")
             return;
         }
-        //Objeto movimiento        
-        const objetoMovimiento = {
-            fecha,
-            hora,
-            nroRemito,
-            transporte,
-            tipoTransporte,
-            chofer,
-            chasis,
-            acoplado,
-            cantidad,
-            descripcion,
-            posicion,
-            sector,
-            altura,
-            ancho,
-            largo,
-            alto,
-            codigoBWS,
-            idCliente,
-            destino,
-            estado,
-            tipoUnidad
-        };
-        setMovimientos([...movimientos, objetoMovimiento]);
 
         //Reiniciar el formulario
         setFecha('');
@@ -109,8 +84,8 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
                 <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Registrar Ingreso</h1>
             </div>
 
-        <form className= 'py-10 sm:ml-10 md:ml-10 lg:ml-10 xl:px-30 2xl:ml-50 sm:px-5' onSubmit={handleSubmit} >
-            <div className='flex flex-wrap '>
+        <form className= 'py-10  sm:px-5' onSubmit={handleSubmit} >
+            <div className='flex justify-center flex-wrap '>
             <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5 '>
                     <label htmlFor='idCliente' className='block text-md font-medium leading-6 text-gray-900'> 
                         ID del Cliente
@@ -235,7 +210,7 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='chasis' className='block text-md font-medium leading-6 text-gray-900'>
-                        Chásis
+                        Chasis
                     </label>
                     <input
                         id='chasis'
@@ -394,7 +369,7 @@ const FormIngreso = ({movimientos, setMovimientos}) => {
             <input 
                 type="submit"
                 id="movimientos"
-                value="Registrar Ingreso" 
+                value="Aceptar" 
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
             />
             
