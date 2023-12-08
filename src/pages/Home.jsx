@@ -15,8 +15,8 @@
   const clientes = [
     { name: 'Registrar cliente', description: 'Registrar un nuevo cliente', href: '/agregarCliente', icon: UserPlusIcon },
     { name: 'Baja de cliente', description: 'Eliminar un cliente', href: '/bajarCliente', icon: UserMinusIcon },
-    { name: 'Modificar cliente', description: 'Modificar un cliente', href: '/#', icon: UserCircleIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
-    { name: 'Ver clientes', description: 'Listar todos los clientes', href: '/#', icon: ListBulletIcon },
+    { name: 'Modificar cliente', description: 'Modificar un cliente', href: '/listarModificarClientes', icon: UserCircleIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
+    { name: 'Ver clientes', description: 'Listar todos los clientes', href: '/listarClientes', icon: ListBulletIcon },
   ]
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')

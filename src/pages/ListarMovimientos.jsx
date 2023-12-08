@@ -147,20 +147,20 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
       return movimientos
-      //.filter((row) =>
-       // row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
-        //(!fechaDesde || row.fecha >= fechaDesde) &&
-        //(!fechaHasta || row.fecha <= fechaHasta)
-      //);
+      .filter((row) =>
+        row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+        (!fechaDesde || row.fecha >= fechaDesde) &&
+        (!fechaHasta || row.fecha <= fechaHasta)
+      );
     } else {
       return movimientos.filter(
         (row) =>
           row.estado === selectedTab 
          
-         // &&
-          //row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
-          //(!fechaDesde || row.fecha >= fechaDesde) &&
-          //(!fechaHasta || row.fecha <= fechaHasta)
+         &&
+          row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+          (!fechaDesde || row.fecha >= fechaDesde) &&
+          (!fechaHasta || row.fecha <= fechaHasta)
           
       );
     }

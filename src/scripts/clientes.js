@@ -171,30 +171,47 @@ export async function obtenerNombreCliente(codigoCliente){
        console.log(error)
 }
 }
-export  async function actualizarCliente(codigo,columnaModificar, nuevoValor) {
-    let code=0;
+
+export async function actualizarCliente(codigo, nuevosValores) {
+    let code = 0;
     try {
-        const { data, error } = await supabase
-            .from('Clientes')
-            .update({ [columnaModificar]: nuevoValor })
-            .eq("codigo", codigo)
-            .select();
-
-        if (error) {
-            code=1;
-            console.error("Error updating Cliente:", error.message);
-        } else {
-            code=1;
-            console.log("Cliente updated successfully:", data);
-        }
+      const { data, error } = await supabase
+        .from('Clientes')
+        .update(nuevosValores)
+        .eq("codigo", codigo)
+        .select();
+  
+      if (error) {
+        code = 1;
+        console.error("Error updating Cliente:", error.message);
+      } else {
+        code = 1;
+        console.log("Cliente updated successfully:", data);
+      }
     } catch (error) {
-        code=1;
-        console.error("Unexpected error:", error.message);
+      code = 1;
+      console.error("Unexpected error:", error.message);
     }
-    return code
-}
+    return code;
+  }
 
-
+export async function obtenerClientePorCodigo(codigoCliente) {
+    try {
+      let { data: Cliente, error } = await supabase
+        .from('Clientes')
+        .select('*')
+        .eq('codigo', codigoCliente)
+        .single();
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      return Cliente;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 //!Esta es la forma de acceder a los datos de la función, como es asíncrono siempre el resultado es una Promise, por lo que se debe acceder de la siguiente manera para poder manipular los datos
 
