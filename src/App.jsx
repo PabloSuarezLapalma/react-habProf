@@ -17,6 +17,7 @@ import BajaCliente from './pages/BajaCliente'
 function App() {
   const [racks, setRacks] = useState([])
   const [hangar, setHangar] = useState([])
+  const [idAlquiler, setIdAlquiler] = useState(0)
   return (
     <>
       <BrowserRouter>
@@ -24,8 +25,8 @@ function App() {
         <Route index element={<Login/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/formIngreso" element={<FormIngreso/>}/>
-        <Route path="/formEgreso" element={<FormEgreso/>}/>
+        <Route path="/formIngreso" element={<FormIngreso idAlquiler={idAlquiler}/>}/>
+        <Route path="/formEgreso" element={<FormEgreso idAlquiler={idAlquiler}/>}/>
         <Route path="/agregarRack" element={<AgregarRack
         setRacks={setRacks}
         racks={racks}/>}/>

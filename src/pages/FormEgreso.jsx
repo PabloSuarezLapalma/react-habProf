@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const FormEgreso = ({movimientos, setMovimientos}) => {
+const FormEgreso = ({idAlquiler}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -22,6 +23,7 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
     const [destino, setDestino] = useState('');
     const [estado, setEstado] = useState('');
     const [tipoUnidad, setTipoUnidad] = useState('');
+    const [nombreResponsable, setNombreResponsable] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -51,31 +53,6 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
         alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual');
         return;
         }
-        //Objeto movimiento        
-        const objetoMovimiento = {
-            fecha,
-            hora,
-            nroRemito,
-            transporte,
-            tipoTransporte,
-            chofer,
-            chasis,
-            acoplado,
-            cantidad,
-            descripcion,
-            posicion,
-            sector,
-            altura,
-            ancho,
-            largo,
-            alto,
-            codigoBWS,
-            idCliente,
-            destino,
-            estado,
-            tipoUnidad
-        };
-        setMovimientos([...movimientos, objetoMovimiento]);
 
         //Reiniciar el formulario
         setFecha('');
@@ -198,6 +175,22 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
                         required
                         placeholder='Transporte' 
                         onChange={(e) => setTransporte(e.target.value)} 
+                    />
+
+                </div>
+                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                    <label htmlFor='transporte' className='block text-md font-medium leading-6 text-gray-900'>
+                        ¿Quién retira?
+                    </label>
+                    <input
+                        id='nombreResponsable'
+                        name="nombreResponsable"  
+                        type="text" 
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={nombreResponsable}
+                        required
+                        placeholder='Responsable' 
+                        onChange={(e) => setNombreResponsable(e.target.value)} 
                     />
 
                 </div>
@@ -435,5 +428,9 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
     </div>
 );
 }
+
+FormEgreso.propTypes = {
+    idAlquiler: PropTypes.string.isRequired,
+};
 
 export default FormEgreso;

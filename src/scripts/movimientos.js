@@ -4,12 +4,11 @@ const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 const SUPABASE_URL = 'https://ewathdqpvxumtxwrmwgw.supabase.co'
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY  )
 
-export  async function obtenerCienPrimerosMovimientos() {
+export  async function obtenerMovimientos() {
     try {
         let { data: Movimientos, error } = await supabase
             .from('Movimientos')
             .select('*')
-            .range(0, 99)
         if (error) {
             throw new Error(error.message);
         }
@@ -111,3 +110,25 @@ export async function filtrarMovimientosEntreFechas(fechaInicio, fechaFin){
          console.log(error)
   }
 }
+
+export async function filtrarMovimientosxCodigo(codigoBWS) {
+    try {
+      let { data: Movimientos, error } = await supabase
+        .from('Movimientos')
+        .select('*')
+        .ilike('codigoBWS', codigoBWS);
+      if (error) {
+        throw new Error(error.message);
+      }
+      if (Movimientos && Movimientos.length > 0) {
+        // Devolver solo el primer elemento del array (asumiendo que solo debería haber uno)
+        return Movimientos[0];
+      } else {
+        // Si no se encuentra ningún movimiento, devolver null o un objeto vacío según sea necesario
+        return null; // O puedes devolver un objeto vacío: return {}
+      }
+    } catch (error) {
+      console.log(error);
+}
+}
+

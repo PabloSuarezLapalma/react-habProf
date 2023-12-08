@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { registrarIngreso } from '../scripts/ingreso';
+import { obtenerDatosActuales } from '../scripts/global';
+import PropTypes from 'prop-types';
 
-
-const FormIngreso = () => {
+const FormIngreso = ({idAlquiler}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -23,6 +25,16 @@ const FormIngreso = () => {
     const [destino, setDestino] = useState('');
     const [estado, setEstado] = useState('');
     const [tipoUnidad, setTipoUnidad] = useState('');
+    const [idPosicion, setIdPosicion] = useState('');
+    const [nombreResponsable, setNombreResponsable] = useState('');
+    const [costo, setCosto]= useState('');
+    const [volumen, setVolumen]= useState('');
+    const [idMercaderia, setIdMercaderia]= useState(generarIdMercaderia());
+
+    function generarIdMercaderia() {
+        const id = Math.random().toString(36).substr(2, 9);
+        return id;
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,15 +55,30 @@ const FormIngreso = () => {
         const diaInput = parseInt(dia);
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
+      
+        const codigoBWS =setCodigoBWS (`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
+        const estado = setEstado('INGRESO');
+        setVolumen(alto * ancho * largo);
         
+        obtenerDatosActuales().then((datos) => {
+            setCosto(datos.costoIngreso);
+        });
+            
+
         const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
         const estado = setEstado('INGRESO');
+
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
             alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")
             return;
         }
+
+
+        //REaliza el registro del movimiento        
+        registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, posicion, sector, altura, volumen, idAlquiler, descripcion, largo, ancho, cantidad)
+
 
         //Reiniciar el formulario
         setFecha('');
@@ -378,5 +405,9 @@ const FormIngreso = () => {
     </div>
 );
 }
+FormIngreso.propTypes = {
+    idAlquiler: PropTypes.string.isRequired,
+};
+
 
 export default FormIngreso;
