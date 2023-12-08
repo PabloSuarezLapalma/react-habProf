@@ -63,10 +63,6 @@ const FormIngreso = ({idAlquiler}) => {
         obtenerDatosActuales().then((datos) => {
             setCosto(datos.costoIngreso);
         });
-            
-
-        const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = setEstado('INGRESO');
 
 
         //No anda la comparación de hora y segundos

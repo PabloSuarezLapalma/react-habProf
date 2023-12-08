@@ -5,11 +5,12 @@ const SUPABASE_URL = 'https://ewathdqpvxumtxwrmwgw.supabase.co'
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY  )
 
 
-export  async function obtenerCienPrimerosClientes() {
+export  async function obtenerClientes() {
     try {
         let { data: Clientes, error } = await supabase
             .from('Clientes')
             .select('*')
+            .ilike('baja', "0")
         if (error) {
             throw new Error(error.message);
         }
@@ -19,7 +20,6 @@ export  async function obtenerCienPrimerosClientes() {
         console.error(error);
     }
 }
-
 export  async function agregarCliente(codigo, nombreCliente, responsable, cuit, telefono, email, username, password){
     let code=0;
     try {
@@ -118,8 +118,6 @@ export  async function existeUsername(username){
 }
 }
 
-
-}
 export  async function existeEmail(email){
     let encontrado=false;
     try{

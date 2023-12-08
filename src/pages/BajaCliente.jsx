@@ -3,7 +3,7 @@ import {XMarkIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarCliente, obtenerCienPrimerosClientes, borrarCliente } from "../scripts/clientes";
+import { buscarCliente, obtenerClientes, darDeBajaCliente } from "../scripts/clientes";
 
 const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "Nombre de usuario","Dar de baja"];
 
@@ -17,7 +17,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
 
   async function fetchClientes() {
     try {
-      const clientesFromDB = await obtenerCienPrimerosClientes();
+      const clientesFromDB = await obtenerClientes();
       const clientesFiltrados = clientesFromDB.filter(cliente => cliente.baja === "0");
       setClientes(clientesFiltrados || []);
     } catch (error) {
@@ -97,10 +97,10 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
   
   const confirmarEliminarCliente = async () => {
     try {
-      await borrarCliente(clienteToDelete); // Elimina el cliente
+      await darDeBajaCliente(clienteToDelete); // Elimina el cliente
     
       // Vuelve a cargar la lista de clientes después de eliminar uno
-      const clientesActualizados = await obtenerCienPrimerosClientes();
+      const clientesActualizados = await obtenerClientes();
       setClientes(clientesActualizados || []);
     } catch (error) {
       console.error('Error al eliminar el cliente:', error);
@@ -132,7 +132,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
 
           </div>
-          <Link to="/home" className="mx-auto -mt-28 "> 
+          <Link to="/home" className="mx-auto mr-20 -mt-28 "> 
                   <IconButton variant="text">
                     <HomeIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   
