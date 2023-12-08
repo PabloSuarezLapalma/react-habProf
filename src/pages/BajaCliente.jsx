@@ -1,5 +1,5 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
-import {ArrowRightIcon} from "@heroicons/react/24/solid";
+import {XMarkIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
@@ -60,10 +60,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
     }
   };
 
-  const cargarNuevosDatos = async () => {
-    const nuevosClientes = await buscarCliente(nombreCliente);
-    setClientes(nuevosClientes || []);
-  };
+  const han
 
   const handleSearchClick = async () => {
     if (searchText.trim() === "") {
@@ -214,8 +211,8 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
             </td>
             <td className="p-4">
               <Tooltip content="Eliminar cliente" className="bg-red-500">
-                  <IconButton variant="text" className=" hover:text-red-800">
-                    <ArrowRightIcon className="h-4 w-4" />
+                  <IconButton variant="text" className=" hover:text-red-800" onClick={handleEliminar}>
+                    <XMarkIcon className=" h-5 w-5" />
                   </IconButton>
               </Tooltip>
             </td>
