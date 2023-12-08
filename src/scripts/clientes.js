@@ -10,7 +10,6 @@ export  async function obtenerCienPrimerosClientes() {
         let { data: Clientes, error } = await supabase
             .from('Clientes')
             .select('*')
-            .range(0, 100)
         if (error) {
             throw new Error(error.message);
         }
@@ -27,7 +26,7 @@ export  async function agregarCliente(codigo, nombreCliente, responsable, cuit, 
         const {error} = await supabase
             .from('Clientes')
             .insert([
-                {codigo:codigo, nombreCliente:nombreCliente, responsable:responsable, cuit:cuit, telefono:telefono, email:email, username:username, password:password},
+                {codigo:codigo, nombreCliente:nombreCliente, responsable:responsable, cuit:cuit, telefono:telefono, email:email, username:username, password:password, baja:"0"},
             ])
             .select()
         if (error) {
@@ -58,6 +57,30 @@ export  async function borrarCliente(codigo){
     }
     return code
 }
+
+export  async function darDeBajaCliente(codigo) {
+    let code=0;
+    try {
+        const { data, error } = await supabase
+            .from('Clientes')
+            .update({baja: "1" })
+            .eq("codigo", codigo)
+            .select();
+
+        if (error) {
+            code=1;
+            console.error("Error updating Cliente:", error.message);
+        } else {
+            code=1;
+            console.log("Cliente updated successfully:", data);
+        }
+    } catch (error) {
+        code=1;
+        console.error("Unexpected error:", error.message);
+    }
+    return code
+}
+
 
 export  async function buscarCliente(nombreCliente){
     try{

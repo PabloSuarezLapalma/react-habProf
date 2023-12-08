@@ -3,7 +3,7 @@ import {ArrowRightIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {filtrarMovimiento, obtenerCienPrimerosMovimientos,filtrarMovimientosEntreFechas} from "../scripts/movimientos";
+import {filtrarMovimiento, obtenerMovimientos,filtrarMovimientosEntreFechas} from "../scripts/movimientos";
 import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
 import {obtenerNombreCliente,obtenerCodigoCliente} from "../scripts/clientes";
 
@@ -23,7 +23,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
 
   async function fetchMovimientos() {
     try {
-      const movimientosFromDB = await obtenerCienPrimerosMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
+      const movimientosFromDB = await obtenerMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
       setMovimientos(movimientosFromDB || []);
 
       // Obtenemos los nombres de los clientes para cada movimiento

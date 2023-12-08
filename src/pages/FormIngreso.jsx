@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { registrarIngreso } from '../scripts/ingreso';
 import { obtenerDatosActuales } from '../scripts/global';
+import PropTypes from 'prop-types';
 
-const FormIngreso = () => {
+const FormIngreso = ({idAlquiler}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -28,6 +29,12 @@ const FormIngreso = () => {
     const [nombreResponsable, setNombreResponsable] = useState('');
     const [costo, setCosto]= useState('');
     const [volumen, setVolumen]= useState('');
+    const [idMercaderia, setIdMercaderia]= useState(generarIdMercaderia());
+
+    function generarIdMercaderia() {
+        const id = Math.random().toString(36).substr(2, 9);
+        return id;
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -391,5 +398,9 @@ const FormIngreso = () => {
     </div>
 );
 }
+FormIngreso.propTypes = {
+    idAlquiler: PropTypes.string.isRequired,
+};
+
 
 export default FormIngreso;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const FormEgreso = ({movimientos, setMovimientos}) => {
+const FormEgreso = ({idAlquiler}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -52,31 +53,6 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
         alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual');
         return;
         }
-        //Objeto movimiento        
-        const objetoMovimiento = {
-            fecha,
-            hora,
-            nroRemito,
-            transporte,
-            tipoTransporte,
-            chofer,
-            chasis,
-            acoplado,
-            cantidad,
-            descripcion,
-            posicion,
-            sector,
-            altura,
-            ancho,
-            largo,
-            alto,
-            codigoBWS,
-            idCliente,
-            destino,
-            estado,
-            tipoUnidad
-        };
-        setMovimientos([...movimientos, objetoMovimiento]);
 
         //Reiniciar el formulario
         setFecha('');
@@ -452,5 +428,9 @@ const FormEgreso = ({movimientos, setMovimientos}) => {
     </div>
 );
 }
+
+FormEgreso.propTypes = {
+    idAlquiler: PropTypes.string.isRequired,
+};
 
 export default FormEgreso;
