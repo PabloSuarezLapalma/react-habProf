@@ -118,8 +118,6 @@ export  async function existeUsername(username){
 }
 }
 
-
-}
 export  async function existeEmail(email){
     let encontrado=false;
     try{
