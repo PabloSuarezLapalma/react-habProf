@@ -131,3 +131,4 @@ export async function filtrarMovimientosxCodigo(codigoBWS) {
       console.log(error);
 }
 }
+

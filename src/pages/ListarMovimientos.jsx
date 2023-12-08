@@ -1,4 +1,4 @@
-import {MagnifyingGlassIcon,ChevronUpDownIcon,HomeIcon} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
@@ -257,9 +257,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
               className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
             >
               {head}{" "}
-              {index !== TABLE_HEAD.length - 1 && (
-                <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
-              )}
+              
             </Typography>
             </th>
                 ))}

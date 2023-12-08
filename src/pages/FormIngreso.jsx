@@ -55,7 +55,7 @@ const FormIngreso = ({idAlquiler}) => {
         const diaInput = parseInt(dia);
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
-        
+      
         const codigoBWS =setCodigoBWS (`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
         const estado = setEstado('INGRESO');
         setVolumen(alto * ancho * largo);
@@ -64,14 +64,21 @@ const FormIngreso = ({idAlquiler}) => {
             setCosto(datos.costoIngreso);
         });
             
+
+        const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
+        const estado = setEstado('INGRESO');
+
+
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
             alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")
             return;
         }
 
+
         //REaliza el registro del movimiento        
         registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, posicion, sector, altura, volumen, idAlquiler, descripcion, largo, ancho, cantidad)
+
 
         //Reiniciar el formulario
         setFecha('');
@@ -389,7 +396,7 @@ const FormIngreso = ({idAlquiler}) => {
             <input 
                 type="submit"
                 id="movimientos"
-                value="Registrar Ingreso" 
+                value="Aceptar" 
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
             />
             
