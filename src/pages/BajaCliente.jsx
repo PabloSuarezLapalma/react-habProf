@@ -17,13 +17,13 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
 
   async function fetchClientes() {
     try {
-      const clientesFromDB = await obtenerCienPrimerosClientes(); //Solo trae los primeros cien movimientos, no la base de datos completa
-      setClientes(clientesFromDB || []);
-
+      const clientesFromDB = await obtenerCienPrimerosClientes();
+      const clientesFiltrados = clientesFromDB.filter(cliente => cliente.baja === "0");
+      setClientes(clientesFiltrados || []);
     } catch (error) {
       console.error('Error al obtener clientes:', error);
     } finally {
-      setLoading(false); // Se establece a falso independientemente del resultado de la obtención de datos
+      setLoading(false);
     }
   }
 
@@ -90,9 +90,23 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
     return filteredRows.slice(startIndex, endIndex);
   }, [currentPage, filteredRows]);
 
-  const handleEliminar = (codigoCliente) => {
+  const handleEliminar = async (codigoCliente) => {
     setClienteToDelete(codigoCliente);
     setShowConfirmationModal(true);
+  };
+  
+  const confirmarEliminarCliente = async () => {
+    try {
+      await borrarCliente(clienteToDelete); // Elimina el cliente
+    
+      // Vuelve a cargar la lista de clientes después de eliminar uno
+      const clientesActualizados = await obtenerCienPrimerosClientes();
+      setClientes(clientesActualizados || []);
+    } catch (error) {
+      console.error('Error al eliminar el cliente:', error);
+    } finally {
+      setShowConfirmationModal(false);
+    }
   };
 
     return (
@@ -101,10 +115,10 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Lista de movimientos
+                Eliminar clientes
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Ve información sobre todos los movimientos
+                Dar de baja a un cliente
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -229,25 +243,22 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
               ¿Está seguro de que desea eliminar este cliente?
             </Typography>
             <div className="flex justify-end gap-4">
-              <Button
+            <Button
                 variant="outlined"
                 className="bg-red-400 text-white"
                 size="sm"
-                onClick={() => {
-                  handleEliminar // Llama a la función para eliminar el cliente
-                  setShowConfirmationModal(false);
-                }}
-              >
+                onClick={confirmarEliminarCliente}
+                >
                 Sí
-              </Button>
-              <Button
+            </Button>
+            <Button
                 variant="outlined"
                 className="bg-gray-50"
                 size="sm"
                 onClick={() => setShowConfirmationModal(false)}
               >
                 No
-              </Button>
+            </Button>
             </div>
           </div>
         </div>
