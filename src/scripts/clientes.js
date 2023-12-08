@@ -5,11 +5,12 @@ const SUPABASE_URL = 'https://ewathdqpvxumtxwrmwgw.supabase.co'
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY  )
 
 
-export  async function obtenerCienPrimerosClientes() {
+export  async function obtenerClientes() {
     try {
         let { data: Clientes, error } = await supabase
             .from('Clientes')
             .select('*')
+            .ilike('baja', "0")
         if (error) {
             throw new Error(error.message);
         }
@@ -22,11 +23,12 @@ export  async function obtenerCienPrimerosClientes() {
 
 export  async function agregarCliente(codigo, nombreCliente, responsable, cuit, telefono, email, username, password){
     let code=0;
+    let baja="0";
     try {
         const {error} = await supabase
             .from('Clientes')
             .insert([
-                {codigo:codigo, nombreCliente:nombreCliente, responsable:responsable, cuit:cuit, telefono:telefono, email:email, username:username, password:password, baja:"0"},
+                {codigo:codigo, nombreCliente:nombreCliente, responsable:responsable, cuit:cuit, telefono:telefono, email:email, username:username, password:password, baja:baja},
             ])
             .select()
         if (error) {
@@ -155,6 +157,25 @@ export async function obtenerCodigoCliente(nombreCliente){
 }
 return nombre;
 }
+
+export async function obtenerResponsable(codigoCliente){
+    let nombre='';
+    try{
+        let { data: Clientes, error } = await supabase
+        .from('Clientes')
+        .select("*")
+        .ilike('codigo', codigoCliente)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Clientes.map(item => {return item;});
+        nombre=listaFiltrada[0].responsable; 
+    }
+    catch (error){
+       console.log(error)
+}
+return nombre;
+}
+
 
 export async function obtenerNombreCliente(codigoCliente){
     try{

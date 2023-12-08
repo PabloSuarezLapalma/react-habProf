@@ -429,8 +429,8 @@ const FormEgreso = ({idAlquiler}) => {
 );
 }
 
-FormEgreso.propTypes = {
-    idAlquiler: PropTypes.string.isRequired,
-};
+//FormEgreso.propTypes = {
+  //  idAlquiler: PropTypes.string.isRequired,
+//};
 
 export default FormEgreso;

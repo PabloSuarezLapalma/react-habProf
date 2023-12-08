@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { registrarIngreso } from '../scripts/ingreso';
 import { obtenerDatosActuales } from '../scripts/global';
+import {obtenerResponsable} from '../scripts/clientes';
 import PropTypes from 'prop-types';
 
 const FormIngreso = ({idAlquiler}) => {
@@ -29,14 +30,55 @@ const FormIngreso = ({idAlquiler}) => {
     const [nombreResponsable, setNombreResponsable] = useState('');
     const [costo, setCosto]= useState('');
     const [volumen, setVolumen]= useState('');
-    const [idMercaderia, setIdMercaderia]= useState(generarIdMercaderia());
+    const [idMercaderia, setIdMercaderia]= useState('');
 
     function generarIdMercaderia() {
-        const id = Math.random().toString(36).substr(2, 9);
-        return id;
+        const id = Math.floor(Math.random() * 1000000000); // Genera un número aleatorio entre 0 y 999999999
+        return id.toString();
     }
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        setCodigoBWS(`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
+    }, [idCliente, sector, posicion, altura, nroRemito]);
+    
+    useEffect(() => {
+        console.log("codigo: ", codigoBWS);
+    }, [codigoBWS]);
+
+    useEffect(() => {
+        setEstado("INGRESO");
+    }, []);
+    
+    useEffect(() => {
+        let vol = alto * ancho * largo;
+        setVolumen(vol);
+    }, [alto, ancho, largo]);
+    
+    useEffect(() => {
+        let costo = 0;
+        obtenerDatosActuales().then((datos) => {
+            costo = datos.costoIngreso;
+            setCosto(costo);
+        });
+    }, []);
+    
+    useEffect(() => {
+        obtenerResponsable(idCliente).then(responsable => {
+            setNombreResponsable(responsable);
+        });
+    }, [idCliente]);
+    
+    useEffect(() => {
+        let idM = generarIdMercaderia();
+        setIdMercaderia(idM);
+    }, []);
+    
+    useEffect(() => {
+        const pos = `${posicion}${sector}${altura}`;
+        setIdPosicion(pos);
+    }, [posicion, sector, altura]);
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
         // Obtener el valor actual de la fecha y hora actual     
@@ -56,23 +98,65 @@ const FormIngreso = ({idAlquiler}) => {
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
       
-        const codigoBWS =setCodigoBWS (`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
-        const estado = setEstado('INGRESO');
-        setVolumen(alto * ancho * largo);
-        
-        obtenerDatosActuales().then((datos) => {
-            setCosto(datos.costoIngreso);
-        });
-            
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
             alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")
             return;
         }
 
+        /*
+        const est= "INGRESO"
+        setEstado(est);
+        let vol= (alto * ancho * largo);
+        setVolumen(vol);
 
-        //REaliza el registro del movimiento        
-        registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, posicion, sector, altura, volumen, idAlquiler, descripcion, largo, ancho, cantidad)
+        let costo=0;
+        await obtenerDatosActuales().then((datos) => {
+            costo=datos.costoIngreso;
+        });
+        setCosto(costo)
+        
+        const responsable= await obtenerResponsable(idCliente)
+        setNombreResponsable(responsable);
+
+        let idM=generarIdMercaderia()
+        setIdMercaderia(idM);
+
+        const pos= `${posicion}${sector}${altura}`
+        setIdPosicion(pos)
+        //Realiza el registro del movimiento   
+      */
+        const idAlquiler= "1234"
+
+        console.log("codigoBWS: ", codigoBWS);
+        console.log("nroRemito: ", nroRemito);
+        console.log("Estado: ", estado);
+        console.log("nombreReponsable: ", nombreResponsable);
+        console.log("Transporte: ", transporte);
+        console.log("Chasis: ", chasis);
+        console.log("Chofer: ", chofer);
+        console.log("Acoplado: ", acoplado);
+        console.log("Costo: ", costo);
+        console.log("idMercaderia: ", idMercaderia);
+        console.log("fecha: ", fecha);
+        console.log("hora: ", hora);
+        console.log("idCliente: ", idCliente);
+        console.log("Destino: ", destino);
+        console.log("tipoUnidad: ", tipoUnidad);
+        console.log("tipoTransporte: ", tipoTransporte);
+        console.log("idPosicion: ", idPosicion);
+        console.log("Posicion: ", posicion);
+        console.log("Sector: ", sector);
+        console.log("Altura: ", altura);
+        console.log("Volumen: ", volumen);
+        console.log("idAlquiler: ", idAlquiler);
+        console.log("Descripcion: ", descripcion);
+        console.log("Largo: ", largo);
+        console.log("Ancho: ", ancho);
+        console.log("Alto: ",alto);
+        console.log("Cantidad: ", cantidad);
+
+        registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, posicion, sector, altura, volumen, idAlquiler, descripcion, largo, ancho, cantidad,alto)
 
 
         //Reiniciar el formulario
@@ -97,7 +181,7 @@ const FormIngreso = ({idAlquiler}) => {
         setDestino('');
         setEstado('');
         setTipoUnidad('');
-    };
+    }
 
     return (
         <div className=' max-w-7xl mx-auto px-8 p-8 text-center'>
@@ -400,9 +484,10 @@ const FormIngreso = ({idAlquiler}) => {
     </div>
 );
 }
-FormIngreso.propTypes = {
-    idAlquiler: PropTypes.string.isRequired,
-};
+
+//FormIngreso.propTypes = {
+  //  idAlquiler: PropTypes.string.isRequired,
+//};
 
 
 export default FormIngreso;

@@ -19,13 +19,13 @@ export  async function obtenerPosiciones() {
     }
 }
 
-export  async function agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen, idAlquiler){
+export  async function agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen,ancho, idAlquiler){
     let code=0;
     try {
         const {error } = await supabase
             .from('Posiciones')
             .insert([
-                {idPosicion:idPosicion, letraPosicion:letraPosicion, sector:sector, altura:altura, volumen:volumen,idAlquiler:idAlquiler},
+                {idPosicion:idPosicion, letraPosicion:letraPosicion, sector:sector, altura:altura, volumen:volumen,ancho:ancho,idAlquiler:idAlquiler},
             ])
             .select()
         if (error) {
