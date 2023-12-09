@@ -18,7 +18,7 @@
             const validUsername = 'demo';
             const validPassword = 'demo';  
             if (username === validUsername && password === validPassword) {
-                  window.location.href = '/Home';
+                  window.location.href = '/home';
                 } else {
                   alert('Invalid username or password');
                 }

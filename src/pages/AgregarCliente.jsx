@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { existeUsername,existeEmail,agregarCliente } from '../scripts/clientes';
+import { existeUsername,existeEmail,agregarCliente, existeCodigo } from '../scripts/clientes';
 import {HomeIcon} from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
 import {IconButton} from "@material-tailwind/react";
@@ -14,20 +14,40 @@ const AgregarCliente = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!existeUsername(username)) {
-            alert("El nombre de usuario ya se encuentra en uso elije otro")
-            return;
+    
+        // Esperar las respuestas de las funciones asincrónicas
+        const existsUsernameResult = await existeUsername(username);
+        const existsEmailResult = await existeEmail(email);
+        const existsCodigoResult = await existeCodigo(codigo);
+    
+        if (existsUsernameResult) {
+          alert('El nombre de usuario ya se encuentra en uso, elija otro.')
+          return;
         }
-        if (!existeEmail(email)) {
-            alert("El email ya se encuentra en uso")
+        if (existsCodigoResult) {
+            alert('El código ya se encuentra en uso, elija otro.')
             return;
+          }
+        if (existsEmailResult) {
+          alert('El correo electrónico ya se encuentra en uso.')
+          return;
         }
-        agregarCliente(codigo, nombreCliente, responsable, cuit, telefono, email, username, password)
-        
-        //Reiniciar el formulario
+    
+        // Si no existe, agregar cliente
+        agregarCliente(
+          codigo,
+          nombreCliente,
+          responsable,
+          cuit,
+          telefono,
+          email,
+          username,
+          password
+        )
+    
+        // Limpiar formulario
         setCodigo('');
         setNombreCliente('');
         setResponsable('');
@@ -36,7 +56,7 @@ const AgregarCliente = () => {
         setEmail('');
         setUsername('');
         setPassword('');
-    };
+      };
 
     return (
         <div className=' max-w-7xl mx-auto px-8 p-8 text-center'>
@@ -98,7 +118,11 @@ const AgregarCliente = () => {
                         value={responsable} 
                         required
                         placeholder='Responsable'
-                        onChange={(e) => setResponsable(e.target.value)} 
+                        onChange={(e) => {
+                            const inputText = e.target.value;
+                            const capitalizedText = inputText.charAt(0).toUpperCase() + inputText.slice(1);
+                            setResponsable(capitalizedText);
+                          }} 
                     />
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -159,7 +183,11 @@ const AgregarCliente = () => {
                         value={username} 
                         required
                         placeholder='Nombre de usuario'
-                        onChange={(e) => setUsername(e.target.value)} 
+                        onChange={(e) => {
+                            const inputText = e.target.value;
+                            const capitalizedText = inputText.charAt(0).toUpperCase() + inputText.slice(1);
+                            setUsername(capitalizedText);
+                          }} 
                     />
 
                 </div>

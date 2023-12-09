@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Button} from '@material-tailwind/react';
-import { obtenerClientePorCodigo, actualizarCliente } from '../scripts/clientes';
+import { obtenerClientePorCodigo, actualizarCliente,existeEmailActual,existeUsernameActual } from '../scripts/clientes';
 import { Typography } from "@material-tailwind/react";
 
 export default function DescripcionCliente() {
@@ -50,30 +50,38 @@ export default function DescripcionCliente() {
 
   const handleGuardarCambios = async () => {
     try {
-      const nuevosValoresTemp = {};
-
-      // Asignación de nuevos valores
-      if (mail !== cliente.email) {
-        nuevosValoresTemp['email'] = mail;
-      }
-      if (telefono !== cliente.telefono) {
-        nuevosValoresTemp['telefono'] = telefono;
-      }
-      if (username !== cliente.username) {
-        nuevosValoresTemp['username'] = username;
-      }
-      if (password !== cliente.password) {
-        nuevosValoresTemp['password'] = password;
-      }
-
-      // Actualización del estado 'nuevosValores'
-      setNuevosValores(nuevosValoresTemp);
-
-      // Verifica si hay cambios para actualizar
-      if (Object.keys(nuevosValoresTemp).length > 0) {
-        setShowConfirmationModal(true);
+      const usernameExists = await existeUsernameActual(username, cliente.codigo);
+      const emailExists = await existeEmailActual(mail, cliente.codigo);
+  
+      if (usernameExists || emailExists) {
+        // Mostrar alerta indicando que el username o email ya están en uso
+        alert(usernameExists ? 'El nombre de usuario ya está en uso.' : 'El correo electrónico ya está en uso.');
       } else {
-        console.log('No hay cambios para actualizar');
+        const nuevosValoresTemp = {};
+  
+        // Asignación de nuevos valores
+        if (mail !== cliente.email) {
+          nuevosValoresTemp['email'] = mail;
+        }
+        if (telefono !== cliente.telefono) {
+          nuevosValoresTemp['telefono'] = telefono;
+        }
+        if (username !== cliente.username) {
+          nuevosValoresTemp['username'] = username;
+        }
+        if (password !== cliente.password) {
+          nuevosValoresTemp['password'] = password;
+        }
+  
+        // Actualización del estado 'nuevosValores'
+        setNuevosValores(nuevosValoresTemp);
+  
+        // Verifica si hay cambios para actualizar
+        if (Object.keys(nuevosValoresTemp).length > 0) {
+          setShowConfirmationModal(true);
+        } else {
+          console.log('No hay cambios para actualizar');
+        }
       }
     } catch (error) {
       console.error('Error al actualizar el cliente:', error);

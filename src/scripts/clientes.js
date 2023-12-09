@@ -97,47 +97,60 @@ export  async function buscarCliente(nombreCliente){
        console.log(error)
 }
 }
-
-export  async function existeUsername(username){
-    let encontrado=false;
-    try{
-        let { data: Movimientos, error } = await supabase
+export async function existeUsername(username) {
+    try {
+      const { data: Movimientos, error } = await supabase
         .from('Clientes')
-        .select("*")
-        .ilike('username', username)
-        if (error) {
-            throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {return item;});
-        if (listaFiltrada.length>0){
-            encontrado=true;
-        }
-        return encontrado;
+        .select('*')
+        .ilike('username', username);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Movimientos.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
-    catch (error){
-       console.log(error)
-}
-}
-
-export  async function existeEmail(email){
-    let encontrado=false;
-    try{
-        let { data: Movimientos, error } = await supabase
+  }
+  export async function existeCodigo(codigo) {
+    try {
+      const { data: Movimientos, error } = await supabase
         .from('Clientes')
-        .select("*")
-        .ilike('email', email)
-        if (error) {
-            throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {return item;});
-        if (listaFiltrada.length>0){
-            encontrado=true;
-        }
-        return encontrado;
+        .select('*')
+        .ilike('codigo', codigo);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Movimientos.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
-    catch (error){
-       console.log(error)
+  }
+  export async function existeEmail(email) {
+    try {
+      const { data: Movimientos, error } = await supabase
+        .from('Clientes')
+        .select('*')
+        .ilike('email', email);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Movimientos.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
 }
-}
-
 export async function obtenerCodigoCliente(nombreCliente){
     let nombre='';
     try{
@@ -213,6 +226,48 @@ export async function obtenerClientePorCodigo(codigoCliente) {
     }
   }
 
+  export async function existeUsernameActual(username, codigoCliente) {
+    try {
+      const { data: Movimientos, error } = await supabase
+        .from('Clientes')
+        .select('*')
+        .neq('codigo', codigoCliente) // Excluir al cliente actual
+        .ilike('username', username);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Movimientos.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+  
+  export async function existeEmailActual(email, codigoCliente) {
+    try {
+      const { data: Movimientos, error } = await supabase
+        .from('Clientes')
+        .select('*')
+        .neq('codigo', codigoCliente) // Excluir al cliente actual
+        .ilike('email', email);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Movimientos.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+
+  
 //!Esta es la forma de acceder a los datos de la función, como es asíncrono siempre el resultado es una Promise, por lo que se debe acceder de la siguiente manera para poder manipular los datos
 
 /*
