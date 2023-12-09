@@ -19,8 +19,6 @@ import ListarModificarCliente from './pages/ListarModificarClientes'
 import ModificarCliente from './pages/ModificarCliente'
 
 function App() {
-  const [racks, setRacks] = useState([])
-  const [hangar, setHangar] = useState([])
   const [idAlquiler, setIdAlquiler] = useState(0)
   return (
     <>
@@ -31,12 +29,8 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/formIngreso" element={<FormIngreso idAlquiler={idAlquiler}/>}/>
         <Route path="/formEgreso" element={<FormEgreso idAlquiler={idAlquiler}/>}/>
-        <Route path="/agregarRack" element={<AgregarRack
-        setRacks={setRacks}
-        racks={racks}/>}/>
-        <Route path="/agregarHangar" element={<AgregarHangar
-        setHangar={setHangar}
-        hangar={hangar}/>}/>
+        <Route path="/agregarRack" element={<AgregarRack/>}/>
+        <Route path="/agregarHangar" element={<AgregarHangar/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>

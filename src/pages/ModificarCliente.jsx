@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Alert, Button, alert } from '@material-tailwind/react';
+import { Button} from '@material-tailwind/react';
 import { obtenerClientePorCodigo, actualizarCliente } from '../scripts/clientes';
 import { Typography } from "@material-tailwind/react";
 
@@ -13,7 +13,6 @@ export default function DescripcionCliente() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [clienteActualizar, setClienteActualizar] = useState(null);
   const [isModified, setIsModified] = useState(false); // Nuevo estado para verificar si se han modificado datos
   const [nuevosValores, setNuevosValores] = useState({}); // Estado para almacenar los nuevos valores
 

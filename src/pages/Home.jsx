@@ -1,8 +1,8 @@
-  import { Fragment, useState } from 'react'
+  import { Fragment, useState, useEffect } from 'react'
   import { Link } from 'react-router-dom'
   import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,UserMinusIcon, UserCircleIcon} from '@heroicons/react/24/outline'
-  import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon} from '@heroicons/react/24/outline'
+  import { ChevronDownIcon } from '@heroicons/react/20/solid'
   import { Typography } from "@material-tailwind/react";
 
   
@@ -18,6 +18,17 @@
     { name: 'Modificar cliente', description: 'Modificar un cliente', href: '/listarModificarClientes', icon: UserCircleIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
     { name: 'Ver clientes', description: 'Listar todos los clientes', href: '/listarClientes', icon: ListBulletIcon },
   ]
+  const gestion = [
+    { name: 'Registrar Rack', description: 'Registrar un nuevo rack', href: '/agregarRack', icon:SquaresPlusIcon },
+    { name: 'Baja de Rack', description: 'Eliminar un rack', href: '/#', icon: ArrowDownIcon },
+    { name: 'Modificar Rack', description: 'Permite modificar un rack', href: '/#', icon: PencilIcon },
+    { name: 'Registrar Hangar', description: 'Eliminar un hangar', href: '/agregarHangar', icon: BuildingOfficeIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
+    { name: 'Baja de Hangar', description: 'Registrar un nuevo hangar', href: '/#', icon: ArrowDownIcon },
+    { name: 'Modificar Hangar', description: 'Permite modificar un hangar', href: '/#', icon: PencilIcon },
+
+  ]
+
+
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -124,6 +135,45 @@
                 </Popover.Panel>
               </Transition>
             </Popover>
+            <Popover className="relative">
+              <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
+                Almacenamiento
+                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              </Popover.Button>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+              >
+                <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-4">
+                    {gestion.map((item) => (
+                      <div
+                        key={item.name}
+                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                      >
+                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                          <item.icon className="h-6 w-6 text-gray-600 group-hover:text-red-500" aria-hidden="true" />
+                        </div>
+                        <div className="flex-auto">
+                          <Link to={item.href} className="block font-semibold  text-blue-gray-900">
+                            {item.name}
+                            <span className="absolute inset-0" />
+                          </Link>
+                          <p className="mt-1 text-gray-600">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                </Popover.Panel>
+              </Transition>
+            </Popover>
           </Popover.Group>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -200,14 +250,38 @@
                       </>
                     )}
                   </Disclosure>
-
+                  <Disclosure as="div" className="-mx-3">
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                          Gestión
+                          <ChevronDownIcon
+                            className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
+                            aria-hidden="true"
+                          />
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="mt-2 space-y-2">
+                          {[...gestion,].map((item) => (
+                            <Disclosure.Button
+                              key={item.name}
+                              as="a"
+                              href={item.href}
+                              className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            >
+                              {item.name}
+                            </Disclosure.Button>
+                          ))}
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
                 </div>
               </div>
             </div>
           </Dialog.Panel>
         </Dialog>
       </header>
-      
+
 
       <figure className="relative h-96 w-full">
       <img
@@ -224,12 +298,16 @@
           Nos encargamos de cuidar tu almacenamiento y tu negocio
           </Typography>
         </div>
+        
       </figcaption>
+      <footer className="-my-32 left-3/4">
+        <Typography variant='paragraph' color='white' >
+          @BaciApp Teléfono: xxxx-xxx-xx-x Contacto: BaciMail@Mail.com
+        </Typography>
+        </footer>
     </figure>
 
-
-      </div>
-      
+  </div>
       
     )
   }
