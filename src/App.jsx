@@ -24,8 +24,7 @@ function App() {
     <>
       <BrowserRouter>
       <Routes>
-        <Route index element={<Login/>}/>
-        <Route path="/login" element={<Login/>}/>
+        <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
         <Route path="/formIngreso" element={<FormIngreso idAlquiler={idAlquiler}/>}/>
         <Route path="/formEgreso" element={<FormEgreso idAlquiler={idAlquiler}/>}/>

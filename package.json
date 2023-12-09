@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": ".",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -30,4 +31,5 @@
     "tailwindcss": "^3.3.5",
     "vite": "^4.4.5"
   }
+
 }
