@@ -214,7 +214,7 @@ export default function DescripcionCliente() {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded shadow-md">
             <Typography variant="h6" color="blue-gray" className="mb-4">
-              ¿Está seguro de que desea eliminar este cliente?
+              ¿Está seguro que desea actualizar este cliente?
             </Typography>
             <div className="flex justify-end gap-4">
             <Button
