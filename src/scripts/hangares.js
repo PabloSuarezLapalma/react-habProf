@@ -25,7 +25,7 @@ export  async function agregarHangar(idHangar,tamanio){
         const { error } = await supabase
             .from('Hangares')
             .insert([
-                { idHangar:idHangar,tamanio:tamanio,fecha_agregado:Date.now()},
+                { idHangar:idHangar,tamanio:tamanio},
             ])
             .select()
         if (error) {
@@ -38,6 +38,31 @@ export  async function agregarHangar(idHangar,tamanio){
     }
     return code
 }
+
+
+export async function actualizarHangar(idHangar, nuevosValores) {
+  let code = 0;
+  try {
+    const { data, error } = await supabase
+      .from('Hangares')
+      .update(nuevosValores)
+      .eq("idHangar", idHangar)
+      .select();
+
+    if (error) {
+      code = 1;
+      console.error("Error updating Cliente:", error.message);
+    } else {
+      code = 1;
+      console.log("Cliente updated successfully:", data);
+    }
+  } catch (error) {
+    code = 1;
+    console.error("Unexpected error:", error.message);
+  }
+  return code;
+}
+
 
 export  async function borrarHangar(idHangar){
     let code=0;
@@ -77,3 +102,38 @@ export async function buscarHangar(idHangar) {
 }
 }
 
+export async function obtenerHangarPorCodigo(idHangar) {
+  try {
+    let { data: Hangares, error } = await supabase
+      .from('Hangares')
+      .select('*')
+      .eq('idHangar', idHangar)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return Hangares;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function existeIDHangar(idHangar) {
+    try {
+      const { data: Hangares, error } = await supabase
+        .from('Hangares')
+        .select('*')
+        .eq('idHangar', idHangar); // Utiliza 'eq' en lugar de 'ilike'  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Hangares.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }

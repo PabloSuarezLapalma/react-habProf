@@ -13,6 +13,9 @@ import BajaRack from './pages/BajaRack'
 import ListarModificarRack from './pages/ListarModificarRack'
 import ModificarRack from './pages/ModificarRack'
 import AgregarHangar from './pages/AgregarHangar'
+import BajaHangar from './pages/BajaHangar'
+import ListarModificarHangar from './pages/ListarModificarHangar'
+import ModificarHangar from './pages/ModificarHangar'
 import AgregarCliente from './pages/AgregarCliente'
 import BajaCliente from './pages/BajaCliente'
 import ListarClientes from './pages/ListarClientes'
@@ -37,6 +40,9 @@ function App() {
         <Route path="/modificarRack/:idRack" element={<ModificarRack />} />
         <Route path='/bajarCliente' element={<BajaCliente/>}/>
         <Route path="/agregarHangar" element={<AgregarHangar/>}/>
+        <Route path="/bajarHangar" element={<BajaHangar/>}/>
+        <Route path="/listarModificarHangar" element={<ListarModificarHangar/>}/>
+        <Route path="/modificarHangar/:idHangar" element={<ModificarHangar />} />
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
