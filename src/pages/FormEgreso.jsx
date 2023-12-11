@@ -2,7 +2,7 @@ import { useState,useEffect} from 'react';
 import { registrarEgreso } from '../scripts/egreso';
 import { obtenerDatosActuales } from '../scripts/global';
 import {obtenerResponsable} from '../scripts/clientes';
-import {obtenerCantidadMercaderia,obtenerDescripcionMercaderia} from  '../scripts/mercaderia';
+import {obtenerCantidadMercaderia} from  '../scripts/mercaderia';
 import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
 import PropTypes from 'prop-types';
 
