@@ -115,6 +115,7 @@ export async function existeUsername(username) {
       console.log(error);
       return false;
     }
+}
   
 export  async function existeEmail(email){
     let encontrado=false;
@@ -152,24 +153,8 @@ export  async function existeEmail(email){
       return false;
     }
   }
-  export async function existeEmail(email) {
-    try {
-      const { data: Movimientos, error } = await supabase
-        .from('Clientes')
-        .select('*')
-        .ilike('email', email);
+
   
-      if (error) {
-        throw new Error(error.message);
-      }
-  
-      const listaFiltrada = Movimientos.map(item => item);
-      return listaFiltrada.length > 0;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-}
 export async function obtenerCodigoCliente(nombreCliente){
     let nombre='';
     try{
