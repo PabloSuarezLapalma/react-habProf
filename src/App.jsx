@@ -13,31 +13,32 @@ import AgregarHangar from './pages/AgregarHangar'
 import ListarMovimientos from './pages/ListarMovimientos'
 import AgregarCliente from './pages/AgregarCliente'
 import BajaCliente from './pages/BajaCliente'
+import ListarClientes from './pages/ListarClientes'
+import DescripcionCliente from './pages/DescripcionCliente'
+import ListarModificarCliente from './pages/ListarModificarClientes'
+import ModificarCliente from './pages/ModificarCliente'
 
 function App() {
-  const [racks, setRacks] = useState([])
-  const [hangar, setHangar] = useState([])
   const [idAlquiler, setIdAlquiler] = useState(0)
   return (
     <>
       <BrowserRouter>
       <Routes>
-        <Route index element={<Login/>}/>
-        <Route path="/login" element={<Login/>}/>
+        <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
         <Route path="/formIngreso" element={<FormIngreso idAlquiler={idAlquiler}/>}/>
         <Route path="/formEgreso" element={<FormEgreso idAlquiler={idAlquiler}/>}/>
-        <Route path="/agregarRack" element={<AgregarRack
-        setRacks={setRacks}
-        racks={racks}/>}/>
-        <Route path="/agregarHangar" element={<AgregarHangar
-        setHangar={setHangar}
-        hangar={hangar}/>}/>
+        <Route path="/agregarRack" element={<AgregarRack/>}/>
+        <Route path="/agregarHangar" element={<AgregarHangar/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
         <Route path="/bajarCliente" element={<BajaCliente/>}/>
-
+        <Route path="/listarClientes" element={<ListarClientes/>}/>
+        <Route path="/descripcionCliente/:codigo" element={<DescripcionCliente />} />
+        <Route path="/listarModificarClientes" element={<ListarModificarCliente/>}/>
+        <Route path="/modificarCliente/:codigo" element={<ModificarCliente />} />
+      
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>

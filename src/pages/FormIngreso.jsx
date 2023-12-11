@@ -92,6 +92,14 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
       
+        const codigoBWS =setCodigoBWS (`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
+        const estado = setEstado('INGRESO');
+        setVolumen(alto * ancho * largo);
+        
+        obtenerDatosActuales().then((datos) => {
+            setCosto(datos.costoIngreso);
+        });
+
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
             alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")

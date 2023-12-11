@@ -1,7 +1,10 @@
     import { useState } from 'react';
     import {validarLogin} from '../scripts/login.js';
+    import { useNavigate } from 'react-router-dom';
+
 
     const Login = () => {
+        const navigate = useNavigate(); // Utilizar useNavigate para la navegación
         const [username, setUsername] = useState('');
         const [password, setPassword] = useState('');
 
@@ -34,7 +37,7 @@
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-red-500 rounded-t-md">
                             <img
                                 className="mx-auto h-25 w-auto"
-                                src="src\assets\images\BACI.png"
+                                src="src\assets\images\BACI.webp"
                                 alt="Baci Logo"
                             />
                         </div>

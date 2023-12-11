@@ -1,20 +1,16 @@
-import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
-import {XMarkIcon} from "@heroicons/react/24/solid";
+import {MagnifyingGlassIcon,HomeIcon,PencilIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarCliente, obtenerClientes, darDeBajaCliente } from "../scripts/clientes";
+import { buscarCliente, obtenerClientes } from "../scripts/clientes";
 
-
-const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "Nombre de usuario","Dar de baja"];
+const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "Nombre de usuario","Modificar"];
 
   export default function BajaCliente() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [clienteToDelete, setClienteToDelete] = useState(null)
 
   async function fetchClientes() {
     try {
@@ -91,24 +87,6 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
     return filteredRows.slice(startIndex, endIndex);
   }, [currentPage, filteredRows]);
 
-  const handleEliminar = async (codigoCliente) => {
-    setClienteToDelete(codigoCliente);
-    setShowConfirmationModal(true);
-  };
-  
-  const confirmarEliminarCliente = async () => {
-    try {
-      await darDeBajaCliente(clienteToDelete); // Elimina el cliente
-    
-      // Vuelve a cargar la lista de clientes después de eliminar uno
-      const clientesActualizados = await obtenerClientes();
-      setClientes(clientesActualizados || []);
-    } catch (error) {
-      console.error('Error al eliminar el cliente:', error);
-    } finally {
-      setShowConfirmationModal(false);
-    }
-  };
 
     return (
       <Card className="lg:h-full lg:w-full">
@@ -116,10 +94,10 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Eliminar clientes
+                Modificar Cliente
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Dar de baja a un cliente
+                Actualiza la información de los clientes
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -225,45 +203,20 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
               </div>
             </td>
             <td className="p-4">
-              <Tooltip content="Eliminar cliente" className="bg-red-500">
-                <IconButton
-                  variant="text"
-                  className="hover:text-red-800"
-                  onClick={() => handleEliminar(clientes.codigo)} // Llama a handleEliminar con el código del cliente
-                  >
-                  <XMarkIcon className="h-5 w-5" />
-                </IconButton>
+              <Tooltip content="Actualizar cliente">
+                <Link to={`/modificarCliente/${clientes.codigo}`}>
+                    <IconButton
+                        variant="text"
+                        className="hover:text-red-800"
+                    >
+                    <PencilIcon className="h-5 w-5" />
+                    </IconButton>
+                </Link>
               </Tooltip>
             </td>
           </tr>
         ))}
-         {showConfirmationModal && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded shadow-md">
-            <Typography variant="h6" color="blue-gray" className="mb-4">
-              ¿Está seguro de que desea eliminar este cliente?
-            </Typography>
-            <div className="flex justify-end gap-4">
-            <Button
-                variant="outlined"
-                className="bg-red-400 text-white"
-                size="sm"
-                onClick={confirmarEliminarCliente}
-                >
-                Sí
-            </Button>
-            <Button
-                variant="outlined"
-                className="bg-gray-50"
-                size="sm"
-                onClick={() => setShowConfirmationModal(false)}
-              >
-                No
-            </Button>
-            </div>
-          </div>
-        </div>
-      )}
+
       </tbody>
           </table>
           
