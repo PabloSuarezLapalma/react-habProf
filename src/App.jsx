@@ -19,15 +19,17 @@ import ListarModificarCliente from './pages/ListarModificarClientes'
 import ModificarCliente from './pages/ModificarCliente'
 
 function App() {
-  const [idAlquiler, setIdAlquiler] = useState(0)
+  const [idPosicion, setIdPosicion] = useState("JA3")
+  const [codigoCliente, setCodigoCliente] = useState("0001")
+  const [idMercaderia, setIdMercaderia] = useState("276947079")
   return (
     <>
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/formIngreso" element={<FormIngreso idAlquiler={idAlquiler}/>}/>
-        <Route path="/formEgreso" element={<FormEgreso idAlquiler={idAlquiler}/>}/>
+        <Route path="/formIngreso" element={<FormIngreso codigoCliente={codigoCliente} idPosicion={idPosicion}/>}/>
+        <Route path="/formEgreso" element={<FormEgreso codigoCliente={codigoCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>
         <Route path="/agregarHangar" element={<AgregarHangar/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>

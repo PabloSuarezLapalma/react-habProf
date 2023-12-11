@@ -73,6 +73,27 @@ export  async function buscarPosicion(idPosicion){
     }
 }
 
+export  async function obtenerVolumenPosicion(idPosicion){
+    let volumen=0
+    try{
+        let { data: Posiciones, error } = await supabase
+        .from('Posiciones')
+        .select("*")
+        .ilike('idPosicion', idPosicion)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Posiciones.map(item => {return item;});
+        volumen= listaFiltrada[0].volumen; 
+    } 
+    catch (error){
+        volumen=-1
+       console.log(error)
+    }
+    return volumen
+}
+
+
+
 export  async function actualizarPosicion(idPosicion,columnaModificar, nuevoValor) {
     let code=0;
     try {

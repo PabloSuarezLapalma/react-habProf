@@ -110,3 +110,23 @@ export  async function actualizarMercaderia(idMercaderia,columnaModificar, nuevo
     }
     return code
 }
+
+
+export  async function obtenerCantidadMercaderia(idMercaderia){
+    let cantidad=0
+    try{
+        let { data: Mercaderias, error } = await supabase
+        .from('Mercaderias')
+        .select("*")
+        .ilike('idMercaderia', idMercaderia)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Mercaderias.map(item => {return item;});
+        cantidad= listaFiltrada[0].cantidad; 
+    } 
+    catch (error){
+        cantidad=-1
+       console.log(error)
+    }
+    return cantidad
+}
