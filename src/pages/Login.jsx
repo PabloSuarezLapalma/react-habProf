@@ -21,7 +21,7 @@
             validarLogin(username,password).then(resultado=>{
                 if (resultado=="0"){
                     //setIsAuthenticated(true);
-                    window.location.href = '/Home';
+                    navigate = '/home';
                 }
                 else{
                     alert("El usuario o contraseña son incorrectos")

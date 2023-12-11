@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {HomeIcon} from "@heroicons/react/24/outline";
 
-const AgregarHangar = ({ hangar, setHangar }) => {
+
+
+const AgregarHangar = () => {
   const [tamanio, setTamanio] = useState(1);
 
   const handleSubmit = (e) => {

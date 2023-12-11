@@ -1,37 +1,40 @@
-import {MagnifyingGlassIcon,HomeIcon,PencilIcon} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
+import {XMarkIcon} from "@heroicons/react/24/solid";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarCliente, obtenerClientes } from "../scripts/clientes";
+import {obtenerRacks,buscarRack, borrarRack} from "../scripts/racks";
 
-const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "Nombre de usuario","Modificar"];
 
-  export default function ListarModificarCliente() {
+const TABLE_HEAD = ["ID", "Posicion", "Altura","Fecha de creación","Dar de baja"];
+
+  export default function BajaRack() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
-  const [clientes, setClientes] = useState([]);
+  const [racks, setRacks] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [rackToDelete, setRackToDelete] = useState(null)
 
-  async function fetchClientes() {
+  async function fetchRacks() {
     try {
-      const clientesFromDB = await obtenerClientes();
-      const clientesFiltrados = clientesFromDB.filter(cliente => cliente.baja === "0");
-      setClientes(clientesFiltrados || []);
+      const racksFromDB = await obtenerRacks();
+      setRacks(racksFromDB || []);
     } catch (error) {
-      console.error('Error al obtener clientes:', error);
+      console.error('Error al obtener racks:', error);
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchClientes();
+    fetchRacks();
   }, []);
 
 
   const itemsPerPage = 7; //Numero de clientes por pagina
 
-  const totalItems = clientes.length;
+  const totalItems = racks.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleNextPage = () => {
@@ -50,12 +53,12 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
   
     if (value.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
-      console.log("Búsqueda vacía, cargando los 100 primeros movimientos");
-      fetchClientes();
+      console.log("Búsqueda vacía, cargando los 100 primeros racks");
+      fetchRacks();
     } else {
       // Si hay texto en el campo de búsqueda, filtramos los movimientos
       console.log(value);
-      buscarCliente(value); // Esta función debería filtrar los movimientos en función del texto ingresado
+      buscarRack(value); // Esta función debería filtrar los movimientos en función del texto ingresado
     }
   };
 
@@ -63,22 +66,22 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
   const handleSearchClick = async () => {
     if (searchText.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
-      fetchClientes();
+      fetchRacks();
     } else {
       try {
-        const clientesEncontrados = await buscarCliente(searchText);
-        setClientes(clientesEncontrados || []);
+        const racksEncontrados = await buscarRack(searchText);
+        setRacks(racksEncontrados || []);
       } catch (error) {
-        console.error('Error al buscar clientes:', error);
+        console.error('Error al buscar racks:', error);
       }
     }
   };
 
   const filteredRows = useMemo(() => {
-      return clientes.filter((row) =>
-        row.nombreCliente.toLowerCase().includes(searchText.toLowerCase())
+      return racks.filter((row) =>
+        row.idRack.toString().includes(searchText)
       );
-  }, [searchText, clientes]);
+  }, [searchText, racks]);
 
 
   const paginatedData = useMemo(() => {
@@ -87,6 +90,24 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
     return filteredRows.slice(startIndex, endIndex);
   }, [currentPage, filteredRows]);
 
+  const handleEliminar = async (idRack) => {
+    setRackToDelete(idRack);
+    setShowConfirmationModal(true);
+  };
+  
+  const confirmarEliminarRack = async () => {
+    try {
+      await borrarRack(rackToDelete); // Elimina el cliente
+    
+      // Vuelve a cargar la lista de clientes después de eliminar uno
+      const racksActualizados = await obtenerRacks();
+      setRacks(racksActualizados || []);
+    } catch (error) {
+      console.error('Error al eliminar el rack:', error);
+    } finally {
+      setShowConfirmationModal(false);
+    }
+  };
 
     return (
       <Card className="lg:h-full lg:w-full">
@@ -94,10 +115,10 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Modificar Cliente
+                Eliminar racks
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Actualiza la información de los clientes
+                Dar de baja a un rack
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -141,8 +162,8 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map((clientes) => (
-          <tr key={clientes.codigo} className="border-b border-blue-gray-50">
+        {paginatedData.map((racks) => (
+          <tr key={racks.idRack} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -151,7 +172,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {clientes.codigo}
+                    {racks.idRack}
                   </Typography>
                 </div>
               </div>
@@ -164,7 +185,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {clientes.nombreCliente}
+                    {racks.columnas}
                   </Typography>
                 </div>
               </div>
@@ -176,7 +197,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                   color="blue-gray"
                   className="font-normal"
                 >
-                {clientes.responsable}
+                {racks.filas}
                 </Typography>
               </div>
             </td>
@@ -187,36 +208,50 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                   color="blue-gray"
                   className="font-normal"
                 >
-                {clientes.email}
+                {racks.fecha_agregado}
                 </Typography>
               </div>
             </td>
             <td className="p-4">
-              <div className="flex flex-col">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
-                >
-                {clientes.username}
-                </Typography>
-              </div>
-            </td>
-            <td className="p-4">
-              <Tooltip content="Actualizar cliente">
-                <Link to={`/modificarCliente/${clientes.codigo}`}>
-                    <IconButton
-                        variant="text"
-                        className="hover:text-red-800"
-                    >
-                    <PencilIcon className="h-5 w-5" />
-                    </IconButton>
-                </Link>
+              <Tooltip content="Eliminar rack" className="bg-red-500">
+                <IconButton
+                  variant="text"
+                  className="hover:text-red-800"
+                  onClick={() => handleEliminar(racks.idRack)} // Llama a handleEliminar con el código del cliente
+                  >
+                  <XMarkIcon className="h-5 w-5" />
+                </IconButton>
               </Tooltip>
             </td>
           </tr>
         ))}
-
+         {showConfirmationModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded shadow-md">
+            <Typography variant="h6" color="blue-gray" className="mb-4">
+              ¿Está seguro de que desea eliminar este rack?
+            </Typography>
+            <div className="flex justify-end gap-4">
+            <Button
+                variant="outlined"
+                className="bg-red-400 text-white"
+                size="sm"
+                onClick={confirmarEliminarRack}
+                >
+                Sí
+            </Button>
+            <Button
+                variant="outlined"
+                className="bg-gray-50"
+                size="sm"
+                onClick={() => setShowConfirmationModal(false)}
+              >
+                No
+            </Button>
+            </div>
+          </div>
+        </div>
+      )}
       </tbody>
           </table>
           
@@ -226,7 +261,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página {currentPage} de {Math.ceil(clientes.length / itemsPerPage)}
+            Página {currentPage} de {Math.ceil(racks.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>

@@ -20,8 +20,8 @@
   ]
   const gestion = [
     { name: 'Registrar Rack', description: 'Registrar un nuevo rack', href: '/agregarRack', icon:SquaresPlusIcon },
-    { name: 'Baja de Rack', description: 'Eliminar un rack', href: '/#', icon: ArrowDownIcon },
-    { name: 'Modificar Rack', description: 'Permite modificar un rack', href: '/#', icon: PencilIcon },
+    { name: 'Baja de Rack', description: 'Eliminar un rack', href: '/bajarRack', icon: ArrowDownIcon },
+    { name: 'Modificar Rack', description: 'Permite modificar un rack', href: '/listarModificarRacks', icon: PencilIcon },
     { name: 'Registrar Hangar', description: 'Eliminar un hangar', href: '/agregarHangar', icon: BuildingOfficeIcon }, //en este const van todos los de mov aca puse de rack para acceder facil, deberíamos hacer lo mismo para gestion de rack, de hangar y ver cuales más
     { name: 'Baja de Hangar', description: 'Registrar un nuevo hangar', href: '/#', icon: ArrowDownIcon },
     { name: 'Modificar Hangar', description: 'Permite modificar un hangar', href: '/#', icon: PencilIcon },
