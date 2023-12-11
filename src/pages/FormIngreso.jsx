@@ -4,7 +4,7 @@ import { obtenerDatosActuales } from '../scripts/global';
 import {obtenerResponsable} from '../scripts/clientes';
 import PropTypes from 'prop-types';
 
-const FormIngreso = ({idAlquiler,idPosicion, letraPosicion, sector, altura, volumen,ancho}) => {
+const FormIngreso = ({idAlquiler,idPosicion}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -26,7 +26,6 @@ const FormIngreso = ({idAlquiler,idPosicion, letraPosicion, sector, altura, volu
     const [destino, setDestino] = useState('');
     const [estado, setEstado] = useState('');
     const [tipoUnidad, setTipoUnidad] = useState('');
-    const [idPosicion, setIdPosicion] = useState('');
     const [nombreResponsable, setNombreResponsable] = useState('');
     const [costo, setCosto]= useState('');
     const [volumen, setVolumen]= useState('');
@@ -73,11 +72,6 @@ const FormIngreso = ({idAlquiler,idPosicion, letraPosicion, sector, altura, volu
         setIdMercaderia(idM);
     }, []);
     
-    useEffect(() => {
-        const pos = `${posicion}${sector}${altura}`;
-        setIdPosicion(pos);
-    }, [posicion, sector, altura]);
-
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -145,10 +139,6 @@ const FormIngreso = ({idAlquiler,idPosicion, letraPosicion, sector, altura, volu
         console.log("tipoUnidad: ", tipoUnidad);
         console.log("tipoTransporte: ", tipoTransporte);
         console.log("idPosicion: ", idPosicion);
-        console.log("Posicion: ", posicion);
-        console.log("Sector: ", sector);
-        console.log("Altura: ", altura);
-        console.log("Volumen: ", volumen);
         console.log("idAlquiler: ", idAlquiler);
         console.log("Descripcion: ", descripcion);
         console.log("Largo: ", largo);
@@ -156,7 +146,7 @@ const FormIngreso = ({idAlquiler,idPosicion, letraPosicion, sector, altura, volu
         console.log("Alto: ",alto);
         console.log("Cantidad: ", cantidad);
 
-        registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, posicion, sector, altura, volumen, idAlquiler, descripcion, largo, ancho, cantidad,alto)
+        registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, idAlquiler, descripcion, largo, ancho, cantidad,alto)
 
 
         //Reiniciar el formulario
