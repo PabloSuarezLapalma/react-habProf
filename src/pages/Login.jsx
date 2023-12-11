@@ -1,4 +1,5 @@
     import { useState } from 'react';
+    import {validarLogin} from '../scripts/login.js';
     import { useNavigate } from 'react-router-dom';
 
 
@@ -17,13 +18,15 @@
 
         const handleSubmit = (event) => {
             event.preventDefault();
-            const validUsername = 'demo';
-            const validPassword = 'demo';  
-            if (username === validUsername && password === validPassword) {
-                navigate('/home'); // Redireccionar a '/home' después del inicio de sesión exitoso
-            } else {
-                  alert('Invalid username or password');
+            validarLogin(username,password).then(resultado=>{
+                if (resultado=="0"){
+                    //setIsAuthenticated(true);
+                    window.location.href = '/Home';
                 }
+                else{
+                    alert("El usuario o contraseña son incorrectos")
+                }
+            })
         };
 
         return (

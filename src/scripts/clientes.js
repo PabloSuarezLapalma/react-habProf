@@ -22,11 +22,12 @@ export  async function obtenerClientes() {
 }
 export  async function agregarCliente(codigo, nombreCliente, responsable, cuit, telefono, email, username, password){
     let code=0;
+    let baja="0";
     try {
         const {error} = await supabase
             .from('Clientes')
             .insert([
-                {codigo:codigo, nombreCliente:nombreCliente, responsable:responsable, cuit:cuit, telefono:telefono, email:email, username:username, password:password, baja:"0"},
+                {codigo:codigo, nombreCliente:nombreCliente, responsable:responsable, cuit:cuit, telefono:telefono, email:email, username:username, password:password, baja:baja},
             ])
             .select()
         if (error) {
@@ -114,18 +115,36 @@ export async function existeUsername(username) {
       console.log(error);
       return false;
     }
-  }
+  
+export  async function existeEmail(email){
+    let encontrado=false;
+    try{
+        let { data: Movimientos, error } = await supabase
+        .from('Clientes')
+        .select("*")
+        .ilike('email', email)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Movimientos.map(item => {return item;});
+        if (listaFiltrada.length>0){
+            encontrado=true;
+        }
+        return encontrado;
+    }
+    catch (error){
+       console.log(error)
+}
+}
+  
   export async function existeCodigo(codigo) {
     try {
       const { data: Movimientos, error } = await supabase
         .from('Clientes')
         .select('*')
         .ilike('codigo', codigo);
-  
       if (error) {
         throw new Error(error.message);
       }
-  
       const listaFiltrada = Movimientos.map(item => item);
       return listaFiltrada.length > 0;
     } catch (error) {
@@ -168,6 +187,25 @@ export async function obtenerCodigoCliente(nombreCliente){
 }
 return nombre;
 }
+
+export async function obtenerResponsable(codigoCliente){
+    let nombre='';
+    try{
+        let { data: Clientes, error } = await supabase
+        .from('Clientes')
+        .select("*")
+        .ilike('codigo', codigoCliente)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Clientes.map(item => {return item;});
+        nombre=listaFiltrada[0].responsable; 
+    }
+    catch (error){
+       console.log(error)
+}
+return nombre;
+}
+
 
 export async function obtenerNombreCliente(codigoCliente){
     try{

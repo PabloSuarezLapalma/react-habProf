@@ -148,7 +148,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
     if (selectedTab === "Todos") {
       return movimientos
       .filter((row) =>
-        row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+       row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
         (!fechaDesde || row.fecha >= fechaDesde) &&
         (!fechaHasta || row.fecha <= fechaHasta)
       );
@@ -156,7 +156,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
       return movimientos.filter(
         (row) =>
           row.estado === selectedTab 
-         
+
          &&
           row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
           (!fechaDesde || row.fecha >= fechaDesde) &&

@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarCliente, obtenerClientes, darDeBajaCliente } from "../scripts/clientes";
 
+
 const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "Nombre de usuario","Dar de baja"];
 
   export default function BajaCliente() {

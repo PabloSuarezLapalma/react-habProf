@@ -35,13 +35,13 @@ export async function obtenerDescripcionMercaderia(idMercaderia){
 }
 }
 
-export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho, idPosicion, cantidad){
+export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho, alto, idPosicion, cantidad){
     let code=0;
     try {
         const {error } = await supabase
-            .from('Posiciones')
+            .from('Mercaderias')
             .insert([
-                {idMercaderia:idMercaderia, descripcion:descripcion, largo:largo, ancho:ancho, idPosicion:idPosicion,cantidad:cantidad},
+                {idMercaderia:idMercaderia, descripcion:descripcion, largo:largo, ancho:ancho, alto:alto,idPosicion:idPosicion,cantidad:cantidad},
             ])
             .select()
         if (error) {
