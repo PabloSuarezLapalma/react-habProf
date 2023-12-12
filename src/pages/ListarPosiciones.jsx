@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
 
-const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler", "Ancho","Seleccionar"];
+const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
   export default function BajaCliente() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,7 +96,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler", "
                 Lista de Posiciones
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Ve información sobre todas las posiciones registradas
+                Seleccione una posición para ver la mercadería a relocalizar
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -141,7 +141,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler", "
             </thead>
  <tbody>
         {paginatedData.map((posiciones) => (
-          <tr key={posiciones.idPosicion} className="border-b border-blue-gray-50">
+          <tr key={posiciones.idPosicion} className="border-b border-blue-gray-50 ">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -213,25 +213,14 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler", "
               </div>
             </td>
             <td className="p-4">
-              <div className="flex flex-col">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
-                >
-                {posiciones.ancho}
-                </Typography>
-              </div>
-            </td>
-            <td className="p-4">
-              <Tooltip content="Ver información detallada">
-                <Link to={`/descripcionPosicion/${posiciones.idPosicion}`}>
+              <Tooltip content="Elegir posición para ver su mercadería">
+                <Link to={`/listadoMercaderiaPosicion/${posiciones.idPosicion}`}>
                     <IconButton
                         variant="text"
                         className="hover:text-red-800"
                     >
                      <a href="#buttons-with-link">
-                          <Button size="sm" color="red" variant="gradient">Usar</Button>
+                          <Button size="sm" color="red" variant="gradient">Elegir</Button>
                      </a>
                     </IconButton>
                 </Link>
