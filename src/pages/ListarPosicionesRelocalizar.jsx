@@ -3,10 +3,11 @@ import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,T
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
+import PropTypes from 'prop-types';
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
-  export default function BajaCliente() {
+  export default function ListarPosicionesRelocalizar({alquiler}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
@@ -15,18 +16,18 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   async function fetchPosiciones() {
     try {
       const posicionesFromDB = await obtenerPosiciones();
-      setPosiciones(posicionesFromDB || []);
+      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler === alquiler);
+      setPosiciones(posicionesFiltradas || []);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);
     } finally {
       setLoading(false);
     }
   }
-
+  
   useEffect(() => {
     fetchPosiciones();
-  }, []);
-
+  }, []); // fetchPosiciones es una dependencia, pero como no cambia, useEffect solo se ejecutará una vez
 
   const itemsPerPage = 7; //Numero de clientes por pagina
 
@@ -49,7 +50,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   
     if (value.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
-      console.log("Búsqueda vacía, cargando los 100 primeros movimientos");
+      console.log("Búsqueda vacía");
       fetchPosiciones();
     } else {
       // Si hay texto en el campo de búsqueda, filtramos los movimientos
@@ -68,7 +69,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
         const posicionEncontrada = await buscarPosicion(searchText);
         setPosiciones(posicionEncontrada || []);
       } catch (error) {
-        console.error('Error al buscar clientes:', error);
+        console.error('Error al buscar posiciones:', error);
       }
     }
   };
@@ -214,7 +215,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
             </td>
             <td className="p-4">
               <Tooltip content="Elegir posición para ver su mercadería">
-                <Link to={`/listadoMercaderiaPosicion/${posiciones.idPosicion}`}>
+                <Link to={`/listarMercaderiaPosicionRelocalizar/${posiciones.idPosicion}`}>
                     <IconButton
                         variant="text"
                         className="hover:text-red-800"
@@ -233,7 +234,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
           </table>
           
            ) : (
-            <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
+            <div>Cargando posiciones...</div> // Si está cargando, se muestra un mensaje de carga
         )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
@@ -251,4 +252,10 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
         </CardFooter>
       </Card>
     );
+    
   }
+  
+  
+  ListarPosicionesRelocalizar.propTypes = {
+  alquiler: PropTypes.string.isRequired,
+};

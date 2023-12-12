@@ -28,7 +28,7 @@
 
   ]
   const posiciones = [
-    { name: 'Listar Posiciones', description: 'Permite mostrar todas las posiciones', href: '/listarPosiciones', icon:BuildingOfficeIcon },
+    { name: 'Listar Posiciones para Relocalizar Mercaderia', description: 'Permite mostrar todas las posiciones', href: '/listarPosicionesRelocalizar', icon:BuildingOfficeIcon },
   ]
 
 
@@ -180,7 +180,7 @@
             </Popover>
             <Popover className="relative">
               <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
-                Posiciones
+                Relocalizar
                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
               </Popover.Button>
 

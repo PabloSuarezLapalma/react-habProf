@@ -17,12 +17,14 @@ import ListarClientes from './pages/ListarClientes'
 import DescripcionCliente from './pages/DescripcionCliente'
 import ListarModificarCliente from './pages/ListarModificarClientes'
 import ModificarCliente from './pages/ModificarCliente'
-import ListarPosiciones from './pages/ListarPosiciones'
+import ListarPosicionesRelocalizar from './pages/ListarPosicionesRelocalizar'
+import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicionRelocalizar'
 
 function App() {
-  const [idPosicion, setIdPosicion] = useState("JA3")
+  const [idPosicion, setIdPosicion] = useState("TR2")
   const [codigoCliente, setCodigoCliente] = useState("0001")
   const [idMercaderia, setIdMercaderia] = useState("276947079")
+  const [idAlquiler, setIdAlquiler] = useState("1234")
   return (
     <>
       <BrowserRouter>
@@ -34,7 +36,8 @@ function App() {
         <Route path="/agregarRack" element={<AgregarRack/>}/>
         <Route path="/agregarHangar" element={<AgregarHangar/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
-        <Route path="/listarPosiciones" element={<ListarPosiciones/>}/>
+        <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
+        <Route path="/listarMercaderiaPosicionRelocalizar/:idPosicion" element={<ListarMercaderiaPosicionRelocalizar/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
         <Route path="/bajarCliente" element={<BajaCliente/>}/>
