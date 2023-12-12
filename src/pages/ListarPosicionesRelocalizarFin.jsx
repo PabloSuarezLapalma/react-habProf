@@ -3,6 +3,7 @@ import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,T
 import {Link,useParams,useLocation} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
+import { registrarIngresoRelocalizar } from "../scripts/ingreso_backstage";
 import PropTypes from 'prop-types';
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
@@ -221,10 +222,11 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
             </td>
             <td className="p-4">
               <Tooltip content="Elegir posición para ver su mercadería">
-                <Link to={`/listarMercaderiaPosicionRelocalizar/${posiciones.idPosicion}`}>
+                <Link to={`/home`}>
                     <IconButton
                         variant="text"
                         className="hover:text-red-800"
+                        onClick={registrarIngresoRelocalizar(alquiler,idPosicion,idMercaderia)}
                     >
                      <a href="#buttons-with-link">
                           <Button size="sm" color="red" variant="gradient">Elegir</Button>
