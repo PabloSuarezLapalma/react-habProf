@@ -14,7 +14,8 @@ export  async function obtenerDatosActuales() {
             throw new Error(error.message);
         }
         let listaClientes = Clientes.map(item => {return item;});
-        return listaClientes[0];
+        let ultimo= listaClientes.length-1;
+        return listaClientes[ultimo];
     } catch (error) {
         console.error(error);
     }
