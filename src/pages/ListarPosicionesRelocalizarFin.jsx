@@ -1,38 +1,43 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
-import {Link,useParams} from "react-router-dom";
+import {Link,useParams,useLocation} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarMercaderia, obtenerMercaderias } from "../scripts/mercaderia";
+import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
+import PropTypes from 'prop-types';
 
-const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Seleccionar"];
+const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
-  export default function ListadoMercaderiaPosicionRelocalizar() {
-  const { idPosicion } = useParams();
+  export default function ListarPosicionesRelocalizarFin({alquiler}) {
+  const {idMercaderia} = useParams();
+  location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const largo = queryParams.get('largo');
+  const ancho = queryParams.get('ancho');
+  const alto = queryParams.get('alto');
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
-  const [mercaderias, setMercaderias] = useState([]);
+  const [posiciones, setPosiciones] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
 
-  async function fetchMercaderias() {
+  async function fetchPosiciones() {
     try {
-      const mercaderiasFromDB = await obtenerMercaderias();
-      const mercaderiasFiltradas = mercaderiasFromDB.filter(mercaderia => mercaderia.idPosicion === idPosicion);
-      setMercaderias(mercaderiasFiltradas || []);
+      const posicionesFromDB = await obtenerPosiciones();
+      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler === alquiler);
+      setPosiciones(posicionesFiltradas || []);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);
     } finally {
       setLoading(false);
     }
   }
-
+  
   useEffect(() => {
-    fetchMercaderias();
-  }, []);
-
+    fetchPosiciones();
+  }, []); // fetchPosiciones es una dependencia, pero como no cambia, useEffect solo se ejecutará una vez
 
   const itemsPerPage = 7; //Numero de clientes por pagina
 
-  const totalItems = mercaderias.length;
+  const totalItems = posiciones.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleNextPage = () => {
@@ -52,11 +57,11 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
     if (value.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
       console.log("Búsqueda vacía");
-      fetchMercaderias();
+      fetchPosiciones();
     } else {
       // Si hay texto en el campo de búsqueda, filtramos los movimientos
       console.log(value);
-      buscarMercaderia(value); // Esta función debería filtrar los movimientos en función del texto ingresado
+      buscarPosicion(value); // Esta función debería filtrar los movimientos en función del texto ingresado
     }
   };
 
@@ -64,22 +69,22 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
   const handleSearchClick = async () => {
     if (searchText.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
-      fetchMercaderias();
+      fetchPosiciones();
     } else {
       try {
-        const mercaderiaEncontrada = await buscarMercaderia(searchText);
-        setMercaderias(mercaderiaEncontrada || []);
+        const posicionEncontrada = await buscarPosicion(searchText);
+        setPosiciones(posicionEncontrada || []);
       } catch (error) {
-        console.error('Error al buscar mercaderias:', error);
+        console.error('Error al buscar posiciones:', error);
       }
     }
   };
 
   const filteredRows = useMemo(() => {
-      return mercaderias.filter((row) =>
+      return posiciones.filter((row) =>
         row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
       );
-  }, [searchText, mercaderias]);
+  }, [searchText, posiciones]);
 
 
   const paginatedData = useMemo(() => {
@@ -95,10 +100,10 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Lista de Mercaderías de la posición {idPosicion}
+                Lista de Posiciones
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Seleccione una mercaderia a relocalizar
+                Seleccione una posición para ver la mercadería a relocalizar
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -142,8 +147,8 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map((mercaderias) => (
-          <tr key={mercaderias.idMercaderia} className="border-b border-blue-gray-50 ">
+        {paginatedData.map((posiciones) => (
+          <tr key={posiciones.idPosicion} className="border-b border-blue-gray-50 ">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -152,7 +157,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {mercaderias.idMercaderia}
+                    {posiciones.idPosicion}
                   </Typography>
                 </div>
               </div>
@@ -165,7 +170,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {mercaderias.descripcion}
+                    {posiciones.letraPosicion}
                   </Typography>
                 </div>
               </div>
@@ -177,7 +182,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   color="blue-gray"
                   className="font-normal"
                 >
-                {mercaderias.largo}
+                {posiciones.sector}
                 </Typography>
               </div>
             </td>
@@ -188,7 +193,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   color="blue-gray"
                   className="font-normal"
                 >
-                {mercaderias.ancho}
+                {posiciones.altura}
                 </Typography>
               </div>
             </td>
@@ -199,7 +204,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   color="blue-gray"
                   className="font-normal"
                 >
-                {mercaderias.alto}
+                {posiciones.volumen}
                 </Typography>
               </div>
             </td>
@@ -210,14 +215,14 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   color="blue-gray"
                   className="font-normal"
                 >
-                {mercaderias.cantidad}
+                {posiciones.idAlquiler}
                 </Typography>
               </div>
             </td>
             <td className="p-4">
               <Tooltip content="Elegir posición para ver su mercadería">
-              <Link to={`/listarMercaderiaPosicionRelocalizar/${mercaderias.idMercaderia}?largo=${mercaderias.largo}&ancho=${mercaderias.ancho}&alto=${mercaderias.alto}`}>          
-                   <IconButton
+                <Link to={`/listarMercaderiaPosicionRelocalizar/${posiciones.idPosicion}`}>
+                    <IconButton
                         variant="text"
                         className="hover:text-red-800"
                     >
@@ -235,12 +240,12 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
           </table>
           
            ) : (
-            <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
+            <div>Cargando posiciones...</div> // Si está cargando, se muestra un mensaje de carga
         )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página {currentPage} de {Math.ceil(mercaderias.length / itemsPerPage)}
+            Página {currentPage} de {Math.ceil(posiciones.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>
@@ -253,4 +258,10 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
         </CardFooter>
       </Card>
     );
+    
   }
+  
+  
+  ListarPosicionesRelocalizarFin.propTypes = {
+  alquiler: PropTypes.string.isRequired,
+};

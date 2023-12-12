@@ -38,6 +38,7 @@ function App() {
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
         <Route path="/listarMercaderiaPosicionRelocalizar/:idPosicion" element={<ListarMercaderiaPosicionRelocalizar/>}/>
+        <Route path="/listarPosicionesRelocalizarFin/:idMercaderia" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
         <Route path="/bajarCliente" element={<BajaCliente/>}/>
