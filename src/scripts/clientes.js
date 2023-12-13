@@ -115,8 +115,9 @@ export async function existeUsername(username) {
       console.log(error);
       return false;
     }
-}
-  
+
+  }
+
 export  async function existeEmail(email){
     let encontrado=false;
     try{
@@ -154,7 +155,7 @@ export  async function existeEmail(email){
     }
   }
 
-  
+
 export async function obtenerCodigoCliente(nombreCliente){
     let nombre='';
     try{
@@ -288,30 +289,3 @@ export async function obtenerClientePorCodigo(codigoCliente) {
       return false;
     }
   }
-
-
-  
-//!Esta es la forma de acceder a los datos de la función, como es asíncrono siempre el resultado es una Promise, por lo que se debe acceder de la siguiente manera para poder manipular los datos
-
-/*
-filtrarCliente("apacuero10").then(resultado=> {
-    if (Array.isArray(resultado)) {
-        // Itera sobre cada elemento del array
-        resultado.forEach(elemento => {
-            console.log("Código:", elemento.codigo);
-            console.log("Nombre del Cliente:", elemento.nombreCliente);
-            console.log("Responsable:", elemento.responsable);
-            console.log("Cuit:", elemento.cuit);
-            console.log("Teléfono:", elemento.telefono);
-            // ... y así sucesivamente para otros campos
-        });
-    } else {
-        console.error("El resultado no es un array.");
-    }
-})
-.catch(error => {
-    console.error("Error en la promesa:", error);
-});
-*/
-// Example usage
-//updateCliente("FEP","password","fepasa");

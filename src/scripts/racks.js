@@ -25,7 +25,7 @@ export  async function agregarRack(idRack,columnas, filas){
         const { error } = await supabase
             .from('Racks')
             .insert([
-                { idRack:idRack,columnas:columnas,filas:filas,fecha_agregado:Date.now()},
+                { idRack:idRack,columnas:columnas,filas:filas},
             ])
             .select()
         if (error) {
@@ -61,8 +61,8 @@ export async function buscarRack(idRack) {
       let { data: Racks, error } = await supabase
         .from('Racks')
         .select('*')
-        .ilike('idRack', idRack);
-      if (error) {
+        .eq('idRack', idRack); // Utiliza 'eq' en lugar de 'ilike'
+        if (error) {
         throw new Error(error.message);
       }
       if (Racks && Racks.length > 0) {
@@ -77,3 +77,99 @@ export async function buscarRack(idRack) {
 }
 }
 
+export async function existeIDRack(idRack) {
+    try {
+      const { data: Racks, error } = await supabase
+        .from('Racks')
+        .select('*')
+        .eq('idRack', idRack); // Utiliza 'eq' en lugar de 'ilike'  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const listaFiltrada = Racks.map(item => item);
+      return listaFiltrada.length > 0;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  export async function obtenerCodigoRack(idRack){
+    let nombre='';
+    try{
+        let { data: Racks, error } = await supabase
+        .from('Racks')
+        .select("*")
+        .eq('idRack', idRack)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Racks.map(item => {return item;});
+        nombre=listaFiltrada[0].idRack; 
+    }
+    catch (error){
+       console.log(error)
+}
+return nombre;
+}
+
+export async function actualizarRack(idRack, nuevosValores) {
+  let code = 0;
+  try {
+    const { data, error } = await supabase
+      .from('Racks')
+      .update(nuevosValores)
+      .eq("idRack", idRack)
+      .select();
+
+    if (error) {
+      code = 1;
+      console.error("Error updating Cliente:", error.message);
+    } else {
+      code = 1;
+      console.log("Cliente updated successfully:", data);
+    }
+  } catch (error) {
+    code = 1;
+    console.error("Unexpected error:", error.message);
+  }
+  return code;
+}
+
+export async function existeIDRackActual(idRack, idRackActual) {
+  try {
+    const { data: Racks, error } = await supabase
+      .from('Racks')
+      .select('*')
+      .neq('idRack', idRackActual) // Excluir al cliente actual
+      .eq('idRack', idRack);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const listaFiltrada = Racks.map(item => item);
+    return listaFiltrada.length > 0;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function obtenerRackPorCodigo(idRack) {
+  try {
+    let { data: Racks, error } = await supabase
+      .from('Racks')
+      .select('*')
+      .eq('idRack', idRack)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return Racks;
+  } catch (error) {
+    console.error(error);
+  }
+}

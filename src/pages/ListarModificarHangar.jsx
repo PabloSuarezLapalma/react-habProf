@@ -2,36 +2,35 @@ import {MagnifyingGlassIcon,HomeIcon,PencilIcon} from "@heroicons/react/24/outli
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarCliente, obtenerClientes } from "../scripts/clientes";
+import { buscarHangar, obtenerHangares } from "../scripts/hangares";
 
-const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "Nombre de usuario","Modificar"];
+const TABLE_HEAD = ["ID", "Tamaño","Fecha de creación","Modificar"];
 
-  export default function ListarModificarCliente() {
+  export default function ListarModificarHangar() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
-  const [clientes, setClientes] = useState([]);
+  const [hangares, setHangares] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
 
-  async function fetchClientes() {
+  async function fetchHangares() {
     try {
-      const clientesFromDB = await obtenerClientes();
-      const clientesFiltrados = clientesFromDB.filter(cliente => cliente.baja === "0");
-      setClientes(clientesFiltrados || []);
+      const hangaresFromDB = await obtenerHangares();
+      setHangares(hangaresFromDB || []);
     } catch (error) {
-      console.error('Error al obtener clientes:', error);
+      console.error('Error al obtener hangares:', error);
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchClientes();
+    fetchHangares();
   }, []);
 
 
-  const itemsPerPage = 7; //Numero de clientes por pagina
+  const itemsPerPage = 7; //Numero de hangares por pagina
 
-  const totalItems = clientes.length;
+  const totalItems = hangares.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleNextPage = () => {
@@ -51,11 +50,11 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
     if (value.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
       console.log("Búsqueda vacía, cargando los 100 primeros movimientos");
-      fetchClientes();
+      fetchHangares();
     } else {
       // Si hay texto en el campo de búsqueda, filtramos los movimientos
       console.log(value);
-      buscarCliente(value); // Esta función debería filtrar los movimientos en función del texto ingresado
+      buscarHangar(value); // Esta función debería filtrar los movimientos en función del texto ingresado
     }
   };
 
@@ -63,22 +62,22 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
   const handleSearchClick = async () => {
     if (searchText.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
-      fetchClientes();
+      fetchHangares();
     } else {
       try {
-        const clientesEncontrados = await buscarCliente(searchText);
-        setClientes(clientesEncontrados || []);
+        const hangaresEncontrados = await buscarHangar(searchText);
+        setHangares(hangaresEncontrados || []);
       } catch (error) {
-        console.error('Error al buscar clientes:', error);
+        console.error('Error al buscar hangares:', error);
       }
     }
   };
 
   const filteredRows = useMemo(() => {
-      return clientes.filter((row) =>
-        row.nombreCliente.toLowerCase().includes(searchText.toLowerCase())
+      return hangares.filter((row) =>
+      row.idHangar.toString().includes(searchText)
       );
-  }, [searchText, clientes]);
+  }, [searchText, hangares]);
 
 
   const paginatedData = useMemo(() => {
@@ -94,10 +93,10 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Modificar Cliente
+                Modificar Hangar
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Actualiza la información de los clientes
+                Actualiza la información de los hangares
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -141,8 +140,8 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map((clientes) => (
-          <tr key={clientes.codigo} className="border-b border-blue-gray-50">
+        {paginatedData.map((hangares) => (
+          <tr key={hangares.idHangar} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -151,7 +150,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {clientes.codigo}
+                    {hangares.idHangar}
                   </Typography>
                 </div>
               </div>
@@ -164,7 +163,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {clientes.nombreCliente}
+                    {hangares.tamanio}
                   </Typography>
                 </div>
               </div>
@@ -176,35 +175,13 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
                   color="blue-gray"
                   className="font-normal"
                 >
-                {clientes.responsable}
+                {hangares.fecha_agregado}
                 </Typography>
               </div>
             </td>
             <td className="p-4">
-              <div className="flex flex-col">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
-                >
-                {clientes.email}
-                </Typography>
-              </div>
-            </td>
-            <td className="p-4">
-              <div className="flex flex-col">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
-                >
-                {clientes.username}
-                </Typography>
-              </div>
-            </td>
-            <td className="p-4">
-              <Tooltip content="Actualizar cliente">
-                <Link to={`/modificarCliente/${clientes.codigo}`}>
+              <Tooltip content="Actualizar hangar">
+                <Link to={`/modificarHangar/${hangares.idHangar}`}>
                     <IconButton
                         variant="text"
                         className="hover:text-red-800"
@@ -221,12 +198,12 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
           </table>
           
            ) : (
-            <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
+            <div>Cargando hangares...</div> // Si está cargando, se muestra un mensaje de carga
         )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página {currentPage} de {Math.ceil(clientes.length / itemsPerPage)}
+            Página {currentPage} de {Math.ceil(hangares.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>

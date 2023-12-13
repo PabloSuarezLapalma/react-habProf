@@ -20,7 +20,8 @@
             event.preventDefault();
             validarLogin(username,password).then(resultado=>{
                 if (resultado=="0"){
-                    navigate('/Home')
+                    //setIsAuthenticated(true);
+                    navigate = '/home';
                 }
                 else{
                     alert("El usuario o contraseña son incorrectos")
