@@ -1,13 +1,16 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
-import {Link,useParams} from "react-router-dom";
+import {Link,useParams,useLocation} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarMercaderia, obtenerMercaderias } from "../scripts/mercaderia";
 
 const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Seleccionar"];
 
   export default function ListadoMercaderiaPosicionRelocalizar() {
-  const { idPosicion } = useParams();
+  const { alquiler } = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idPosicion = queryParams.get('idPosicion');
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [mercaderias, setMercaderias] = useState([]);
@@ -124,7 +127,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
-                {TABLE_HEAD.map((head, index) => (
+                {TABLE_HEAD.map((head) => (
             <th
             key={head}
             className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
@@ -215,25 +218,24 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
               </div>
             </td>
             <td className="p-4">
-              <Tooltip content="Elegir posición para ver su mercadería">
-              <Link to={`/listarMercaderiaPosicionRelocalizar/${mercaderias.idMercaderia}?largo=${mercaderias.largo}&ancho=${mercaderias.ancho}&alto=${mercaderias.alto}`}>          
-                   <IconButton
-                        variant="text"
-                        className="hover:text-red-800"
-                    >
-                     <a href="#buttons-with-link">
-                          <Button size="sm" color="red" variant="gradient">Elegir</Button>
-                     </a>
-                    </IconButton>
-                </Link>
-              </Tooltip>
+            <Tooltip content="Elegir posición para ver su mercadería">
+              <Link to={`/listarPosicionesRelocalizarFin/${alquiler}?idPosicion=${idPosicion}&idMercaderia=${mercaderias.idMercaderia}`}>
+                <Button
+                  size="sm"
+                  color="red"
+                  variant="gradient"
+                  className="hover:text-red-800"
+                >
+                  Elegir
+                </Button>
+              </Link>
+            </Tooltip>
             </td>
           </tr>
         ))}
 
       </tbody>
           </table>
-          
            ) : (
             <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
         )}

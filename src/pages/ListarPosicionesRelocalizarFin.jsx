@@ -3,18 +3,17 @@ import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,T
 import {Link,useParams,useLocation} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
+import { buscarMercaderia } from "../scripts/mercaderia";
 import { registrarIngresoRelocalizar } from "../scripts/ingreso_backstage";
-import PropTypes from 'prop-types';
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
-  export default function ListarPosicionesRelocalizarFin({alquiler}) {
-  const {idMercaderia} = useParams();
+  export default function ListarPosicionesRelocalizarFin() {
+  const {alquiler} = useParams();
   location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const largo = queryParams.get('largo');
-  const ancho = queryParams.get('ancho');
-  const alto = queryParams.get('alto');
+  const idPosicion = queryParams.get('idPosicion');
+  const idMercaderia = queryParams.get('idMercaderia');
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
@@ -23,7 +22,15 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   async function fetchPosiciones() {
     try {
       const posicionesFromDB = await obtenerPosiciones();
-      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler === alquiler);
+      const mercaderiaFromDB = await buscarMercaderia(idMercaderia);
+      const alto = mercaderiaFromDB.alto;
+      const ancho = mercaderiaFromDB.ancho;
+      const largo = mercaderiaFromDB.largo;
+      const volumenFiltro= alto*ancho*largo;
+      console.log(alquiler);
+      console.log(idPosicion);
+      console.log(idMercaderia);
+      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler === alquiler && posicion.volumen >= volumenFiltro && posicion.idPosicion !== idPosicion);
       setPosiciones(posicionesFiltradas || []);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);
@@ -101,10 +108,10 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Lista de Posiciones
+                Lista de Posiciones Disponibles
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Seleccione una posición para ver la mercadería a relocalizar
+                Seleccione la posicion a la cual desea mover la mercaderia {idMercaderia}
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -130,7 +137,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
-                {TABLE_HEAD.map((head, index) => (
+                {TABLE_HEAD.map((head) => (
             <th
             key={head}
             className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
@@ -221,26 +228,25 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
               </div>
             </td>
             <td className="p-4">
+            <Link to={`/home`}>
               <Tooltip content="Elegir posición para ver su mercadería">
-                <Link to={`/home`}>
-                    <IconButton
-                        variant="text"
-                        className="hover:text-red-800"
-                        onClick={registrarIngresoRelocalizar(alquiler,idPosicion,idMercaderia)}
-                    >
-                     <a href="#buttons-with-link">
-                          <Button size="sm" color="red" variant="gradient">Elegir</Button>
-                     </a>
-                    </IconButton>
-                </Link>
+                <Button
+                  size="sm"
+                  color="red"
+                  variant="gradient"
+                  className="hover:text-red-800"
+                  onClick={() => registrarIngresoRelocalizar(alquiler,posiciones.idPosicion,idMercaderia)}
+                >
+                  Elegir
+                </Button>
               </Tooltip>
+            </Link>
             </td>
           </tr>
         ))}
 
       </tbody>
           </table>
-          
            ) : (
             <div>Cargando posiciones...</div> // Si está cargando, se muestra un mensaje de carga
         )}
@@ -262,8 +268,3 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
     );
     
   }
-  
-  
-  ListarPosicionesRelocalizarFin.propTypes = {
-  alquiler: PropTypes.string.isRequired,
-};

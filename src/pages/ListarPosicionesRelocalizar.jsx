@@ -123,7 +123,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
-                {TABLE_HEAD.map((head, index) => (
+                {TABLE_HEAD.map((head) => (
             <th
             key={head}
             className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
@@ -214,25 +214,24 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
               </div>
             </td>
             <td className="p-4">
-              <Tooltip content="Elegir posición para ver su mercadería">
-                <Link to={`/listarMercaderiaPosicionRelocalizar/${posiciones.idPosicion}`}>
-                    <IconButton
-                        variant="text"
-                        className="hover:text-red-800"
-                    >
-                     <a href="#buttons-with-link">
-                          <Button size="sm" color="red" variant="gradient">Elegir</Button>
-                     </a>
-                    </IconButton>
-                </Link>
-              </Tooltip>
+            <Tooltip content="Elegir posición para ver su mercadería">
+              <Link to={`/listarMercaderiaPosicionRelocalizar/${alquiler}?idPosicion=${posiciones.idPosicion}`}>
+                <Button
+                  size="sm"
+                  color="red"
+                  variant="gradient"
+                  className="hover:text-red-800"
+                >
+                  Elegir
+                </Button>
+              </Link>
+            </Tooltip>
             </td>
           </tr>
         ))}
 
       </tbody>
           </table>
-          
            ) : (
             <div>Cargando posiciones...</div> // Si está cargando, se muestra un mensaje de carga
         )}
@@ -255,7 +254,6 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
     
   }
   
-  
-  ListarPosicionesRelocalizar.propTypes = {
+ListarPosicionesRelocalizar.propTypes = {
   alquiler: PropTypes.string.isRequired,
 };

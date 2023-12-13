@@ -19,6 +19,7 @@ import ListarModificarCliente from './pages/ListarModificarClientes'
 import ModificarCliente from './pages/ModificarCliente'
 import ListarPosicionesRelocalizar from './pages/ListarPosicionesRelocalizar'
 import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicionRelocalizar'
+import ListarPosicionesRelocalizarFin from './pages/ListarPosicionesRelocalizarFin'
 
 function App() {
   const [idPosicion, setIdPosicion] = useState("TR2")
@@ -37,8 +38,8 @@ function App() {
         <Route path="/agregarHangar" element={<AgregarHangar/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
         <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
-        <Route path="/listarMercaderiaPosicionRelocalizar/:idPosicion" element={<ListarMercaderiaPosicionRelocalizar/>}/>
-        <Route path="/listarPosicionesRelocalizarFin/:idMercaderia" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
+        <Route path="/listarMercaderiaPosicionRelocalizar/:alquiler" element={<ListarMercaderiaPosicionRelocalizar/>}/>
+        <Route path="/listarPosicionesRelocalizarFin/:alquiler" element={<ListarPosicionesRelocalizarFin/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
         <Route path="/bajarCliente" element={<BajaCliente/>}/>
