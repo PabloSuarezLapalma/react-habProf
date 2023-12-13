@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import { useState,useEffect} from 'react';
+import { registrarEgreso } from '../scripts/egreso';
+import { obtenerDatosActuales } from '../scripts/global';
+import {obtenerResponsable} from '../scripts/clientes';
+import {obtenerCantidadMercaderia} from  '../scripts/mercaderia';
+import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
 import PropTypes from 'prop-types';
 
-const FormEgreso = ({idAlquiler}) => {
+const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -13,8 +18,6 @@ const FormEgreso = ({idAlquiler}) => {
     const [cantidad, setCantidad] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [posicion, setPosicion] = useState('');
-    const [sector, setSector] = useState('');
-    const [altura, setAltura] = useState('');
     const [ancho, setAncho] = useState('');
     const [largo, setLargo] = useState('');
     const [alto, setAlto] = useState('');
@@ -24,8 +27,65 @@ const FormEgreso = ({idAlquiler}) => {
     const [estado, setEstado] = useState('');
     const [tipoUnidad, setTipoUnidad] = useState('');
     const [nombreResponsable, setNombreResponsable] = useState('');
+    const [costo, setCosto]= useState('');
+    const [volumen, setVolumen]= useState('');
+    const [idMercaderia, setIdMercaderia]= useState('');
+    
 
-    const handleSubmit = (e) => {
+    function generarIdMercaderia() {
+        const id = Math.floor(Math.random() * 1000000000); // Genera un número aleatorio entre 0 y 999999999
+        return id.toString();
+    }
+
+    useEffect(() => {
+        setCodigoBWS(`${codigoCliente}-${idPosicion}-${nroRemito}`);
+    }, [codigoCliente, idPosicion, nroRemito]);
+
+    useEffect(() => {
+        setPosicion(`${idPosicion}`);
+    }, [idPosicion]);
+    
+    useEffect(() => {
+        setIDCliente(`${codigoCliente}`);
+    }, [codigoCliente]);
+    
+    useEffect(() => {
+        setIdMercaderia(`${mercaderia}`);
+    }, [mercaderia]);
+    
+    useEffect(() => {
+        console.log("codigo: ", codigoBWS);
+    }, [codigoBWS]);
+
+    useEffect(() => {
+        setEstado("EGRESO");
+    }, []);
+    
+    useEffect(() => {
+        let vol = alto * ancho * largo;
+        setVolumen(vol);
+    }, [alto, ancho, largo]);
+    
+    useEffect(() => {
+        let costo = 0;
+        obtenerDatosActuales().then((datos) => {
+            costo = datos.costoEgreso;
+            setCosto(costo);
+        });
+    }, []);
+    
+    useEffect(() => {
+        obtenerResponsable(codigoCliente).then(responsable => {
+            setNombreResponsable(responsable);
+        });
+    }, [codigoCliente]);
+    
+    useEffect(() => {
+        let idM = generarIdMercaderia();
+        setIdMercaderia(idM);
+    }, []);
+    
+    async function handleSubmit(e) {
         e.preventDefault();
 
         // Obtener el valor actual de la fecha y hora actual     
@@ -44,15 +104,56 @@ const FormEgreso = ({idAlquiler}) => {
         const diaInput = parseInt(dia);
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
-        
-        const codigoBWS = `${idCliente}-${sector}${posicion}${altura}-${nroRemito}`;
-        const estado = 'EGRESO';
+
+        setVolumen(alto * ancho * largo);
+        obtenerDatosActuales().then((datos) => {
+            setCosto(datos.costoIngreso);
+        });
 
         //No anda la comparación de hora y segundos
         if ((anioInput > anioActual) || (anioInput === anioActual && mesInput > mesActual) || (anioInput === anioActual && mesInput === mesActual && diaInput > diaActual) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput > horaActual ) || (anioInput === anioActual && mesInput === mesActual && diaInput === diaActual && horaInput === horaActual && minInput > minActual)) {
-        alert('La fecha y hora ingresada no puede ser mayor a la fecha y hora actual');
-        return;
+            alert("La fecha y hora ingresada no puede ser mayor a la fecha y hora actual")
+            return;
         }
+
+        //Realiza el registro del movimiento   
+      
+        console.log("codigoBWS: ", codigoBWS);
+        console.log("nroRemito: ", nroRemito);
+        console.log("Estado: ", estado);
+        console.log("nombreReponsable: ", nombreResponsable);
+        console.log("Transporte: ", transporte);
+        console.log("Chasis: ", chasis);
+        console.log("Chofer: ", chofer);
+        console.log("Acoplado: ", acoplado);
+        console.log("Costo: ", costo);
+        console.log("idMercaderia: ", idMercaderia);
+        console.log("fecha: ", fecha);
+        console.log("hora: ", hora);
+        console.log("codigoCliente: ", idCliente);
+        console.log("Destino: ", destino);
+        console.log("tipoUnidad: ", tipoUnidad);
+        console.log("tipoTransporte: ", tipoTransporte);
+        console.log("idPosicion: ", posicion);
+        console.log("Descripcion: ", descripcion);
+        console.log("Largo: ", largo);
+        console.log("Ancho: ", ancho);
+        console.log("Alto: ",alto);
+        console.log("Cantidad: ", cantidad);
+        console.log("Volumen: ", volumen); 
+
+        let volumenActual =await obtenerVolumenPosicion(idPosicion)
+        await actualizarPosicion(idPosicion, "volumen",volumenActual+volumen)
+        console.log("Volumen Actual: ",volumenActual)
+        console.log("Diferencia de Volumen : ",volumenActual+volumen)
+
+        let cantidadActual= await obtenerCantidadMercaderia(mercaderia)
+        console.log("Cantidad Actual: ",cantidadActual)
+        let cantidadNueva= cantidadActual-cantidad
+        console.log("Cantidad Nueva: ",cantidadNueva)
+
+        await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,mercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte,cantidadNueva )
+
 
         //Reiniciar el formulario
         setFecha('');
@@ -65,21 +166,16 @@ const FormEgreso = ({idAlquiler}) => {
         setAcoplado('');
         setCantidad('');
         setDescripcion('');
-        setPosicion('');
-        setSector('');
-        setAltura('');
         setAncho('');
         setLargo('');
         setAlto('');
         setCodigoBWS('');
-        setIDCliente('');
         setDestino('');
-        setEstado('');
         setTipoUnidad('');
-    };
+    }
 
     return (
-        <div className=' max-w-7xl mx-auto px-8 p-8 text-center '>
+        <div className=' max-w-7xl mx-auto px-8 p-8 text-center'>
         <div className="bg-white pt-4 pb-4 pl-2 pr-2 rounded-lg shadow-md text-black sm:w-fit md:w-fit lg:w-fit xl:w-fit">
             <div className="shadow-md bg-red-500 mx-auto rounded-md sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-11/12">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold mt-5 text-center mb-10 pt-4 pb-4 text-white ">Registrar Egreso</h1>
@@ -88,7 +184,7 @@ const FormEgreso = ({idAlquiler}) => {
         <form className= 'py-10  sm:px-5' onSubmit={handleSubmit} >
             <div className='flex justify-center flex-wrap '>
             <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5 '>
-                    <label htmlFor='idCliente' className='block text-md font-medium leading-6 text-gray-900'> 
+                    <label htmlFor='codigoCliente' className='block text-md font-medium leading-6 text-gray-900'> 
                         ID del Cliente
                     </label>
                         <input
@@ -97,7 +193,7 @@ const FormEgreso = ({idAlquiler}) => {
                             type="text" 
                             className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
                             value={idCliente} 
-                            required
+                            disabled
                             placeholder='ID Cliente'
                             onChange={(e) => setIDCliente(e.target.value)}  
                         />
@@ -120,7 +216,7 @@ const FormEgreso = ({idAlquiler}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='fecha' className='block text-md font-medium leading-6 text-gray-900'>
-                        Fecha de Egreso
+                        Fecha de Ingreso
                     </label>
                     <input
                         id='fecha'
@@ -134,7 +230,7 @@ const FormEgreso = ({idAlquiler}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='hora' className='block text-md font-medium leading-6 text-gray-900'>
-                        Hora de Egreso
+                        Hora de ingreso
                     </label>
                     <input
                         id='hora'
@@ -175,22 +271,6 @@ const FormEgreso = ({idAlquiler}) => {
                         required
                         placeholder='Transporte' 
                         onChange={(e) => setTransporte(e.target.value)} 
-                    />
-
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='transporte' className='block text-md font-medium leading-6 text-gray-900'>
-                        ¿Quién retira?
-                    </label>
-                    <input
-                        id='nombreResponsable'
-                        name="nombreResponsable"  
-                        type="text" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={nombreResponsable}
-                        required
-                        placeholder='Responsable' 
-                        onChange={(e) => setNombreResponsable(e.target.value)} 
                     />
 
                 </div>
@@ -285,38 +365,8 @@ const FormEgreso = ({idAlquiler}) => {
                         value={posicion}
                         required
                         placeholder='Posición' 
-                        onChange={(e) => setPosicion(e.target.value.toUpperCase())} 
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='sector' className='block text-md font-medium leading-6 text-gray-900'>
-                        Sector
-                    </label>
-                    <input
-                        id='sector'
-                        name="sector" 
-                        type="text" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        maxLength={1} 
-                        value={sector}
-                        required
-                        placeholder='Sector' 
-                        onChange={(e) => setSector(e.target.value.toUpperCase())} 
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='altura' className='block text-md font-medium leading-6 text-gray-900'>
-                        Altura
-                    </label>
-                    <input
-                        id='altura'
-                        name="altura" 
-                        type="number" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={altura} 
-                        required
-                        placeholder='Altura'
-                        onChange={(e) => setAltura(e.target.value)} 
+                        disabled
+                        onChange={(e) => setPosicion(e.target.value)}  
                     />
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -364,7 +414,6 @@ const FormEgreso = ({idAlquiler}) => {
                         onChange={(e) => setAlto(e.target.value)}
                     /> 
                 </div>
-
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='destino' className='block text-md font-medium leading-6 text-gray-900'>
                         Destino
@@ -396,41 +445,23 @@ const FormEgreso = ({idAlquiler}) => {
                         onChange={(e) => setTipoUnidad(e.target.value)} 
                     />
                 </div>
-
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='descripcion' className='block text-md font-medium leading-6 text-gray-900'>
-                        Descripción
-                    </label>
-                    <textarea
-                        id='descripcion'
-                        name="descripcion"  
-                        type="text" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={descripcion}
-                        required
-                        placeholder='Descripcion'
-                        rows={3}
-                        cols={80}
-                        resize = 'none'
-                        onChange={(e) => setDescripcion(e.target.value)} 
-                    />
-                </div>
             </div>
             <input 
                 type="submit"
                 id="movimientos"
-                value="Registrar Egreso" 
+                value="Aceptar" 
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
             />
-            
         </form>
     </div>
     </div>
 );
 }
 
-//FormEgreso.propTypes = {
-  //  idAlquiler: PropTypes.string.isRequired,
-//};
+FormEgreso.propTypes = {
+    idPosicion: PropTypes.string.isRequired,
+    codigoCliente: PropTypes.string.isRequired,
+    mercaderia: PropTypes.string.isRequired,
+};
 
 export default FormEgreso;

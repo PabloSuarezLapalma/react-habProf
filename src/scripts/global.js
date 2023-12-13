@@ -7,26 +7,79 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY  )
 
 export  async function obtenerDatosActuales() {
     try {
-        let { data: Clientes, error } = await supabase
+        let { data: Global, error } = await supabase
             .from('Global')
             .select('*')
         if (error) {
             throw new Error(error.message);
         }
-        let listaClientes = Clientes.map(item => {return item;});
-        return listaClientes[0];
+        let listaGlobal = Global.map(item => {return item;});
+        let ultimo= listaGlobal.length-1;
+        return listaGlobal[ultimo];
     } catch (error) {
         console.error(error);
     }
 }
 
-export  async function agregarDatosGlobales(fecha, costoIngreso, costoEgreso, costoRelocalizar){
+export  async function obtenerCostoIngresoActual() {
+    try {
+        let { data: Global, error } = await supabase
+            .from('Global')
+            .select('*')
+            .order('fechaActualizacion', { ascending: false })
+        if (error) {
+            throw new Error(error.message);
+        }
+        let listaGlobal = Global.map(item => {return item;});
+        return listaGlobal[0].costoIngreso;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export  async function obtenerCostoEgresoActual() {
+    try {
+        let { data: Global, error } = await supabase
+            .from('Global')
+            .select('*')
+            .order('fechaActualizacion', { ascending: false })
+        if (error) {
+            throw new Error(error.message);
+        }
+        let listaGlobal = Global.map(item => {return item;});
+        return listaGlobal[0].costoEgreso;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export  async function obtenerCostoRelocalizacionActual() {
+    try {
+        let { data: Global, error } = await supabase
+            .from('Global')
+            .select('*')
+            .order('fechaActualizacion', { ascending: false })
+        if (error) {
+            throw new Error(error.message);
+        }
+        if (Global.length === 0) {
+            throw new Error('No data found');
+        }
+        let listaGlobal = Global.map(item => {return item;});
+        return listaGlobal[0].costoRelocalizacion;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+export  async function agregarDatosGlobales(fechaActualizacion, costoIngreso, costoEgreso, costoRelocalizar){
     let code=0;
     try {
         const {error} = await supabase
-            .from('Clientes')
+            .from('Global')
             .insert([
-                {fecha:fecha, costoIngreso:costoIngreso, costoEgreso:costoEgreso, costoRelocalizar:costoRelocalizar},
+                {fechaActualizacion:fechaActualizacion, costoIngreso:costoIngreso, costoEgreso:costoEgreso, costoRelocalizar:costoRelocalizar},
             ])
             .select()
         if (error) {
@@ -40,13 +93,13 @@ export  async function agregarDatosGlobales(fecha, costoIngreso, costoEgreso, co
     return code
 }
 
-export  async function borrarDatosFecha(fecha){
+export  async function borrarDatosFecha(fechaActualizacion){
     let code=0;
     try{
         const { error } = await supabase
-            .from('Clientes')
+            .from('Global')
             .delete()
-            .eq('fecha', fecha)
+            .eq('fechaActualizacion', fechaActualizacion)
         if (error) {
             code=1;
             throw new Error(error.message);}
@@ -58,15 +111,15 @@ export  async function borrarDatosFecha(fecha){
     return code
 }
 
-export  async function buscarDatoFecha(fecha){
+export  async function buscarDatoFecha(fechaActualizacion){
     try{
-        let { data: Movimientos, error } = await supabase
-        .from('Clientes')
+        let { data: Global, error } = await supabase
+        .from('Global')
         .select("*")
-        .ilike('fecha', fecha)
+        .ilike('fechaActualizacion', fechaActualizacion)
         if (error) {
             throw new Error(error.message);}   
-        let listaFiltrada = Movimientos.map(item => {return item;});
+        let listaFiltrada = Global.map(item => {return item;});
         return listaFiltrada; 
     }
     catch (error){

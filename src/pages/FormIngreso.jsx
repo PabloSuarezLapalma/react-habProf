@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { registrarIngreso } from '../scripts/ingreso';
 import { obtenerDatosActuales } from '../scripts/global';
 import {obtenerResponsable} from '../scripts/clientes';
+import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
 import PropTypes from 'prop-types';
 
-const FormIngreso = ({idAlquiler,idPosicion}) => {
+const FormIngreso = ({codigoCliente,idPosicion}) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -16,8 +17,6 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
     const [cantidad, setCantidad] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [posicion, setPosicion] = useState('');
-    const [sector, setSector] = useState('');
-    const [altura, setAltura] = useState('');
     const [ancho, setAncho] = useState('');
     const [largo, setLargo] = useState('');
     const [alto, setAlto] = useState('');
@@ -37,8 +36,16 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
     }
 
     useEffect(() => {
-        setCodigoBWS(`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
-    }, [idCliente, sector, posicion, altura, nroRemito]);
+        setCodigoBWS(`${codigoCliente}-${idPosicion}-${nroRemito}`);
+    }, [codigoCliente, idPosicion, nroRemito]);
+
+    useEffect(() => {
+        setPosicion(`${idPosicion}`);
+    }, [idPosicion]);
+    
+    useEffect(() => {
+        setIDCliente(`${codigoCliente}`);
+    }, [codigoCliente]);
     
     useEffect(() => {
         console.log("codigo: ", codigoBWS);
@@ -62,10 +69,10 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
     }, []);
     
     useEffect(() => {
-        obtenerResponsable(idCliente).then(responsable => {
+        obtenerResponsable(codigoCliente).then(responsable => {
             setNombreResponsable(responsable);
         });
-    }, [idCliente]);
+    }, [codigoCliente]);
     
     useEffect(() => {
         let idM = generarIdMercaderia();
@@ -91,11 +98,8 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
         const diaInput = parseInt(dia);
         const horaInput = parseInt(horas);
         const minInput = parseInt(mins);
-      
-        const codigoBWS =setCodigoBWS (`${idCliente}-${sector}${posicion}${altura}-${nroRemito}`);
-        const estado = setEstado('INGRESO');
+
         setVolumen(alto * ancho * largo);
-        
         obtenerDatosActuales().then((datos) => {
             setCosto(datos.costoIngreso);
         });
@@ -106,30 +110,11 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
             return;
         }
 
-        /*
-        const est= "INGRESO"
-        setEstado(est);
-        let vol= (alto * ancho * largo);
-        setVolumen(vol);
-
-        let costo=0;
-        await obtenerDatosActuales().then((datos) => {
-            costo=datos.costoIngreso;
-        });
-        setCosto(costo)
-        
-        const responsable= await obtenerResponsable(idCliente)
-        setNombreResponsable(responsable);
-
         let idM=generarIdMercaderia()
         setIdMercaderia(idM);
 
-        const pos= `${posicion}${sector}${altura}`
-        setIdPosicion(pos)
         //Realiza el registro del movimiento   
-      */
-        const idAlquiler= "1234"
-
+      
         console.log("codigoBWS: ", codigoBWS);
         console.log("nroRemito: ", nroRemito);
         console.log("Estado: ", estado);
@@ -142,19 +127,22 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
         console.log("idMercaderia: ", idMercaderia);
         console.log("fecha: ", fecha);
         console.log("hora: ", hora);
-        console.log("idCliente: ", idCliente);
+        console.log("codigoCliente: ", idCliente);
         console.log("Destino: ", destino);
         console.log("tipoUnidad: ", tipoUnidad);
         console.log("tipoTransporte: ", tipoTransporte);
-        console.log("idPosicion: ", idPosicion);
-        console.log("idAlquiler: ", idAlquiler);
+        console.log("idPosicion: ", posicion);
         console.log("Descripcion: ", descripcion);
         console.log("Largo: ", largo);
         console.log("Ancho: ", ancho);
         console.log("Alto: ",alto);
         console.log("Cantidad: ", cantidad);
 
-        registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, idPosicion, idAlquiler, descripcion, largo, ancho, cantidad,alto)
+        let volumenActual =await obtenerVolumenPosicion(idPosicion)
+        await actualizarPosicion(idPosicion, "volumen",volumenActual+volumen)
+        console.log("Volumen Actual: ",volumenActual)
+
+        await registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, posicion, descripcion, largo, ancho, cantidad,alto)
 
 
         //Reiniciar el formulario
@@ -168,16 +156,11 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
         setAcoplado('');
         setCantidad('');
         setDescripcion('');
-        setPosicion('');
-        setSector('');
-        setAltura('');
         setAncho('');
         setLargo('');
         setAlto('');
         setCodigoBWS('');
-        setIDCliente('');
         setDestino('');
-        setEstado('');
         setTipoUnidad('');
     }
 
@@ -191,7 +174,7 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
         <form className= 'py-10  sm:px-5' onSubmit={handleSubmit} >
             <div className='flex justify-center flex-wrap '>
             <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5 '>
-                    <label htmlFor='idCliente' className='block text-md font-medium leading-6 text-gray-900'> 
+                    <label htmlFor='codigoCliente' className='block text-md font-medium leading-6 text-gray-900'> 
                         ID del Cliente
                     </label>
                         <input
@@ -200,7 +183,7 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
                             type="text" 
                             className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
                             value={idCliente} 
-                            required
+                            disabled
                             placeholder='ID Cliente'
                             onChange={(e) => setIDCliente(e.target.value)}  
                         />
@@ -372,38 +355,8 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
                         value={posicion}
                         required
                         placeholder='Posición' 
-                        onChange={(e) => setPosicion(e.target.value.toUpperCase())} 
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='sector' className='block text-md font-medium leading-6 text-gray-900'>
-                        Sector
-                    </label>
-                    <input
-                        id='sector'
-                        name="sector" 
-                        type="text" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        maxLength={1} 
-                        value={sector}
-                        required
-                        placeholder='Sector' 
-                        onChange={(e) => setSector(e.target.value.toUpperCase())} 
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='altura' className='block text-md font-medium leading-6 text-gray-900'>
-                        Altura
-                    </label>
-                    <input
-                        id='altura'
-                        name="altura" 
-                        type="number" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={altura} 
-                        required
-                        placeholder='Altura'
-                        onChange={(e) => setAltura(e.target.value)} 
+                        disabled
+                        onChange={(e) => setPosicion(e.target.value)}  
                     />
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -465,7 +418,6 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
                         placeholder='Descripcion'
                         rows={3}
                         cols={80}
-                        resize = 'none'
                         onChange={(e) => setDescripcion(e.target.value)} 
                     />
                 </div>
@@ -483,9 +435,10 @@ const FormIngreso = ({idAlquiler,idPosicion}) => {
 );
 }
 
-//FormIngreso.propTypes = {
-  //  idAlquiler: PropTypes.string.isRequired,
-//};
+FormIngreso.propTypes = {
+    idPosicion: PropTypes.string.isRequired,
+    codigoCliente: PropTypes.string.isRequired,
+};
 
 
 export default FormIngreso;

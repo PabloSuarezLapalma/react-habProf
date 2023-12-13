@@ -39,7 +39,6 @@ export  async function agregarHangar(idHangar,tamanio){
     return code
 }
 
-
 export async function actualizarHangar(idHangar, nuevosValores) {
   let code = 0;
   try {
@@ -101,6 +100,7 @@ export async function buscarHangar(idHangar) {
       console.log(error);
 }
 }
+
 
 export async function obtenerHangarPorCodigo(idHangar) {
   try {

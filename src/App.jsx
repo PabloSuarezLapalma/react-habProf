@@ -22,18 +22,24 @@ import ListarClientes from './pages/ListarClientes'
 import DescripcionCliente from './pages/DescripcionCliente'
 import ListarModificarCliente from './pages/ListarModificarClientes'
 import ModificarCliente from './pages/ModificarCliente'
+import ListarPosicionesRelocalizar from './pages/ListarPosicionesRelocalizar'
+import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicionRelocalizar'
+import ListarPosicionesRelocalizarFin from './pages/ListarPosicionesRelocalizarFin'
 import Error404 from './pages/Error404'
 
 function App() {
-  const [idAlquiler, setIdAlquiler] = useState(0)
+  const [idPosicion, setIdPosicion] = useState("TR2")
+  const [codigoCliente, setCodigoCliente] = useState("0001")
+  const [idMercaderia, setIdMercaderia] = useState("276947079")
+  const [idAlquiler, setIdAlquiler] = useState("1234")
   return (
     <>
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/formIngreso" element={<FormIngreso idAlquiler={idAlquiler}/>}/>
-        <Route path="/formEgreso" element={<FormEgreso idAlquiler={idAlquiler}/>}/>
+        <Route path="/formIngreso" element={<FormIngreso codigoCliente={codigoCliente} idPosicion={idPosicion}/>}/>
+        <Route path="/formEgreso" element={<FormEgreso codigoCliente={codigoCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>
         <Route path='/bajarRack' element={<BajaRack/>}/>
         <Route path="/listarModificarRacks" element={<ListarModificarRack/>}/>
@@ -44,6 +50,9 @@ function App() {
         <Route path="/listarModificarHangar" element={<ListarModificarHangar/>}/>
         <Route path="/modificarHangar/:idHangar" element={<ModificarHangar />} />
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
+        <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
+        <Route path="/listarMercaderiaPosicionRelocalizar/:alquiler/:idPosicion" element={<ListarMercaderiaPosicionRelocalizar/>}/>
+        <Route path="/listarPosicionesRelocalizarFin/:alquiler/:idPosicion/:idMercaderia/:cantidad" element={<ListarPosicionesRelocalizarFin/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />
         <Route path="/agregarCliente" element={<AgregarCliente/>}/>
         <Route path="/listarClientes" element={<ListarClientes/>}/>

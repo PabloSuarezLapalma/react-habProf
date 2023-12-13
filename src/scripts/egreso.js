@@ -1,10 +1,17 @@
-import { agregarMercaderia } from './mercaderia';
-import { agregarPosicion } from './posiciones';
+import { actualizarMercaderia,buscarMercaderia,obtenerDescripcionMercaderia,borrarMercaderia} from './mercaderia';
 import { agregarMovimiento } from './movimientos';
 
-export function registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte, idPosicion, letraPosicion, sector, altura, volumen, idAlquiler, descripcion, largo, ancho, cantidad,alto
+export async function registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte, cantidadNueva
     ){
-    agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
-    agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen,ancho, idAlquiler)
-    agregarMercaderia(idMercaderia, descripcion, largo, ancho, alto, idPosicion, cantidad)
+    let descripcion =  await obtenerDescripcionMercaderia(idMercaderia)
+    await agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
+    let mercaderia= await buscarMercaderia(idMercaderia)
+    const cantidadVieja= mercaderia.cantidad;
+    const diferencia= cantidadNueva-cantidadVieja
+    if (diferencia === 0) {
+        borrarMercaderia(idMercaderia)
+    } else{
+        await actualizarMercaderia(idMercaderia, 'cantidad', parseInt(cantidadNueva))
+        await actualizarMercaderia(idMercaderia, 'descripcion', descripcion)
+    }
 }

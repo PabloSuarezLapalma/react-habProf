@@ -115,6 +115,7 @@ export async function existeUsername(username) {
       console.log(error);
       return false;
     }
+
   }
 
 export  async function existeEmail(email){
@@ -153,6 +154,7 @@ export  async function existeEmail(email){
       return false;
     }
   }
+
 
 export async function obtenerCodigoCliente(nombreCliente){
     let nombre='';

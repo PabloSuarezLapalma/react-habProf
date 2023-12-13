@@ -19,6 +19,22 @@ export  async function obtenerAlquileres() {
     }
 }
 
+export  async function obtenerCodigoClienteAlquiler(idAlquiler){
+    try{
+        let { data: Alquileres, error } = await supabase
+        .from('Alquileres')
+        .select("*")
+        .ilike('idAlquiler', idAlquiler)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Alquileres.map(item => {return item;});
+        return listaFiltrada[0].codigoCliente; 
+    }
+    catch (error){
+       console.log(error)
+    }
+}
+
 export  async function agregarAlquiler(idAlquiler, fechaIngreso, estado, fechaFin, codigoCliente){
     let code=0;
     try {

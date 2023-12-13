@@ -19,13 +19,13 @@ export  async function obtenerPosiciones() {
     }
 }
 
-export  async function agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen,ancho, idAlquiler){
+export  async function agregarPosicion(idPosicion, letraPosicion, sector, altura, volumen,ancho, idAlquiler,idRack, idHangar){
     let code=0;
     try {
         const {error } = await supabase
             .from('Posiciones')
             .insert([
-                {idPosicion:idPosicion, letraPosicion:letraPosicion, sector:sector, altura:altura, volumen:volumen,ancho:ancho,idAlquiler:idAlquiler},
+                {idPosicion:idPosicion, letraPosicion:letraPosicion, sector:sector, altura:altura, volumen:volumen,ancho:ancho,idAlquiler:idAlquiler, idRack:idRack, idHangar:idHangar},
             ])
             .select()
         if (error) {
@@ -72,6 +72,27 @@ export  async function buscarPosicion(idPosicion){
        console.log(error)
     }
 }
+
+export  async function obtenerVolumenPosicion(idPosicion){
+    let volumen=0
+    try{
+        let { data: Posiciones, error } = await supabase
+        .from('Posiciones')
+        .select("*")
+        .ilike('idPosicion', idPosicion)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Posiciones.map(item => {return item;});
+        volumen= listaFiltrada[0].volumen; 
+    } 
+    catch (error){
+        volumen=-1
+       console.log(error)
+    }
+    return volumen
+}
+
+
 
 export  async function actualizarPosicion(idPosicion,columnaModificar, nuevoValor) {
     let code=0;
