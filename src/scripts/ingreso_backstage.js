@@ -4,7 +4,7 @@ import { obtenerCostoRelocalizacionActual} from './global';
 import { agregarMovimiento } from './movimientos';
 import { actualizarPosicion,obtenerVolumenPosicion } from './posiciones';
 
-export async function registrarIngresoRelocalizar(alquiler,idPosicion,idMercaderia,cantidadNueva)
+export async function registrarIngresoRelocalizar(alquiler,idPosicion,idMercaderia,cantidadNueva,nuevoIdMercaderia)
 { 
     const codigoCliente=  await obtenerCodigoClienteAlquiler(alquiler) 
     const costoRelocalizar = await obtenerCostoRelocalizacionActual();  
@@ -53,7 +53,6 @@ export async function registrarIngresoRelocalizar(alquiler,idPosicion,idMercader
     console.log("Ancho: ", ancho);
     console.log("Alto: ",alto);
     console.log("Cantidad: ", cantidad);
-    const nuevoIdMercaderia= Math.floor(Math.random() * 1000000000)
     await agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costoRelocalizar,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
     await agregarMercaderia(nuevoIdMercaderia, descripcion, largo, ancho, alto, idPosicion, cantidadNueva)
     const volumenNuevo= largo*ancho*alto*cantidad

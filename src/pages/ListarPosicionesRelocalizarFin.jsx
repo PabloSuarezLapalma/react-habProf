@@ -48,7 +48,8 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
 
   async function confirmarRelocalizar(posicionNueva) {
     try {    
-      registrarIngresoRelocalizar(alquiler, posicionNueva, idMercaderia,parseInt(cantidad));
+      let nuevoIdMercaderia= Math.floor(Math.random() * 1000000000);
+      registrarIngresoRelocalizar(alquiler, posicionNueva, idMercaderia,parseInt(cantidad),nuevoIdMercaderia);
       registrarEgresoRelocalizar(alquiler,idPosicion,idMercaderia,parseInt(cantidad));
       navigate('/home');
     } catch (error) {
