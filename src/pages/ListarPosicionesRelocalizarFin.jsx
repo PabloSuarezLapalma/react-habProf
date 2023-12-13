@@ -1,4 +1,4 @@
-import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon,HomeIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
 import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
@@ -142,9 +142,14 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
           </div>
           <Link to="/home" className="mx-auto mr-20 -mt-28 "> 
                   <IconButton variant="text">
-                    <HomeIcon className="h-8 w-8 text-red-500" />
+                    <HomeIcon className="h-8 w-8 text-red-500"/>
                   </IconButton>   
           </Link>
+                  <IconButton variant="text"  className="mx-auto mr-20 -mt-28 "
+                    onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${alquiler}/${idPosicion}`)}
+                  >
+                    <ArrowLeftIcon className="h-8 w-8 text-red-500" />
+                  </IconButton>   
           </div>
         </CardHeader>
         <CardBody className="overflow-scroll -mt-6 px-0">
