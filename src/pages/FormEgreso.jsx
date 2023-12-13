@@ -145,7 +145,7 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
         let volumenActual =await obtenerVolumenPosicion(idPosicion)
         await actualizarPosicion(idPosicion, "volumen",volumenActual+volumen)
         console.log("Volumen Actual: ",volumenActual)
-        console.log("Diferencia de Voluymen : ",volumenActual+volumen)
+        console.log("Diferencia de Volumen : ",volumenActual+volumen)
 
         let cantidadActual= await obtenerCantidadMercaderia(mercaderia)
         console.log("Cantidad Actual: ",cantidadActual)

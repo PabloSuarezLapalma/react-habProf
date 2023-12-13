@@ -1,23 +1,22 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
-import {Link,useParams,useLocation} from "react-router-dom";
+import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
 import { buscarMercaderia } from "../scripts/mercaderia";
 import { registrarIngresoRelocalizar } from "../scripts/ingreso_backstage";
+import { registrarEgresoRelocalizar } from "../scripts/egreso_backstage";
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
   export default function ListarPosicionesRelocalizarFin() {
-  const {alquiler} = useParams();
-  location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const idPosicion = queryParams.get('idPosicion');
-  const idMercaderia = queryParams.get('idMercaderia');
+  const navigate = useNavigate();
+  const {alquiler,idPosicion,idMercaderia,cantidad} = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   async function fetchPosiciones() {
     try {
@@ -27,10 +26,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
       const ancho = mercaderiaFromDB.ancho;
       const largo = mercaderiaFromDB.largo;
       const volumenFiltro= alto*ancho*largo;
-      console.log(alquiler);
-      console.log(idPosicion);
-      console.log(idMercaderia);
-      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler === alquiler && posicion.volumen >= volumenFiltro && posicion.idPosicion !== idPosicion);
+      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler  === alquiler && posicion.volumen >= volumenFiltro && posicion.idPosicion !== idPosicion);
       setPosiciones(posicionesFiltradas || []);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);
@@ -44,6 +40,24 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   }, []); // fetchPosiciones es una dependencia, pero como no cambia, useEffect solo se ejecutará una vez
 
   const itemsPerPage = 7; //Numero de clientes por pagina
+
+    
+  const handleConfirmar = async () => {
+    setShowConfirmationModal(true);
+  };
+
+  async function confirmarRelocalizar(posicionNueva) {
+    try {    
+      registrarIngresoRelocalizar(alquiler, posicionNueva, idMercaderia,parseInt(cantidad));
+      registrarEgresoRelocalizar(alquiler,idPosicion,idMercaderia,parseInt(cantidad));
+      navigate('/home');
+    } catch (error) {
+      console.error('Error al eliminar el cliente:', error);
+    } finally {
+      setShowConfirmationModal(false);
+    }
+  }
+
 
   const totalItems = posiciones.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -228,23 +242,47 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
               </div>
             </td>
             <td className="p-4">
-            <Link to={`/home`}>
               <Tooltip content="Elegir posición para ver su mercadería">
                 <Button
                   size="sm"
                   color="red"
                   variant="gradient"
                   className="hover:text-red-800"
-                  onClick={() => registrarIngresoRelocalizar(alquiler,posiciones.idPosicion,idMercaderia)}
-                >
+                  onClick={() => {handleConfirmar();
+                  }}                >
                   Elegir
                 </Button>
               </Tooltip>
-            </Link>
             </td>
+            {showConfirmationModal && (
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+                <div className="bg-white p-4 rounded shadow-md">
+                  <Typography variant="h6" color="blue-gray" className="mb-4">
+                    ¿Desea relocalizar la mercadería {idMercaderia} de la posición {idPosicion} a la posición {posiciones.idPosicion}?
+                  </Typography>
+                  <div className="flex justify-end gap-4">
+                  <Button
+                      variant="outlined"
+                      className="bg-red-400 text-white"
+                      size="sm"
+                      onClick={() => confirmarRelocalizar(posiciones.idPosicion)}
+                      >
+                      Sí
+                  </Button>
+                  <Button
+                      variant="outlined"
+                      className="bg-gray-50"
+                      size="sm"
+                      onClick={() => setShowConfirmationModal(false)}
+                    >
+                      No
+                  </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </tr>
         ))}
-
       </tbody>
           </table>
            ) : (

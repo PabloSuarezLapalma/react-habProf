@@ -139,7 +139,7 @@ const FormIngreso = ({codigoCliente,idPosicion}) => {
         console.log("Cantidad: ", cantidad);
 
         let volumenActual =await obtenerVolumenPosicion(idPosicion)
-        await actualizarPosicion(idPosicion, "volumen",volumenActual-volumen)
+        await actualizarPosicion(idPosicion, "volumen",volumenActual+volumen)
         console.log("Volumen Actual: ",volumenActual)
 
         await registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, posicion, descripcion, largo, ancho, cantidad,alto)

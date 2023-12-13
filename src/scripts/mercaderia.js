@@ -82,7 +82,7 @@ export  async function buscarMercaderia(idMercaderia){
         if (error) {
             throw new Error(error.message);}   
         let listaFiltrada = Mercaderias.map(item => {return item;});
-        return listaFiltrada; 
+        return listaFiltrada[0]; 
     }
     catch (error){
        console.log(error)
@@ -95,7 +95,7 @@ export  async function actualizarMercaderia(idMercaderia,columnaModificar, nuevo
         const { data, error } = await supabase
             .from('Mercaderias')
             .update({ [columnaModificar]: nuevoValor })
-            .eq("idMercaderia", idMercaderia)
+            .eq('idMercaderia', idMercaderia)
             .select();
         if (error) {
             code=1;

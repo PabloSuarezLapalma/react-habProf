@@ -1,6 +1,6 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
-import {Link} from "react-router-dom";
+import {Link,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
   export default function ListarPosicionesRelocalizar({alquiler}) {
+  const navigate = useNavigate(); 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
@@ -215,16 +216,15 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
             </td>
             <td className="p-4">
             <Tooltip content="Elegir posición para ver su mercadería">
-              <Link to={`/listarMercaderiaPosicionRelocalizar/${alquiler}?idPosicion=${posiciones.idPosicion}`}>
                 <Button
                   size="sm"
                   color="red"
                   variant="gradient"
                   className="hover:text-red-800"
+                  onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${alquiler}/${posiciones.idPosicion}`)}
                 >
                   Elegir
                 </Button>
-              </Link>
             </Tooltip>
             </td>
           </tr>

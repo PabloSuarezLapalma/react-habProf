@@ -1,20 +1,19 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
-import {Link,useParams,useLocation} from "react-router-dom";
+import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarMercaderia, obtenerMercaderias } from "../scripts/mercaderia";
 
 const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Seleccionar"];
 
   export default function ListadoMercaderiaPosicionRelocalizar() {
-  const { alquiler } = useParams();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const idPosicion = queryParams.get('idPosicion');
+  const navigate = useNavigate(); // Utilizar useNavigate para la navegación
+  const { alquiler,idPosicion } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [mercaderias, setMercaderias] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [cantidad, setCantidad] = useState(0);
 
   async function fetchMercaderias() {
     try {
@@ -77,6 +76,15 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
       }
     }
   };
+
+  function verificarCantidad(cantidadMercaderia) {
+    if (cantidad > 0 && cantidad <= cantidadMercaderia) {
+        return true;
+    } else {
+        return false;
+    }
+    
+  }
 
   const filteredRows = useMemo(() => {
       return mercaderias.filter((row) =>
@@ -213,22 +221,35 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   color="blue-gray"
                   className="font-normal"
                 >
-                {mercaderias.cantidad}
+                <Input
+                  placeholder = {`Máximo ${mercaderias.cantidad} unidades`}
+                  type="number"
+                  required
+                  className=" pl-10"
+                  onChange={(e) => {setCantidad(e.target.value)}}
+                  >
+                  </Input>
                 </Typography>
+                
               </div>
             </td>
             <td className="p-4">
             <Tooltip content="Elegir posición para ver su mercadería">
-              <Link to={`/listarPosicionesRelocalizarFin/${alquiler}?idPosicion=${idPosicion}&idMercaderia=${mercaderias.idMercaderia}`}>
                 <Button
                   size="sm"
                   color="red"
                   variant="gradient"
                   className="hover:text-red-800"
-                >
+                  onClick={() =>  
+                    {if (verificarCantidad(mercaderias.cantidad)) {
+                    navigate(`/listarPosicionesRelocalizarFin/${alquiler}/${idPosicion}/${mercaderias.idMercaderia}/${cantidad}`)
+                    } else {
+                      alert("La cantidad ingresada es incorrecta")
+                    }
+                  }}
+                  >
                   Elegir
                 </Button>
-              </Link>
             </Tooltip>
             </td>
           </tr>
