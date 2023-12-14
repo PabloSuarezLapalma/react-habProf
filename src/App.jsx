@@ -26,10 +26,11 @@ import ListarPosicionesRelocalizar from './pages/ListarPosicionesRelocalizar'
 import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicionRelocalizar'
 import ListarPosicionesRelocalizarFin from './pages/ListarPosicionesRelocalizarFin'
 import Error404 from './pages/Error404'
+import Montetizacion from './pages/Monetizacion'
 
 function App() {
   const [idPosicion, setIdPosicion] = useState("TR2")
-  const [codigoCliente, setCodigoCliente] = useState("0001")
+  const [idCliente, setCodigoCliente] = useState("0001")
   const [idMercaderia, setIdMercaderia] = useState("276947079")
   const [idAlquiler, setIdAlquiler] = useState("1234")
   return (
@@ -38,8 +39,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/formIngreso" element={<FormIngreso codigoCliente={codigoCliente} idPosicion={idPosicion}/>}/>
-        <Route path="/formEgreso" element={<FormEgreso codigoCliente={codigoCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
+        <Route path="/formIngreso" element={<FormIngreso codigoCliente={idCliente} idPosicion={idPosicion}/>}/>
+        <Route path="/formEgreso" element={<FormEgreso codigoCliente={idCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>
         <Route path='/bajarRack' element={<BajaRack/>}/>
         <Route path="/listarModificarRacks" element={<ListarModificarRack/>}/>
@@ -59,7 +60,7 @@ function App() {
         <Route path="/descripcionCliente/:codigo" element={<DescripcionCliente />} />
         <Route path="/listarModificarClientes" element={<ListarModificarCliente/>}/>
         <Route path="/modificarCliente/:codigo" element={<ModificarCliente />} />
-      
+        <Route path="/infoMonetizacion" element={<Montetizacion codigoCliente={idCliente}/>}/>
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>

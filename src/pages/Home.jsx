@@ -1,7 +1,7 @@
   import { Fragment, useState } from 'react'
   import { Link } from 'react-router-dom'
   import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon} from '@heroicons/react/24/outline'
+  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon,CurrencyDollarIcon} from '@heroicons/react/24/outline'
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
   import { Typography } from "@material-tailwind/react";
 
@@ -26,6 +26,9 @@
     { name: 'Baja de Hangar', description: 'Registrar un nuevo hangar', href: '/bajarHangar', icon: ArrowDownIcon },
     { name: 'Modificar Hangar', description: 'Permite modificar un hangar', href: '/listarModificarHangar', icon: PencilIcon },
 
+  ]
+  const monetizacion = [
+    { name: 'Monetizacion de Cliente', description: 'Muestra información con respecto a la monetización de un cliente', href: '/infoMonetizacion', icon:CurrencyDollarIcon },
   ]
 
 
@@ -174,6 +177,45 @@
                 </Popover.Panel>
               </Transition>
             </Popover>
+            <Popover className="relative">
+              <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
+                Monetizacion
+                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              </Popover.Button>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+              >
+                <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-4">
+                    {monetizacion.map((item) => (
+                      <div
+                        key={item.name}
+                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                      >
+                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                          <item.icon className="h-6 w-6 text-gray-600 group-hover:text-red-500" aria-hidden="true" />
+                        </div>
+                        <div className="flex-auto">
+                          <Link to={item.href} className="block font-semibold  text-blue-gray-900">
+                            {item.name}
+                            <span className="absolute inset-0" />
+                          </Link>
+                          <p className="mt-1 text-gray-600">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                </Popover.Panel>
+              </Transition>
+            </Popover>
           </Popover.Group>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -262,6 +304,31 @@
                         </Disclosure.Button>
                         <Disclosure.Panel className="mt-2 space-y-2">
                           {[...gestion,].map((item) => (
+                            <Disclosure.Button
+                              key={item.name}
+                              as="a"
+                              href={item.href}
+                              className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            >
+                              {item.name}
+                            </Disclosure.Button>
+                          ))}
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
+                  <Disclosure as="div" className="-mx-3">
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                          Monetizacion
+                          <ChevronDownIcon
+                            className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
+                            aria-hidden="true"
+                          />
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="mt-2 space-y-2">
+                          {[...monetizacion,].map((item) => (
                             <Disclosure.Button
                               key={item.name}
                               as="a"
