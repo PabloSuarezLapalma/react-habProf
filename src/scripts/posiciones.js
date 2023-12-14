@@ -73,6 +73,40 @@ export  async function buscarPosicionesAlquiler(idAlquiler){
     }
 }
 
+export  async function buscaridPosicionAlquiler(idAlquiler){
+    try{
+        let { data: Posiciones, error } = await supabase
+        .from('Posiciones')
+        .select("*")
+        .ilike('idAlquiler', idAlquiler)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Posiciones.map(item => {return item;});
+        return listaFiltrada[0].idPosicion; 
+    }
+    catch (error){
+       console.log(error)
+    }
+}
+
+export  async function buscarIdMercaderiaPosicion(idPosicion){
+    try{
+        let { data: Posiciones, error } = await supabase
+        .from('Posiciones')
+        .select("*")
+        .ilike('idPosicion', idPosicion)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Posiciones.map(item => {return item;});
+        return listaFiltrada[0].idMercaderia; 
+    }
+    catch (error){
+       console.log(error)
+    }
+}
+
+
+
 
 export  async function buscarPosicion(idPosicion){
     try{

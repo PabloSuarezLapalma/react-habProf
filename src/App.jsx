@@ -58,7 +58,7 @@ function App() {
         <Route path="/descripcionCliente/:codigo" element={<DescripcionCliente />} />
         <Route path="/listarModificarClientes" element={<ListarModificarCliente/>}/>
         <Route path="/modificarCliente/:codigo" element={<ModificarCliente />} />
-        <Route path="/infoMonetizacion" element={<Monetizacion codigoCliente={idCliente}/>}/>
+        <Route path="/infoMonetizacion" element={<Monetizacion/>}/>
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>

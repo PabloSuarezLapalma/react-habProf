@@ -2,21 +2,39 @@ import {HomeIcon,InformationCircleIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {buscarPosicionesAlquiler } from "../scripts/posiciones";
-import { buscarAlquilerCliente } from "../scripts/alquileres";
+import {buscaridPosicionAlquiler } from "../scripts/posiciones";
+import { obtenerAlquileres} from "../scripts/alquileres";
+import {obtenerNombreCliente} from "../scripts/clientes";
 
-const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Renovacion", "Renueva?"];
+const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha de Renovacion", "Monto Total (USD)","Renueva?"];
 
-  export default function Monetizacion(codigoCliente) {
+  export default function Monetizacion() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [posiciones, setPosiciones] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [alquileres, setAlquileres] = useState([]);
+  const [posiciones, setPosiciones] = useState([]);
+  const [clientes, setClientes] = useState([]);
+  //const [mercaderias, setMercaderias] = useState([]);
 
-  async function fetchPosiciones() {
+  async function fetchAlquileres() {
     try {
-      let alquiler= buscarAlquilerCliente(codigoCliente);
-      const posicionesFromDB = await buscarPosicionesAlquiler(alquiler.idAlquiler);
-      setPosiciones(posicionesFromDB || []);
+      const alquileresFromDB= obtenerAlquileres();
+      setPosiciones(alquileresFromDB || []);
+
+      const clientes = {};
+      for (const alquiler of alquileresFromDB) {
+          const nombreCliente = await obtenerNombreCliente(alquiler.codigoCliente);
+          clientes[alquiler.codigoCliente] = nombreCliente;
+      }
+      setClientes(clientes);
+
+      const posiciones = {};
+      for (const alquiler of alquileresFromDB) {
+          const idPosicion = await buscaridPosicionAlquiler(alquiler.idAlquiler);
+          posiciones[alquiler.idAlquiler] = idPosicion;
+      }
+      setPosiciones(posiciones);
+
     } catch (error) {
       console.error('Error al obtener clientes:', error);
     } finally {
@@ -25,7 +43,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
   }
 
   useEffect(() => {
-    fetchPosiciones();
+    fetchAlquileres();
   }, []);
 
 
@@ -95,10 +113,10 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Monetizacion del cliente {codigoCliente}
+                MONETIZACION
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Ve información sobre todos los clientes
+                Información de la monetizacion de todos los clientes y cerrar mes
               </Typography>
             </div>
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
@@ -134,8 +152,8 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map((clientes) => (
-          <tr key={posiciones.codigo} className="border-b border-blue-gray-50">
+        {paginatedData.map((alquileres) => (
+          <tr key={alquileres.idAlquiler} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -144,7 +162,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {posiciones.codigo}
+                    {alquileres.idAlquiler}
                   </Typography>
                 </div>
               </div>
@@ -157,7 +175,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {clientes.nombreCliente}
+                    {clientes[alquileres.codigoCliente]}
                   </Typography>
                 </div>
               </div>
@@ -169,7 +187,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
                   color="blue-gray"
                   className="font-normal"
                 >
-                {clientes.responsable}
+                {alquileres.fechaIngreso}
                 </Typography>
               </div>
             </td>
@@ -180,7 +198,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
                   color="blue-gray"
                   className="font-normal"
                 >
-                {clientes.email}
+                 {posiciones[alquileres.idAlquiler]}
                 </Typography>
               </div>
             </td>
@@ -191,7 +209,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
                   color="blue-gray"
                   className="font-normal"
                 >
-                {clientes.username}
+                {alquileres.fechaRenovacion}
                 </Typography>
               </div>
             </td>
@@ -219,7 +237,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página {currentPage} de {Math.ceil(posiciones.length / itemsPerPage)}
+            Página {currentPage} de {Math.ceil(alquileres.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>

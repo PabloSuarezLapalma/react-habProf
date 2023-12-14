@@ -108,6 +108,22 @@ export  async function buscarMercaderia(idMercaderia){
 }
 }
 
+export  async function obtenerMercaderiasAlquiler(idAlquiler){
+    try{
+        let { data: Mercaderias, error } = await supabase
+        .from('Mercaderias')
+        .select("*")
+        .ilike('idAlquiler', idAlquiler)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Mercaderias.map(item => {return item;});
+        return listaFiltrada[0]; 
+    }
+    catch (error){
+       console.log(error)
+}
+}
+
 export  async function actualizarMercaderia(idMercaderia,columnaModificar, nuevoValor) {
     let code=1;
     try {
@@ -149,3 +165,4 @@ export  async function obtenerCantidadMercaderia(idMercaderia){
     }
     return cantidad
 }
+
