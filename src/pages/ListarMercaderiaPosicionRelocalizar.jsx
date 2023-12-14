@@ -18,7 +18,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
   async function fetchMercaderias() {
     try {
       const mercaderiasFromDB = await obtenerMercaderias();
-      const mercaderiasFiltradas = mercaderiasFromDB.filter(mercaderia => mercaderia.idPosicion === idPosicion);
+      const mercaderiasFiltradas = mercaderiasFromDB.filter(mercaderia => mercaderia.idPosicion === idPosicion && mercaderia.vaciada!="SI") ;
       setMercaderias(mercaderiasFiltradas || []);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);

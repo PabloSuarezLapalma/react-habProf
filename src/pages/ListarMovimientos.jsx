@@ -265,7 +265,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
             </thead>
  <tbody>
         {paginatedData.map((movimiento) => (
-          <tr key={movimiento.nombreCliente} className="border-b border-blue-gray-50">
+          <tr key={movimiento.codigoBWS} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">

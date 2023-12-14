@@ -1,4 +1,4 @@
-import { buscarMercaderia,borrarMercaderia,actualizarMercaderia} from './mercaderia';
+import { buscarMercaderia,vaciarMercaderia,actualizarMercaderia} from './mercaderia';
 import { obtenerCodigoClienteAlquiler } from './alquileres';
 import { obtenerCostoRelocalizacionActual} from './global';
 import { actualizarPosicion,obtenerVolumenPosicion } from './posiciones';
@@ -57,7 +57,7 @@ export async function registrarEgresoRelocalizar(alquiler,idPosicion,idMercaderi
     //await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costoRelocalizar,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte, diferenciaCantidad,nuevoIdMercaderia)
     await agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costoRelocalizar,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
     if (diferenciaCantidad === 0) {
-        borrarMercaderia(idMercaderia)
+        vaciarMercaderia(idMercaderia)
     } else{
         await actualizarMercaderia(idMercaderia, 'cantidad', parseInt(diferenciaCantidad))
         await actualizarMercaderia(idMercaderia, 'descripcion', descripcion)
