@@ -135,7 +135,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
             </thead>
  <tbody>
         {paginatedData.map((clientes) => (
-          <tr key={clientes.codigo} className="border-b border-blue-gray-50">
+          <tr key={posiciones.codigo} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -144,7 +144,7 @@ const TABLE_HEAD = ["Alquiler", "Monto", "Fecha de Ingreso","Ultima Fecha de Ren
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {clientes.codigo}
+                    {posiciones.codigo}
                   </Typography>
                 </div>
               </div>

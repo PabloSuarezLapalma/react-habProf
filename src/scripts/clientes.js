@@ -231,7 +231,23 @@ export async function actualizarCliente(codigo, nuevosValores) {
     }
     return code;
   }
-
+  export async function obtenerClientePorCodigo(codigoCliente) {
+    try {
+      let { data: Cliente, error } = await supabase
+        .from('Clientes')
+        .select('*')
+        .eq('codigo', codigoCliente)
+        .single();
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      return Cliente;
+    } catch (error) {
+      console.error(error);
+    }
+  }
   export async function existeUsernameActual(username, codigoCliente) {
     try {
       const { data: Movimientos, error } = await supabase
