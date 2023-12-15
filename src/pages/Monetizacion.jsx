@@ -1,10 +1,10 @@
-import {HomeIcon,InformationCircleIcon,MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Input,Checkbox } from "@material-tailwind/react";
+import {HomeIcon,MagnifyingGlassIcon} from "@heroicons/react/24/outline";
+import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Input,Checkbox} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import {buscaridPosicionAlquiler } from "../scripts/posiciones";
 import { obtenerAlquileres,buscarAlquilerCliente} from "../scripts/alquileres";
-import {obtenerNombreCliente,obtenerCodigoCliente,buscarCliente} from "../scripts/clientes";
+import {obtenerNombreCliente,buscarCliente} from "../scripts/clientes";
 
 const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha de Renovacion", "Monto Total (USD)","Renueva?"];
 
@@ -150,6 +150,13 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
 
           </div>
+          <Button
+                  size="lg"
+                  color="red"
+                  variant="gradient"
+                >
+                  Cerrar Mes
+                </Button>
           <Link to="/home" className="mx-auto mr-20 -mt-28 "> 
                   <IconButton variant="text">
                     <HomeIcon className="h-8 w-8 text-red-500" />
