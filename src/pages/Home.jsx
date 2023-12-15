@@ -1,7 +1,7 @@
-  import { Fragment, useState, useEffect } from 'react'
+  import { Fragment, useState } from 'react'
   import { Link } from 'react-router-dom'
   import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon} from '@heroicons/react/24/outline'
+  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon,CurrencyDollarIcon} from '@heroicons/react/24/outline'
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
   import { Typography } from "@material-tailwind/react";
 
@@ -9,7 +9,7 @@
   const movimientos = [
     { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/formIngreso', icon: PlusIcon },
     { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '/formEgreso', icon: MinusIcon },
-    { name: 'Relocalizar movimiento', description: 'Permite modificar un movimiento', href: '#', icon: MapPinIcon },
+    { name: 'Relocalizar movimiento', description: 'Permite modificar un movimiento', href: '/listarPosicionesRelocalizar', icon: MapPinIcon },
     { name: 'Ver movimientos', description: 'Ver todos los movimientos', href: '/listarMovimientos', icon: ListBulletIcon },
   ]
   const clientes = [
@@ -27,10 +27,9 @@
     { name: 'Modificar Hangar', description: 'Permite modificar un hangar', href: '/listarModificarHangar', icon: PencilIcon },
 
   ]
-  const posiciones = [
-    { name: 'Listar Posiciones para Relocalizar Mercaderia', description: 'Permite mostrar todas las posiciones', href: '/listarPosicionesRelocalizar', icon:BuildingOfficeIcon },
+  const monetizacion = [
+    { name: 'Monetizacion de Cliente', description: 'Muestra información con respecto a la monetización de un cliente', href: '/infoMonetizacion', icon:CurrencyDollarIcon },
   ]
-
 
 
   function classNames(...classes) {
@@ -180,7 +179,7 @@
             </Popover>
             <Popover className="relative">
               <Popover.Button className="flex items-center gap-x-1 text-sm leading-6 font-semibold text-blue-gray-900">
-                Relocalizar
+                Monetizacion
                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
               </Popover.Button>
 
@@ -195,7 +194,7 @@
               >
                 <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                   <div className="p-4">
-                    {posiciones.map((item) => (
+                    {monetizacion.map((item) => (
                       <div
                         key={item.name}
                         className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
@@ -322,14 +321,14 @@
                     {({ open }) => (
                       <>
                         <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                          Posiciones
+                          Monetizacion
                           <ChevronDownIcon
                             className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
                             aria-hidden="true"
                           />
                         </Disclosure.Button>
                         <Disclosure.Panel className="mt-2 space-y-2">
-                          {[...posiciones,].map((item) => (
+                          {[...monetizacion,].map((item) => (
                             <Disclosure.Button
                               key={item.name}
                               as="a"
@@ -343,6 +342,7 @@
                       </>
                     )}
                   </Disclosure>
+                  
                 </div>
               </div>
             </div>

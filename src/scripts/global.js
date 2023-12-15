@@ -71,15 +71,33 @@ export  async function obtenerCostoRelocalizacionActual() {
         console.error(error);
     }
 }
+export  async function obtenerCostoAlmacenamientoActual() {
+    try {
+        let { data: Global, error } = await supabase
+            .from('Global')
+            .select('*')
+            .order('fechaActualizacion', { ascending: false })
+        if (error) {
+            throw new Error(error.message);
+        }
+        if (Global.length === 0) {
+            throw new Error('No data found');
+        }
+        let listaGlobal = Global.map(item => {return item;});
+        return listaGlobal[0].costoAlmacenamiento;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
-export  async function agregarDatosGlobales(fechaActualizacion, costoIngreso, costoEgreso, costoRelocalizar){
+export  async function agregarDatosGlobales(fechaActualizacion, costoIngreso, costoEgreso, costoRelocalizar,costoAlmacenamiento){
     let code=0;
     try {
         const {error} = await supabase
             .from('Global')
             .insert([
-                {fechaActualizacion:fechaActualizacion, costoIngreso:costoIngreso, costoEgreso:costoEgreso, costoRelocalizar:costoRelocalizar},
+                {fechaActualizacion:fechaActualizacion, costoIngreso:costoIngreso, costoEgreso:costoEgreso, costoRelocalizar:costoRelocalizar,costoAlmacenamiento:costoAlmacenamiento},
             ])
             .select()
         if (error) {

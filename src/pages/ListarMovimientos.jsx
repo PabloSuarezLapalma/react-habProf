@@ -8,7 +8,7 @@ import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
 import {obtenerNombreCliente,obtenerCodigoCliente} from "../scripts/clientes";
 import { Spinner } from "@material-tailwind/react";
 
-const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO",},{label: "Egreso",value: "EGRESO",},];
+const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO"},{label:"Relocalizar" ,value:"RELOCALIZACION"},{label: "Egreso",value: "EGRESO",},];
 const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "Detalles"];
 
   export default function SortableTable() {
@@ -247,7 +247,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
-                {TABLE_HEAD.map((head, index) => (
+                {TABLE_HEAD.map((head) => (
             <th
             key={head}
             className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
@@ -266,7 +266,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
             </thead>
  <tbody>
         {paginatedData.map((movimiento) => (
-          <tr key={movimiento.nombreCliente} className="border-b border-blue-gray-50">
+          <tr key={movimiento.codigoBWS} className="border-b border-blue-gray-50">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
