@@ -152,8 +152,7 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
         let cantidadNueva= cantidadActual-cantidad
         console.log("Cantidad Nueva: ",cantidadNueva)
 
-        await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,mercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte,cantidadNueva )
-
+        await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,mercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte,cantidadNueva)
 
         //Reiniciar el formulario
         setFecha('');

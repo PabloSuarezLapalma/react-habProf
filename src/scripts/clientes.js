@@ -231,8 +231,7 @@ export async function actualizarCliente(codigo, nuevosValores) {
     }
     return code;
   }
-
-export async function obtenerClientePorCodigo(codigoCliente) {
+  export async function obtenerClientePorCodigo(codigoCliente) {
     try {
       let { data: Cliente, error } = await supabase
         .from('Clientes')
@@ -249,7 +248,6 @@ export async function obtenerClientePorCodigo(codigoCliente) {
       console.error(error);
     }
   }
-
   export async function existeUsernameActual(username, codigoCliente) {
     try {
       const { data: Movimientos, error } = await supabase

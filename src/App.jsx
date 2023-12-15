@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login'
@@ -25,21 +23,22 @@ import ModificarCliente from './pages/ModificarCliente'
 import ListarPosicionesRelocalizar from './pages/ListarPosicionesRelocalizar'
 import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicionRelocalizar'
 import ListarPosicionesRelocalizarFin from './pages/ListarPosicionesRelocalizarFin'
+import Monetizacion from './pages/Monetizacion'
 import Error404 from './pages/Error404'
 
 function App() {
-  const [idPosicion, setIdPosicion] = useState("TR2")
-  const [codigoCliente, setCodigoCliente] = useState("0001")
-  const [idMercaderia, setIdMercaderia] = useState("276947079")
-  const [idAlquiler, setIdAlquiler] = useState("1234")
+  const idPosicion = "TR2"
+  const idCliente = "0001"
+  const idMercaderia="276947079"
+  const idAlquiler="1234"
   return (
     <>
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/formIngreso" element={<FormIngreso codigoCliente={codigoCliente} idPosicion={idPosicion}/>}/>
-        <Route path="/formEgreso" element={<FormEgreso codigoCliente={codigoCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
+        <Route path="/formIngreso" element={<FormIngreso codigoCliente={idCliente} idPosicion={idPosicion}/>}/>
+        <Route path="/formEgreso" element={<FormEgreso codigoCliente={idCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>
         <Route path='/bajarRack' element={<BajaRack/>}/>
         <Route path="/listarModificarRacks" element={<ListarModificarRack/>}/>
@@ -59,7 +58,7 @@ function App() {
         <Route path="/descripcionCliente/:codigo" element={<DescripcionCliente />} />
         <Route path="/listarModificarClientes" element={<ListarModificarCliente/>}/>
         <Route path="/modificarCliente/:codigo" element={<ModificarCliente />} />
-      
+        <Route path="/infoMonetizacion" element={<Monetizacion/>}/>
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>
@@ -68,21 +67,3 @@ function App() {
 }
 
 export default App
-
-/* Esto va debajo de descripcion Movimiento
-<FormIngreso
-        setMovimientos={setMovimientos}
-        movimientos={movimientos}
-      />
-
-*/
-
-/*
-{movimientos.map((movimiento) => (
-        <DescripcionMovimiento key={movimiento.codigoBWS} movimiento={movimiento} />
-      ))}
-*/
-
-/*
-<Login/>
-*/

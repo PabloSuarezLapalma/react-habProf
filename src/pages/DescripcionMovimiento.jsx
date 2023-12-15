@@ -18,6 +18,8 @@ export default function DescripcionMovimiento() {
   const [sector, setSector] = useState('');
   const [posicion, setPosicion] = useState('');
   const [altura, setAltura] = useState('');
+  console.log(codigoBWS);
+  console.log(movimiento);
 
 
   useEffect(() => {
@@ -26,14 +28,14 @@ export default function DescripcionMovimiento() {
       // Obtener la mercadería correspondiente al ID de la mercadería en el movimiento
       buscarMercaderia(movimientoFiltrado.idMercaderia).then((mercaderia) => {
         // Asignar la descripción de la mercadería al estado para mostrarla en los campos
-        if (mercaderia.length > 0) {
-          setDescripcionMercaderia(mercaderia[0].descripcion);
-          setCantidad(mercaderia[0].cantidad);
-          setAncho(mercaderia[0].ancho);
-          setLargo(mercaderia[0].largo);
-          setAlto(mercaderia[0].alto);
+        if (mercaderia !=null ) {
+          setDescripcionMercaderia(mercaderia.descripcion);
+          setCantidad(mercaderia.cantidad);
+          setAncho(mercaderia.ancho);
+          setLargo(mercaderia.largo);
+          setAlto(mercaderia.alto);
           // Obtener la posición correspondiente al ID de la posición en la mercadería
-          buscarPosicion(mercaderia[0].idPosicion).then((posiciones) => {
+          buscarPosicion(mercaderia.idPosicion).then((posiciones) => {
             // Asignar la información de la posición al estado
             if (posiciones.length > 0) {
               setSector(posiciones[0].sector);

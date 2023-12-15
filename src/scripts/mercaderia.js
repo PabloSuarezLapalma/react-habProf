@@ -41,7 +41,7 @@ export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho
         const {error } = await supabase
             .from('Mercaderias')
             .insert([
-                {idMercaderia:idMercaderia, descripcion:descripcion, largo:largo, ancho:ancho, alto:alto,idPosicion:idPosicion,cantidad:cantidad},
+                {idMercaderia:idMercaderia, descripcion:descripcion, largo:largo, ancho:ancho, alto:alto,idPosicion:idPosicion,cantidad:cantidad,vaciada:""},
             ])
             .select()
         if (error) {
@@ -54,6 +54,25 @@ export  async function agregarMercaderia(idMercaderia, descripcion, largo, ancho
     }
     return code
 }
+
+export  async function vaciarMercaderia(idMercaderia){
+    let code=0;
+    try{
+        const { error } = await supabase
+            .from('Mercaderias')
+            .update({'vaciada': "SI" })
+            .eq('idMercaderia', idMercaderia)
+        if (error) {
+            code=1;
+            throw new Error(error.message);}
+        }
+    catch (error){
+        code=1;
+        console.error(error);
+    }
+    return code
+}
+
 
 export  async function borrarMercaderia(idMercaderia){
     let code=0;
@@ -79,6 +98,22 @@ export  async function buscarMercaderia(idMercaderia){
         .from('Mercaderias')
         .select("*")
         .ilike('idMercaderia', idMercaderia)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Mercaderias.map(item => {return item;});
+        return listaFiltrada[0]; 
+    }
+    catch (error){
+       console.log(error)
+}
+}
+
+export  async function obtenerMercaderiasAlquiler(idAlquiler){
+    try{
+        let { data: Mercaderias, error } = await supabase
+        .from('Mercaderias')
+        .select("*")
+        .ilike('idAlquiler', idAlquiler)
         if (error) {
             throw new Error(error.message);}   
         let listaFiltrada = Mercaderias.map(item => {return item;});
@@ -130,3 +165,4 @@ export  async function obtenerCantidadMercaderia(idMercaderia){
     }
     return cantidad
 }
+

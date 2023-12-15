@@ -1,8 +1,8 @@
-import { buscarMercaderia} from './mercaderia';
-import { registrarEgreso} from './egreso';
+import { buscarMercaderia,vaciarMercaderia,actualizarMercaderia} from './mercaderia';
 import { obtenerCodigoClienteAlquiler } from './alquileres';
 import { obtenerCostoRelocalizacionActual} from './global';
 import { actualizarPosicion,obtenerVolumenPosicion } from './posiciones';
+import { agregarMovimiento } from './movimientos';
 
 
 export async function registrarEgresoRelocalizar(alquiler,idPosicion,idMercaderia,cantidadNueva)
@@ -54,9 +54,15 @@ export async function registrarEgresoRelocalizar(alquiler,idPosicion,idMercaderi
     console.log("Largo: ", largo);
     console.log("Ancho: ", ancho);
     console.log("Alto: ",alto);
-    await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costoRelocalizar,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte, diferenciaCantidad);
+    //await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costoRelocalizar,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte, diferenciaCantidad,nuevoIdMercaderia)
+    await agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costoRelocalizar,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
+    if (diferenciaCantidad === 0) {
+        vaciarMercaderia(idMercaderia)
+    } else{
+        await actualizarMercaderia(idMercaderia, 'cantidad', parseInt(diferenciaCantidad))
+        await actualizarMercaderia(idMercaderia, 'descripcion', descripcion)
+    }    
     const volumenNuevo= largo*ancho*alto*cantidadNueva
     let volumenViejo =await obtenerVolumenPosicion(idPosicion)
     await actualizarPosicion(idPosicion, "volumen",volumenViejo+volumenNuevo)
-    
 }
