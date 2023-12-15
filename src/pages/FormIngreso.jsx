@@ -26,7 +26,7 @@ const FormIngreso = ({codigoCliente,idPosicion}) => {
     const [estado, setEstado] = useState('');
     const [tipoUnidad, setTipoUnidad] = useState('');
     const [nombreResponsable, setNombreResponsable] = useState('');
-    const [costo, setCosto]= useState('');
+    const [costo, setCosto]= useState(0);
     const [volumen, setVolumen]= useState('');
     const [idMercaderia, setIdMercaderia]= useState('');
 

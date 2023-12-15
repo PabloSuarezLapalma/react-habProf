@@ -108,16 +108,16 @@ export  async function buscarMercaderia(idMercaderia){
 }
 }
 
-export  async function obtenerMercaderiasAlquiler(idAlquiler){
+export  async function obtenerMercaderiasPosicion(idPosicion){
     try{
         let { data: Mercaderias, error } = await supabase
         .from('Mercaderias')
         .select("*")
-        .ilike('idAlquiler', idAlquiler)
+        .ilike('idPosicion', idPosicion)
         if (error) {
             throw new Error(error.message);}   
         let listaFiltrada = Mercaderias.map(item => {return item;});
-        return listaFiltrada[0]; 
+        return listaFiltrada; 
     }
     catch (error){
        console.log(error)

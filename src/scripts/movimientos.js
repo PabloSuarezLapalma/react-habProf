@@ -111,3 +111,18 @@ export async function filtrarMovimientosEntreFechas(fechaInicio, fechaFin){
   }
 }
 
+export async function buscarMovimientosMercaderia(idMercaderia){
+    try{
+        let { data: Movimientos, error } = await supabase
+        .from('Movimientos')
+        .select("*")
+        .ilike('idMercaderia', idMercaderia)
+        if (error) {
+            throw new Error(error.message);}   
+        let listaFiltrada = Movimientos.map(item => {return item;});
+        return listaFiltrada; 
+    }
+    catch (error){
+           console.log(error)
+    }
+}

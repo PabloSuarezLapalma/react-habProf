@@ -5,6 +5,7 @@ import {useState,useMemo,useEffect} from "react";
 import {buscaridPosicionAlquiler } from "../scripts/posiciones";
 import { obtenerAlquileres,buscarAlquilerCliente} from "../scripts/alquileres";
 import {obtenerNombreCliente,buscarCliente} from "../scripts/clientes";
+import {calcularMontoTotalAlquiler} from "../scripts/monetizacion";
 
 const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha de Renovacion", "Monto Total (USD)","Renueva?"];
 
@@ -16,6 +17,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   const [posiciones, setPosiciones] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [renuevan, setRenuevan] = useState([]);
+  const [montosTotales, setMontosTotales] = useState({});
 
   //const [mercaderias, setMercaderias] = useState([]);
 
@@ -37,6 +39,15 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
       }
       setPosiciones(posiciones);
 
+      /*
+      const montos= {};
+      for (const alquiler of alquileresFromDB) {
+        let monto= await calcularMontoTotalAlquiler(alquiler.idAlquiler, renuevan, alquiler.fechaRenovacion, alquiler.fechaIngreso);
+        montos[alquiler.idAlquiler] = monto;
+      }
+      setMontosTotales(montos);
+      */
+
     } catch (error) {
       console.error('Error al obtener clientes:', error);
     } finally {
@@ -46,8 +57,12 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
 
   useEffect(() => {
     fetchAlquileres();
-  }, []);
+  }, [alquileres,posiciones,clientes,montosTotales]);
 
+  useEffect(() => {
+    console.log(renuevan);
+  }, [renuevan]);
+  
 
   const itemsPerPage = 7; //Numero de clientes por pagina
 
@@ -109,10 +124,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     return filteredRows.slice(startIndex, endIndex);
   }, [currentPage, filteredRows]);
 
-  useEffect(() => {
-    console.log(renuevan);
-  }, [renuevan]);
-  
+
   const handleCheckboxChange = (event) => {
     const idAlquiler = event.target.value; // Obtiene el idAlquiler del valor del Checkbox
     const isChecked = event.target.checked; // Obtiene el estado marcado del Checkbox
@@ -126,7 +138,6 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     }
   };
 
-  
     return (
       <Card className="lg:h-full lg:w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -271,7 +282,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                   color="blue-gray"
                   className="font-normal"
                 >
-                  ACA VA EL MONTO DE C/ALQUILER
+                  {montosTotales[alquileres.idAlquiler]}
                 </Typography>
               </div>
             </td>
