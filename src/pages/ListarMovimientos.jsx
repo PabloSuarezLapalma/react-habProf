@@ -6,6 +6,7 @@ import {useState,useMemo,useEffect} from "react";
 import {filtrarMovimiento, obtenerMovimientos,filtrarMovimientosEntreFechas} from "../scripts/movimientos";
 import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
 import {obtenerNombreCliente,obtenerCodigoCliente} from "../scripts/clientes";
+import { Spinner } from "@material-tailwind/react";
 
 const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO"},{label:"Relocalizar" ,value:"RELOCALIZACION"},{label: "Egreso",value: "EGRESO",},];
 const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "Detalles"];
@@ -328,7 +329,7 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
       </tbody>
           </table>
            ) : (
-            <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
+            <Spinner className="flex gap-8 mx-auto h-8 w-8" color="red"/> // Si está cargando, se muestra un mensaje de carga
         )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

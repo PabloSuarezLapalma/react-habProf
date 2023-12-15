@@ -1,6 +1,6 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {XMarkIcon} from "@heroicons/react/24/solid";
-import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,} from "@material-tailwind/react";
+import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarCliente, obtenerClientes, darDeBajaCliente } from "../scripts/clientes";
@@ -268,7 +268,7 @@ const TABLE_HEAD = ["Código", "Nombre", "Responsable","Correo electrónico", "N
           </table>
           
            ) : (
-            <div>Cargando movimientos...</div> // Si está cargando, se muestra un mensaje de carga
+            <Spinner className="flex gap-8 mx-auto h-8 w-8" color="red"/> // Si está cargando, se muestra un mensaje de carga
         )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

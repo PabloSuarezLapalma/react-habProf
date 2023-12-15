@@ -1,5 +1,5 @@
 import {MagnifyingGlassIcon,HomeIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
-import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip} from "@material-tailwind/react";
+import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
 import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
@@ -292,7 +292,8 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
       </tbody>
           </table>
            ) : (
-            <div>Cargando posiciones...</div> // Si está cargando, se muestra un mensaje de carga
+            <Spinner className="flex gap-8 mx-auto h-8 w-8" color="red"/> // Si está cargando, se muestra un mensaje de carga
+
         )}
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
