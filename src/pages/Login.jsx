@@ -21,7 +21,7 @@
             validarLogin(username,password).then(resultado=>{
                 if (resultado=="0"){
                     //setIsAuthenticated(true);
-                    navigate = '/home';
+                    navigate('/home');
                 }
                 else{
                     alert("El usuario o contraseña son incorrectos")
