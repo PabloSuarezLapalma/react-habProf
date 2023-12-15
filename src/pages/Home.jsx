@@ -47,7 +47,7 @@
           <div className="flex lg:flex-1">
             <Link to="/home" className="-m-1.5 p-1.5">
               <Typography className="sr-only">BACI BWS</Typography>
-              <img className="h-8 w-auto" src="src\assets\images\BACI.webp" alt="Baci logo" />
+              <img className="h-8 w-auto" src="../public/images/BACI.webp" alt="Baci logo" />
             </Link>
           </div>
           <div className="flex lg:hidden">
@@ -354,7 +354,7 @@
       <figure className="relative h-96 w-full">
       <img
         className=" h-screen w-screen object-cover object-center"
-        src="src/assets/images/BaciBlur.webp" //aca va la imagen de baci blur;
+        src="../public/images/BaciBlur.webp" //aca va la imagen de baci blur;
         alt="imagen de baci"
       />
       <figcaption className="absolute bottom-8 left-2/4 flex -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">

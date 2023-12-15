@@ -37,7 +37,7 @@
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-red-500 rounded-t-md">
                             <img
                                 className="mx-auto h-25 w-auto"
-                                src="src\assets\images\BACI.webp"
+                                src="./public/images/BACI.webp"
                                 alt="Baci Logo"
                             />
                         </div>
