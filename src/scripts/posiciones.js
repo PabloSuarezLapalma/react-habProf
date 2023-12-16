@@ -107,7 +107,6 @@ export  async function buscarIdMercaderiaPosicion(idPosicion){
 
 
 
-
 export  async function buscarPosicion(idPosicion){
     try{
         let { data: Posiciones, error } = await supabase

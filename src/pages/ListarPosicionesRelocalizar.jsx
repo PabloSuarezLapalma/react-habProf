@@ -2,12 +2,13 @@ import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
 import {Link,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
+import { buscarPosicion, obtenerPosiciones,buscarPosicionesAlquiler} from "../scripts/posiciones";
+import {buscarAlquileresCliente} from "../scripts/alquileres";
 import PropTypes from 'prop-types';
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
-  export default function ListarPosicionesRelocalizar({alquiler}) {
+  export default function ListarPosicionesRelocalizar({codigoCliente}) {
   const navigate = useNavigate(); 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
@@ -16,9 +17,14 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
 
   async function fetchPosiciones() {
     try {
-      const posicionesFromDB = await obtenerPosiciones();
-      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler === alquiler);
-      setPosiciones(posicionesFiltradas || []);
+      //const posicionesFromDB = await obtenerPosiciones();
+      const alquileresCliente = await buscarAlquileresCliente(codigoCliente);
+      const posicionesFiltradas= [];
+      for (const alquiler of alquileresCliente) {
+        const posicion= await buscarPosicionesAlquiler(alquiler.idAlquiler);
+        posicionesFiltradas.push(posicion);
+      }
+      setPosiciones(posicionesFiltradas);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);
     } finally {
@@ -255,5 +261,5 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   }
   
 ListarPosicionesRelocalizar.propTypes = {
-  alquiler: PropTypes.string.isRequired,
+  codigoCliente: PropTypes.string.isRequired,
 };

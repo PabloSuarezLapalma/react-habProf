@@ -49,7 +49,7 @@ function App() {
         <Route path="/listarModificarHangar" element={<ListarModificarHangar/>}/>
         <Route path="/modificarHangar/:idHangar" element={<ModificarHangar />} />
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
-        <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar alquiler={idAlquiler}/>}/>
+        <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar codigoCliente={idCliente}/>}/>
         <Route path="/listarMercaderiaPosicionRelocalizar/:alquiler/:idPosicion" element={<ListarMercaderiaPosicionRelocalizar/>}/>
         <Route path="/listarPosicionesRelocalizarFin/:alquiler/:idPosicion/:idMercaderia/:cantidad" element={<ListarPosicionesRelocalizarFin/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />

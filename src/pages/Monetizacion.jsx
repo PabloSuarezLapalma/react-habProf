@@ -25,6 +25,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     try {
       const alquileresFromDB= await obtenerAlquileres();
       setAlquileres(alquileresFromDB || []);
+
       const clientes = {};
       for (const alquiler of alquileresFromDB) {
           const nombreCliente = await obtenerNombreCliente(alquiler.codigoCliente);
@@ -42,7 +43,13 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
       
       const montos= {};
       for (const alquiler of alquileresFromDB) {
-        let monto= await calcularMontoTotalAlquiler(alquiler.idAlquiler, renuevan, new Date(alquiler.fechaRenovacion), new Date(alquiler.fechaIngreso));
+        const fechaRenovacion = alquiler.fechaRenovacion ? new Date(alquiler.fechaRenovacion + ' GMT-0300') : null;
+        const fechaIngreso = alquiler.fechaIngreso ? new Date(alquiler.fechaIngreso + ' GMT-0300') : null;        
+        console.log("PARAMETROS DEL ALQUILER: ",alquiler.idAlquiler);
+        console.log('CHAT Fecha Renovacion',fechaRenovacion);
+        console.log('CHAT Fecha Ingreso',fechaIngreso);
+
+        let monto= await calcularMontoTotalAlquiler(alquiler.idAlquiler, renuevan,fechaRenovacion, fechaIngreso);
         montos[alquiler.idAlquiler] = monto;
       }
       setMontosTotales(montos);
@@ -282,7 +289,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                   color="blue-gray"
                   className="font-normal"
                 >
-                {montosTotales[alquileres.idAlquiler]}
+                {montosTotales[alquileres.idAlquiler].toString()}
                 </Typography>
               </div>
             </td>
