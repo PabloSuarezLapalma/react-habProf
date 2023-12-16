@@ -39,14 +39,14 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
       }
       setPosiciones(posiciones);
 
-      /*
+      
       const montos= {};
       for (const alquiler of alquileresFromDB) {
-        let monto= await calcularMontoTotalAlquiler(alquiler.idAlquiler, renuevan, alquiler.fechaRenovacion, alquiler.fechaIngreso);
+        let monto= await calcularMontoTotalAlquiler(alquiler.idAlquiler, renuevan, new Date(alquiler.fechaRenovacion), new Date(alquiler.fechaIngreso));
         montos[alquiler.idAlquiler] = monto;
       }
       setMontosTotales(montos);
-      */
+      
 
     } catch (error) {
       console.error('Error al obtener clientes:', error);
@@ -57,7 +57,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
 
   useEffect(() => {
     fetchAlquileres();
-  }, [alquileres,posiciones,clientes,montosTotales]);
+  }, []);
 
   useEffect(() => {
     console.log(renuevan);
@@ -282,7 +282,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                   color="blue-gray"
                   className="font-normal"
                 >
-                  {montosTotales[alquileres.idAlquiler]}
+                {montosTotales[alquileres.idAlquiler]}
                 </Typography>
               </div>
             </td>

@@ -122,7 +122,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Altura","Fecha de creación","Modificar"]
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr className="">
-                {TABLE_HEAD.map((head, index) => (
+                {TABLE_HEAD.map((head) => (
             <th
             key={head}
             className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
