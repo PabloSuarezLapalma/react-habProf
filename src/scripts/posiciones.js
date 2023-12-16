@@ -167,3 +167,5 @@ export  async function actualizarPosicion(idPosicion,columnaModificar, nuevoValo
     }
     return code
 }
+
+

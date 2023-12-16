@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login'
 import Home from './pages/Home'
+import SeleccionarCliente from './pages/SeleccionarCliente'
+import ListarPosicionesCliente from './pages/ListarPosicionesCliente'
 import FormIngreso from './pages/FormIngreso'
 import FormEgreso from './pages/FormEgreso'
 import ListarMovimientos from './pages/ListarMovimientos'
@@ -37,6 +39,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/home" element={<Home/>}/>
+        <Route path="/seleccionarCliente/:tipo" element={<SeleccionarCliente/>}/>
+        <Route path="/listarPosicionesCliente/:tipo/:clienteSeleccionado" element={<ListarPosicionesCliente/>}/>
         <Route path="/formIngreso" element={<FormIngreso codigoCliente={idCliente} idPosicion={idPosicion}/>}/>
         <Route path="/formEgreso" element={<FormEgreso codigoCliente={idCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>

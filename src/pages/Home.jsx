@@ -5,10 +5,9 @@
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
   import { Typography } from "@material-tailwind/react";
 
-  
   const movimientos = [
-    { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href: '/formIngreso', icon: PlusIcon },
-    { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '/formEgreso', icon: MinusIcon },
+    { name: 'Registrar ingreso', description: 'Registrar un nuevo movimiento de ingreso', href:'/seleccionarCliente/ingreso', icon: PlusIcon },
+    { name: 'Registrar egreso', description: 'Registrar un nuevo movimiento de egreso', href: '/seleccionarCliente/egreso', icon: MinusIcon },
     { name: 'Relocalizar movimiento', description: 'Permite modificar un movimiento', href: '/listarPosicionesRelocalizar', icon: MapPinIcon },
     { name: 'Ver movimientos', description: 'Ver todos los movimientos', href: '/listarMovimientos', icon: ListBulletIcon },
   ]

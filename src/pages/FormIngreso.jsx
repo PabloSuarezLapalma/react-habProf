@@ -5,7 +5,7 @@ import {obtenerResponsable} from '../scripts/clientes';
 import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
 import PropTypes from 'prop-types';
 
-const FormIngreso = ({codigoCliente,idPosicion}) => {
+const FormIngreso = () => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
