@@ -142,7 +142,7 @@ export default function DescripcionCliente() {
                   Telefono
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   value={telefono}
                   onChange={(e) => setTelefono(e.target.value)}
                   placeholder="Nro de telefono"
