@@ -4,6 +4,8 @@ import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
 import { buscarMercaderia } from "../scripts/mercaderia";
+import {buscarAlquileresCliente} from "../scripts/alquileres";
+import {buscarPosicionesAlquiler} from "../scripts/posiciones";
 import { registrarIngresoRelocalizar } from "../scripts/ingreso_backstage";
 import { registrarEgresoRelocalizar } from "../scripts/egreso_backstage";
 
@@ -11,7 +13,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
 
   export default function ListarPosicionesRelocalizarFin() {
   const navigate = useNavigate();
-  const {alquiler,idPosicion,idMercaderia,cantidad} = useParams();
+  const {alquiler,idPosicion,codigoCliente,idMercaderia,cantidad} = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
@@ -20,13 +22,19 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
 
   async function fetchPosiciones() {
     try {
-      const posicionesFromDB = await obtenerPosiciones();
       const mercaderiaFromDB = await buscarMercaderia(idMercaderia);
       const alto = mercaderiaFromDB.alto;
       const ancho = mercaderiaFromDB.ancho;
       const largo = mercaderiaFromDB.largo;
       const volumenFiltro= alto*ancho*largo;
-      const posicionesFiltradas = posicionesFromDB.filter(posicion => posicion.idAlquiler  === alquiler && posicion.volumen >= volumenFiltro && posicion.idPosicion !== idPosicion);
+      const alquileres = await buscarAlquileresCliente(codigoCliente);
+      const posicionesCliente = [];
+      for (const alquiler of alquileres) {
+        const posicionesAlquiler = await buscarPosicionesAlquiler(alquiler.idAlquiler);
+        posicionesCliente.push(...posicionesAlquiler);
+        console.log("Posiciones encontradas:", posicionesAlquiler);
+      }
+      const posicionesFiltradas = posicionesCliente.filter(posicion => posicion.volumen >= volumenFiltro && posicion.idPosicion !== idPosicion);
       setPosiciones(posicionesFiltradas || []);
     } catch (error) {
       console.error('Error al obtener posiciones:', error);
@@ -146,7 +154,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
                   </IconButton>   
           </Link>
                   <IconButton variant="text"  className="mx-auto mr-20 -mt-28 "
-                    onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${alquiler}/${idPosicion}`)}
+                    onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${alquiler}/${idPosicion}/${codigoCliente}`)}
                   >
                     <ArrowLeftIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   

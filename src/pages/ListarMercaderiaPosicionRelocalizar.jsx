@@ -8,7 +8,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
 
   export default function ListadoMercaderiaPosicionRelocalizar() {
   const navigate = useNavigate(); // Utilizar useNavigate para la navegación
-  const { alquiler,idPosicion } = useParams();
+  const { alquiler,idPosicion,codigoCliente} = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [mercaderias, setMercaderias] = useState([]);
@@ -247,7 +247,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   className="hover:text-red-800"
                   onClick={() =>  
                     {if (verificarCantidad(mercaderias.cantidad)) {
-                    navigate(`/listarPosicionesRelocalizarFin/${alquiler}/${idPosicion}/${mercaderias.idMercaderia}/${cantidad}`)
+                    navigate(`/listarPosicionesRelocalizarFin/${alquiler}/${idPosicion}/${codigoCliente}/${mercaderias.idMercaderia}/${cantidad}`)
                     } else {
                       alert("La cantidad ingresada es incorrecta")
                     }

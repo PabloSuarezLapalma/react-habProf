@@ -17,24 +17,27 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
 
   async function fetchPosiciones() {
     try {
-      //const posicionesFromDB = await obtenerPosiciones();
-      const alquileresCliente = await buscarAlquileresCliente(codigoCliente);
-      const posicionesFiltradas= [];
-      for (const alquiler of alquileresCliente) {
-        const posicion= await buscarPosicionesAlquiler(alquiler.idAlquiler);
-        posicionesFiltradas.push(posicion);
+      const alquileres = await buscarAlquileresCliente(codigoCliente);
+      const posicionesFiltradas = [];
+      
+      for (const alquiler of alquileres) {
+        const posicionesAlquiler = await buscarPosicionesAlquiler(alquiler.idAlquiler);
+        posicionesFiltradas.push(...posicionesAlquiler);
+        console.log("Posiciones encontradas:", posicionesAlquiler);
       }
       setPosiciones(posicionesFiltradas);
+      setLoading(false);
     } catch (error) {
-      console.error('Error al obtener posiciones:', error);
-    } finally {
+      console.error('Error al obtener alquileres:', error);
       setLoading(false);
     }
   }
-  
+
   useEffect(() => {
-    fetchPosiciones();
-  }, []); // fetchPosiciones es una dependencia, pero como no cambia, useEffect solo se ejecutará una vez
+    if (codigoCliente) {
+      fetchPosiciones();
+    }
+  }, [codigoCliente]);  
 
   const itemsPerPage = 7; //Numero de clientes por pagina
 
@@ -83,7 +86,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
 
   const filteredRows = useMemo(() => {
       return posiciones.filter((row) =>
-        row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
+      row.idPosicion &&  row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
       );
   }, [searchText, posiciones]);
 
@@ -227,7 +230,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
                   color="red"
                   variant="gradient"
                   className="hover:text-red-800"
-                  onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${alquiler}/${posiciones.idPosicion}`)}
+                  onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${posiciones.idAlquiler}/${posiciones.idPosicion}/${codigoCliente}`)}
                 >
                   Elegir
                 </Button>
