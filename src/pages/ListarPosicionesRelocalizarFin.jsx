@@ -1,8 +1,10 @@
 import {MagnifyingGlassIcon,HomeIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
-import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
+import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner,Popover,
+  PopoverHandler,
+  PopoverContent,} from "@material-tailwind/react";
 import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarPosicion, obtenerPosiciones } from "../scripts/posiciones";
+import { buscarPosicion} from "../scripts/posiciones";
 import { buscarMercaderia } from "../scripts/mercaderia";
 import {buscarAlquileresCliente} from "../scripts/alquileres";
 import {buscarPosicionesAlquiler} from "../scripts/posiciones";
@@ -19,6 +21,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   const [posiciones, setPosiciones] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
 
   async function fetchPosiciones() {
     try {
@@ -275,14 +278,32 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
                     ¿Desea relocalizar la mercadería {idMercaderia} de la posición {idPosicion} a la posición {posiciones.idPosicion}?
                   </Typography>
                   <div className="flex justify-end gap-4">
+                  <Popover  animate={{
+                                      mount: { scale: 1, y: 0 },
+                                      unmount: { scale: 0, y: 25 },
+                                    }} placement="bottom">
+                  <PopoverHandler>
+                  <div onClick={() => {
+                  console.log('Button clicked');
+                  confirmarRelocalizar(posiciones.idPosicion)}
+                }}>
                   <Button
-                      variant="outlined"
-                      className="bg-red-400 text-white"
-                      size="sm"
-                      onClick={() => confirmarRelocalizar(posiciones.idPosicion)}
-                      >
-                      Sí
-                  </Button>
+                        variant="outlined"
+                        className="bg-red-400 text-white"
+                        size="sm"
+                        onClick={() => {
+                          console.log('Button clicked');
+                          confirmarRelocalizar(posiciones.idPosicion)}
+                                  }
+                        >
+                        Sí
+                    </Button>
+                  </PopoverHandler>
+                  <PopoverContent>
+                    Relocalización Exitosa. Volviendo a la pantalla principal
+                  </PopoverContent>
+                </Popover>
+                  
                   <Button
                       variant="outlined"
                       className="bg-gray-50"

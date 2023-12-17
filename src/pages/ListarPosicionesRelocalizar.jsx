@@ -1,6 +1,6 @@
-import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
-import {Link,useNavigate,useParams} from "react-router-dom";
+import {useNavigate,useParams} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion,buscarPosicionesAlquiler} from "../scripts/posiciones";
 import {buscarAlquileresCliente} from "../scripts/alquileres";
@@ -121,11 +121,12 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
 
           </div>
-          <Link to="/home" className="mx-auto mr-20 -mt-28 "> 
-                  <IconButton variant="text">
-                    <HomeIcon className="h-8 w-8 text-red-500" />
+          <IconButton variant="text"  className="mx-auto mr-20 -mt-28 "
+                    onClick={() => navigate(`/seleccionarClienteRelocalizar`)}
+                  >
+                    <ArrowLeftIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   
-          </Link>
+
           </div>
         </CardHeader>
         <CardBody className="overflow-scroll -mt-6 px-0">

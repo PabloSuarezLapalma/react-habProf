@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { obtenerClientes } from '../scripts/clientes';
-import { useNavigate} from 'react-router-dom';
-import { Select, Option, Typography } from "@material-tailwind/react";
+import { useNavigate,Link,} from 'react-router-dom';
+import { Select, Option, Typography,IconButton } from "@material-tailwind/react";
+import {HomeIcon} from "@heroicons/react/24/outline";
 
 
 const SeleccionarClienteRelocalizar = () => {
@@ -62,6 +63,13 @@ const SeleccionarClienteRelocalizar = () => {
                                   </Select>
                               </div>
                             </div>
+                        </div>
+                        <div>
+                              <IconButton variant="text"  className="mx-auto mr-30 -mt-0 mb-0"
+                          onClick={() => navigate(`/home`)}
+                        >
+                          <HomeIcon className="h-8 w-8 text-red-500" />
+                        </IconButton>   
                         </div>
                         <button
                             

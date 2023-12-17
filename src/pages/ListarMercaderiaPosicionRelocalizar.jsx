@@ -129,7 +129,7 @@ const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Sel
                   </IconButton>   
           </Link>
                  <IconButton variant="text"  className="mx-auto mr-20 -mt-28 "
-                    onClick={() => navigate(`/listarPosicionesRelocalizar`)}
+                    onClick={() => navigate(`/listarPosicionesRelocalizar/${codigoCliente}`)}
                   >
                     <ArrowLeftIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   
