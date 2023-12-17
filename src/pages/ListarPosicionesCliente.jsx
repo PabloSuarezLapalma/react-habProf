@@ -2,61 +2,46 @@ import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
 import {Link,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {buscarPosicionesAlquiler} from "../scripts/posiciones";
+import {buscarPosicionesAlquiler,buscarPosicion} from "../scripts/posiciones";
 import { useParams } from "react-router-dom";
-import { buscarAlquilerCliente } from "../scripts/alquileres";
+import { buscarAlquileresCliente } from "../scripts/alquileres";
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
-  export default function ListarPosicionesCliente() {
+export default function ListarPosicionesCliente() {
   const navigate = useNavigate();
-  const {tipo,clienteSeleccionado} = useParams(); 
+  const { tipo, clienteSeleccionado } = useParams();
   const [alquileresCliente, setAlquileresCliente] = useState([]); // Estado para almacenar los alquileres del cliente
-  const [posicionesAlquileres, setPosicionesAlquileres] = useState([]); // Estado para almacenar las posiciones de los alquileres
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
 
- 
+  async function fetchPosiciones() {
+    try {
+      const alquileres = await buscarAlquileresCliente(clienteSeleccionado);
+      const posicionesFiltradas = [];
+      
+      for (const alquiler of alquileres) {
+        const posicionesAlquiler = await buscarPosicionesAlquiler(alquiler.idAlquiler);
+        posicionesFiltradas.push(...posicionesAlquiler);
+        console.log("Posiciones encontradas:", posicionesAlquiler);
+      }
+
+      setPosiciones(posicionesFiltradas);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener alquileres:', error);
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchAlquileres() {
-      try {
-        const alquileres = await buscarAlquilerCliente(clienteSeleccionado);
-        setAlquileresCliente(alquileres || []);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al obtener alquileres:', error);
-        setLoading(false);
-      }
-    }
-
     if (clienteSeleccionado) {
-      fetchAlquileres();
-    }
-  }, [clienteSeleccionado]);
-
-  useEffect(() => {
-    async function fetchPosiciones() {
-      try {
-        const posiciones = await Promise.all(
-          alquileresCliente.map(async (alquiler) => {
-            const posicionesAlquiler = await buscarPosicionesAlquiler(alquiler.idAlquiler);
-            return { idAlquiler: alquiler.idAlquiler, posiciones: posicionesAlquiler || [] };
-          })
-        );
-        setPosicionesAlquileres(posiciones || []);
-      } catch (error) {
-        console.error('Error al obtener posiciones de alquileres:', error);
-      }
-    }
-
-    if (alquileresCliente.length > 0) {
       fetchPosiciones();
     }
-  }, [alquileresCliente]);
-
+  }, [clienteSeleccionado]);   
+      
   const itemsPerPage = 7; //Numero de clientes por pagina
 
   const totalItems = posiciones.length;
@@ -87,7 +72,6 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
     }
   };
 
-
   const handleSearchClick = async () => {
     if (searchText.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
@@ -103,18 +87,17 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   };
 
   const filteredRows = useMemo(() => {
-      return posiciones.filter((row) =>
-        row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
-      );
-  }, [searchText, posiciones]);
+    return posiciones.filter((row) =>
+      row.idPosicion && row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
+    );
+}, [searchText, posiciones]);
 
 
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
-    return filteredRows.slice(startIndex, endIndex);
-  }, [currentPage, filteredRows]);
-
+const paginatedData = useMemo(() => {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
+  return filteredRows.slice(startIndex, endIndex);
+}, [currentPage, filteredRows]);
 
     return (
       <Card className="lg:h-full lg:w-full">
@@ -169,7 +152,8 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map((posiciones) => (
+        {paginatedData.map((posiciones ) => (
+          
           <tr key={posiciones.idPosicion} className="border-b border-blue-gray-50 ">
             <td className="p-4">
               <div className="flex items-center gap-3">
@@ -248,7 +232,6 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
                   color="red"
                   variant="gradient"
                   className="hover:text-red-800"
-                  onClick={() => navigate(`/listarMercaderiaPosicionRelocalizar/${alquiler}/${posiciones.idPosicion}`)}
                 >
                   Elegir
                 </Button>

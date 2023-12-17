@@ -40,33 +40,37 @@ const SeleccionarCliente = () => {
                             <div className='mb-4 flex flex-col'>
                                 <Typography htmlFor='seleccionarCliente' variant='h5' className='block my-6 leading-6 text-red-500'>Buscar Cliente:</Typography>
                                 <div className='flex'>
-                                <Select label="Selecionar Cliente"
-                                        selected={(element) =>
-                                            element &&
-                                            React.cloneElement(element, {
-                                              disabled: true,
-                                              className:
-                                                "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
+                                  <Select
+                                    label="Selecionar Cliente"
+                                    selected={(element) =>
+                                      element &&
+                                      React.cloneElement(element, {
+                                        disabled: true,
+                                        className:
+                                          "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
                                             })
-                                          }
-                                          onClick={(e) => {setClienteSeleccionado(e.target.value)}}
-                                          >
-                                        {clientes.map(({ nombreCliente, codigo }) => (
-                                            <Option key={codigo} value={codigo} className="flex items-center gap-2">
-
-                                                {nombreCliente}
-                                            </Option>
-                                            ))}
-                                </Select>
-                                </div>
+                                        }
+                                    onChange={(value) => {
+                                      setClienteSeleccionado(value);
+                                      console.log(value);
+                                      }}
+                                  >
+                                    {clientes.map(({ nombreCliente, codigo }) => (
+                                      <Option key={codigo} value={codigo} className="flex items-center gap-2">
+                                        {nombreCliente}
+                                      </Option>
+                                    ))}
+                                  </Select>
+                              </div>
                             </div>
                         </div>
                         <button
+                            
                             disabled= {(clienteSeleccionado === null)}
                             className={"bg-red-500 font-semibold rounded-md text-white justify-center px-10 py-2 mt-32 text-lg shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
                             + (clienteSeleccionado === null ? " opacity-50 cursor-not-allowed" : " hover:bg-red-600 hover:shadow-lg") + " w-1/2 mx-auto mt-4"}  
                             onClick={() => {
-                                navigate(`/listarPosicionesCliente/${tipo}/${clienteSeleccionado.codigo}`);}}
+                                navigate(`/listarPosicionesCliente/${tipo}/${clienteSeleccionado}`);}}
                         >
                         Continuar con el {tipo}
                         </button>

@@ -105,21 +105,25 @@ export  async function buscarAlquilerCliente(codigoCliente){
     }
 }
 
-export  async function buscarAlquileresCliente(codigoCliente){
-    try{
-        let { data: Alquileres, error } = await supabase
+export async function buscarAlquileresCliente(codigoCliente) {
+    try {
+      let { data: Alquileres, error } = await supabase
         .from('Alquileres')
         .select("*")
-        .ilike('codigoCliente', codigoCliente)
-        if (error) {
-            throw new Error(error.message);}   
-        let listaFiltrada = Alquileres.map(item => {return item;});
-        return listaFiltrada; 
+        .ilike('codigoCliente', codigoCliente);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      let listaFiltrada = Alquileres.map(item => { return item; });
+      return listaFiltrada; // Devolver la lista completa de alquileres
+    } catch (error) {
+      console.log(error);
     }
-    catch (error){
-       console.log(error)
-    }
-}
+  }
+
+
 
 
 export  async function actualizarAlquiler(idAlquiler,columnaModificar, nuevoValor) {

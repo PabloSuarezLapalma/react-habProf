@@ -62,7 +62,7 @@ export  async function buscarPosicionesAlquiler(idAlquiler){
         let { data: Posiciones, error } = await supabase
         .from('Posiciones')
         .select("*")
-        .ilike('idAlquiler', idAlquiler)
+        .eq('idAlquiler', idAlquiler)
         if (error) {
             throw new Error(error.message);}   
         let listaFiltrada = Posiciones.map(item => {return item;});
