@@ -25,6 +25,7 @@ import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicio
 import ListarPosicionesRelocalizarFin from './pages/ListarPosicionesRelocalizarFin'
 import Monetizacion from './pages/Monetizacion'
 import Error404 from './pages/Error404'
+import SeleccionarClienteRelocalizar from './pages/SeleccionarClienteRelocalizar'
 
 function App() {
   const idPosicion = "TR2"
@@ -48,8 +49,9 @@ function App() {
         <Route path="/bajarHangar" element={<BajaHangar/>}/>
         <Route path="/listarModificarHangar" element={<ListarModificarHangar/>}/>
         <Route path="/modificarHangar/:idHangar" element={<ModificarHangar />} />
+        <Route path="/seleccionarClienteRelocalizar" element={<SeleccionarClienteRelocalizar/>}/>
         <Route path="/listarMovimientos" element={<ListarMovimientos/>}/>
-        <Route path="/listarPosicionesRelocalizar" element={<ListarPosicionesRelocalizar codigoCliente={idCliente}/>}/>
+        <Route path="/listarPosicionesRelocalizar/:codigoCliente" element={<ListarPosicionesRelocalizar/>}/>
         <Route path="/listarMercaderiaPosicionRelocalizar/:alquiler/:idPosicion/:codigoCliente" element={<ListarMercaderiaPosicionRelocalizar/>}/>
         <Route path="/listarPosicionesRelocalizarFin/:alquiler/:idPosicion/:codigoCliente/:idMercaderia/:cantidad" element={<ListarPosicionesRelocalizarFin/>}/>
         <Route path="/descripcionMovimiento/:codigoBWS" element={<DescripcionMovimiento />} />

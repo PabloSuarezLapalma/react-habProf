@@ -1,15 +1,15 @@
 import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
-import {Link,useNavigate} from "react-router-dom";
+import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import { buscarPosicion, obtenerPosiciones,buscarPosicionesAlquiler} from "../scripts/posiciones";
+import { buscarPosicion,buscarPosicionesAlquiler} from "../scripts/posiciones";
 import {buscarAlquileresCliente} from "../scripts/alquileres";
-import PropTypes from 'prop-types';
 
 const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
 
-  export default function ListarPosicionesRelocalizar({codigoCliente}) {
+  export default function ListarPosicionesRelocalizar() {
   const navigate = useNavigate(); 
+  const {codigoCliente} = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [posiciones, setPosiciones] = useState([]);
@@ -262,7 +262,3 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
     );
     
   }
-  
-ListarPosicionesRelocalizar.propTypes = {
-  codigoCliente: PropTypes.string.isRequired,
-};
