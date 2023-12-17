@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { obtenerClientes } from '../scripts/clientes';
-import { useNavigate ,useParams } from 'react-router-dom';
-import { Select, Option, Typography } from "@material-tailwind/react";
-
+import { useNavigate ,useParams, Link } from 'react-router-dom';
+import { Select, Option, Typography,IconButton } from "@material-tailwind/react";
+import {HomeIcon} from "@heroicons/react/24/outline";
 
 const SeleccionarCliente = () => {
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
@@ -31,6 +31,7 @@ const SeleccionarCliente = () => {
     return (
         <>
             <div className=' flex items-center justify-center'>
+
                 <div className='max-w-2xl mx-auto px-0 py-8 '>
                     <main className="shadow-lg bg-white py-8 rounded-lg sm:pt-5 lg:px-4 text-center">
                         <div className="shadow-sm bg-red-500 mx-auto rounded-md w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12 xl:w-10/12 mt-2 mb-4 px-10">
@@ -63,6 +64,11 @@ const SeleccionarCliente = () => {
                                   </Select>
                               </div>
                             </div>
+                            <Link to="/home" className="mx-auto -mt-28 "> 
+                              <IconButton variant="text">
+                                <HomeIcon className="h-8 w-8 text-red-500" />
+                              </IconButton>   
+                            </Link>
                         </div>
                         <button
                             

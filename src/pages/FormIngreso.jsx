@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { registrarIngreso } from '../scripts/ingreso';
 import { obtenerDatosActuales } from '../scripts/global';
 import {obtenerResponsable} from '../scripts/clientes';
 import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
-import PropTypes from 'prop-types';
 
 const FormIngreso = () => {
+    const {clienteSeleccionado,idPosicion} = useParams();
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -36,16 +37,17 @@ const FormIngreso = () => {
     }
 
     useEffect(() => {
-        setCodigoBWS(`${codigoCliente}-${idPosicion}-${nroRemito}`);
-    }, [codigoCliente, idPosicion, nroRemito]);
+        console.log(idPosicion);
+        setCodigoBWS(`${clienteSeleccionado}-${idPosicion}-${nroRemito}`);
+    }, [clienteSeleccionado, idPosicion, nroRemito]);
 
     useEffect(() => {
         setPosicion(`${idPosicion}`);
     }, [idPosicion]);
     
     useEffect(() => {
-        setIDCliente(`${codigoCliente}`);
-    }, [codigoCliente]);
+        setIDCliente(`${clienteSeleccionado}`);
+    }, [clienteSeleccionado]);
     
     useEffect(() => {
         console.log("codigo: ", codigoBWS);
@@ -69,10 +71,10 @@ const FormIngreso = () => {
     }, []);
     
     useEffect(() => {
-        obtenerResponsable(codigoCliente).then(responsable => {
+        obtenerResponsable(clienteSeleccionado).then(responsable => {
             setNombreResponsable(responsable);
         });
-    }, [codigoCliente]);
+    }, [clienteSeleccionado]);
     
     useEffect(() => {
         let idM = generarIdMercaderia();
@@ -127,11 +129,11 @@ const FormIngreso = () => {
         console.log("idMercaderia: ", idMercaderia);
         console.log("fecha: ", fecha);
         console.log("hora: ", hora);
-        console.log("codigoCliente: ", idCliente);
+        console.log("codigoCliente: ", clienteSeleccionado);
         console.log("Destino: ", destino);
         console.log("tipoUnidad: ", tipoUnidad);
         console.log("tipoTransporte: ", tipoTransporte);
-        console.log("idPosicion: ", posicion);
+        console.log("idPosicion: ", idPosicion);
         console.log("Descripcion: ", descripcion);
         console.log("Largo: ", largo);
         console.log("Ancho: ", ancho);
@@ -434,11 +436,5 @@ const FormIngreso = () => {
     </div>
 );
 }
-
-FormIngreso.propTypes = {
-    idPosicion: PropTypes.string.isRequired,
-    codigoCliente: PropTypes.string.isRequired,
-};
-
 
 export default FormIngreso;

@@ -4,9 +4,10 @@ import { obtenerDatosActuales } from '../scripts/global';
 import {obtenerResponsable} from '../scripts/clientes';
 import {obtenerCantidadMercaderia} from  '../scripts/mercaderia';
 import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
-import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 
-const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
+const FormEgreso = () => {
+    const {tipo,clienteSeleccionado,idPosicion,idMercaderia,cantidad,descripcion,ancho,largo,alto} = useParams();
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -15,43 +16,28 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
     const [chofer, setChofer] = useState('');
     const [chasis, setChasis] = useState('');
     const [acoplado, setAcoplado] = useState('');
-    const [cantidad, setCantidad] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [posicion, setPosicion] = useState('');
-    const [ancho, setAncho] = useState('');
-    const [largo, setLargo] = useState('');
-    const [alto, setAlto] = useState('');
     const [codigoBWS, setCodigoBWS] = useState('');
     const [idCliente, setIDCliente]= useState('');
     const [destino, setDestino] = useState('');
     const [estado, setEstado] = useState('');
-    const [tipoUnidad, setTipoUnidad] = useState('');
     const [nombreResponsable, setNombreResponsable] = useState('');
     const [costo, setCosto]= useState('');
     const [volumen, setVolumen]= useState('');
-    const [idMercaderia, setIdMercaderia]= useState('');
-    
-
-    function generarIdMercaderia() {
-        const id = Math.floor(Math.random() * 1000000000); // Genera un número aleatorio entre 0 y 999999999
-        return id.toString();
-    }
+    const [idPosicionEgreso, setIDPosicionEgreso]= useState('');
 
     useEffect(() => {
-        setCodigoBWS(`${codigoCliente}-${idPosicion}-${nroRemito}`);
-    }, [codigoCliente, idPosicion, nroRemito]);
+        setCodigoBWS(`${clienteSeleccionado}-${idPosicion}-${nroRemito}`);
+    }, [clienteSeleccionado, idPosicion, nroRemito]);
 
     useEffect(() => {
-        setPosicion(`${idPosicion}`);
+        setIDPosicionEgreso(`${idPosicion}`);
     }, [idPosicion]);
     
     useEffect(() => {
-        setIDCliente(`${codigoCliente}`);
-    }, [codigoCliente]);
+        setIDCliente(`${clienteSeleccionado}`);
+    }, [clienteSeleccionado]);
     
-    useEffect(() => {
-        setIdMercaderia(`${mercaderia}`);
-    }, [mercaderia]);
+
     
     useEffect(() => {
         console.log("codigo: ", codigoBWS);
@@ -75,15 +61,12 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
     }, []);
     
     useEffect(() => {
-        obtenerResponsable(codigoCliente).then(responsable => {
+        obtenerResponsable(clienteSeleccionado).then(responsable => {
             setNombreResponsable(responsable);
         });
-    }, [codigoCliente]);
+    }, [clienteSeleccionado]);
     
-    useEffect(() => {
-        let idM = generarIdMercaderia();
-        setIdMercaderia(idM);
-    }, []);
+
     
     async function handleSubmit(e) {
         e.preventDefault();
@@ -107,7 +90,7 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
 
         setVolumen(alto * ancho * largo);
         obtenerDatosActuales().then((datos) => {
-            setCosto(datos.costoIngreso);
+            setCosto(datos.costoEgreso);
         });
 
         //No anda la comparación de hora y segundos
@@ -130,11 +113,11 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
         console.log("idMercaderia: ", idMercaderia);
         console.log("fecha: ", fecha);
         console.log("hora: ", hora);
-        console.log("codigoCliente: ", idCliente);
+        console.log("codigoCliente: ", clienteSeleccionado);
         console.log("Destino: ", destino);
-        console.log("tipoUnidad: ", tipoUnidad);
+        console.log("tipoUnidad: ", descripcion);
         console.log("tipoTransporte: ", tipoTransporte);
-        console.log("idPosicion: ", posicion);
+        console.log("idPosicion: ", idPosicion);
         console.log("Descripcion: ", descripcion);
         console.log("Largo: ", largo);
         console.log("Ancho: ", ancho);
@@ -147,12 +130,12 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
         console.log("Volumen Actual: ",volumenActual)
         console.log("Diferencia de Volumen : ",volumenActual+volumen)
 
-        let cantidadActual= await obtenerCantidadMercaderia(mercaderia)
+        let cantidadActual= await obtenerCantidadMercaderia(idMercaderia)
         console.log("Cantidad Actual: ",cantidadActual)
         let cantidadNueva= cantidadActual-cantidad
         console.log("Cantidad Nueva: ",cantidadNueva)
 
-        await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,mercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte,cantidadNueva)
+        await registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,clienteSeleccionado,destino,descripcion,tipoTransporte,cantidadNueva)
 
         //Reiniciar el formulario
         setFecha('');
@@ -163,14 +146,8 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
         setChofer('');
         setChasis('');
         setAcoplado('');
-        setCantidad('');
-        setDescripcion('');
-        setAncho('');
-        setLargo('');
-        setAlto('');
         setCodigoBWS('');
         setDestino('');
-        setTipoUnidad('');
     }
 
     return (
@@ -215,7 +192,7 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='fecha' className='block text-md font-medium leading-6 text-gray-900'>
-                        Fecha de Ingreso
+                        Fecha de Egreso
                     </label>
                     <input
                         id='fecha'
@@ -229,7 +206,7 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='hora' className='block text-md font-medium leading-6 text-gray-900'>
-                        Hora de ingreso
+                        Hora de Egreso
                     </label>
                     <input
                         id='hora'
@@ -336,84 +313,6 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
                 </div>
                 
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                <label htmlFor='cantidad' className='block text-md font-medium leading-6 text-gray-900'>
-                        Cantidad
-                    </label>
-                    <input
-                        id='cantidad'
-                        name="cantidad" 
-                        type="number" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={cantidad}
-                        required
-                        placeholder='Cantidad' 
-                        onChange={(e) => setCantidad(e.target.value)} 
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                <label htmlFor='posicion' className='block text-md font-medium leading-6 text-gray-900'>
-                        Posición
-                    </label>
-                    <input 
-                        id='posicion'
-                        name="posicion"
-                        type="text" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        pattern="[A-Za-z]" 
-                        maxLength={1} 
-                        value={posicion}
-                        required
-                        placeholder='Posición' 
-                        disabled
-                        onChange={(e) => setPosicion(e.target.value)}  
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='ancho' className='block text-md font-medium leading-6 text-gray-900'>
-                        Ancho
-                    </label>
-                    <input
-                        id='ancho'
-                        name="ancho" 
-                        type="number" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={ancho}
-                        required
-                        placeholder='Ancho (cm)' 
-                        onChange={(e) => setAncho(e.target.value)} 
-                    />
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='largo' className='block text-md font-medium leading-6 text-gray-900'>
-                        Largo
-                    </label>
-                    <input
-                        id='largo'
-                        name="largo" 
-                        type="number" 
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={largo} 
-                        required
-                        placeholder='Largo (cm)'
-                        onChange={(e) => setLargo(e.target.value)}
-                    /> 
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='alto' className='block text-md font-medium leading-6 text-gray-900'>
-                        Alto
-                    </label>
-                    <input
-                        id='alto'
-                        name="alto" 
-                        type="number"
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={alto}
-                        required
-                        placeholder='Alto (cm)'
-                        onChange={(e) => setAlto(e.target.value)}
-                    /> 
-                </div>
-                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='destino' className='block text-md font-medium leading-6 text-gray-900'>
                         Destino
                     </label>
@@ -428,22 +327,80 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
                         onChange={(e) => setDestino(e.target.value)} 
                     />
                 </div>
-
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
-                    <label htmlFor='tipoUnidad' className='block text-md font-medium leading-6 text-gray-900'>
-                        Tipo de unidad
+                <label htmlFor='idPosicion' className='block text-md font-medium leading-6 text-gray-900'>
+                        Posición
                     </label>
-                    <input
-                        id='tipoUnidad'
-                        name="tipoUnidad" 
+                    <input 
+                        id='idPosicion'
+                        name="idPosicion"
                         type="text" 
                         className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
-                        value={tipoUnidad} 
+                        pattern="[A-Za-z]" 
+                        maxLength={1} 
+                        value={idPosicion}
                         required
-                        placeholder='Tipo de unidad'
-                        onChange={(e) => setTipoUnidad(e.target.value)} 
+                        placeholder='Posición' 
+                        disabled
                     />
                 </div>
+                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                    <label htmlFor='ancho' className='block text-md font-medium leading-6 text-gray-900'>
+                        Ancho
+                    </label>
+                    <input
+                        id='ancho'
+                        name="ancho" 
+                        type="number" 
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={ancho}
+                        disabled
+                        placeholder='Ancho (cm)' 
+                    />
+                </div>
+                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                    <label htmlFor='largo' className='block text-md font-medium leading-6 text-gray-900'>
+                        Largo
+                    </label>
+                    <input
+                        id='largo'
+                        name="largo" 
+                        type="number" 
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={largo} 
+                        disabled
+                        placeholder='Largo (cm)'
+                    /> 
+                </div>
+                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                    <label htmlFor='alto' className='block text-md font-medium leading-6 text-gray-900'>
+                        Alto
+                    </label>
+                    <input
+                        id='alto'
+                        name="alto" 
+                        type="number"
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={alto}
+                        disabled
+                        placeholder='Alto (cm)'
+                    /> 
+                </div>
+                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                    <label htmlFor='descripcion' className='block text-md font-medium leading-6 text-gray-900'>
+                        Descripcion
+                    </label>
+                    <input
+                        id='descripcion'
+                        name="descripcion" 
+                        type="text"
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={descripcion}
+                        disabled
+                        placeholder='Alto (cm)'
+                    /> 
+                </div>
+
             </div>
             <input 
                 type="submit"
@@ -457,10 +414,5 @@ const FormEgreso = ({codigoCliente,idPosicion,mercaderia}) => {
 );
 }
 
-FormEgreso.propTypes = {
-    idPosicion: PropTypes.string.isRequired,
-    codigoCliente: PropTypes.string.isRequired,
-    mercaderia: PropTypes.string.isRequired,
-};
 
 export default FormEgreso;

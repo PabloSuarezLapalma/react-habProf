@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import SeleccionarCliente from './pages/SeleccionarCliente'
 import ListarPosicionesCliente from './pages/ListarPosicionesCliente'
+import ListadoMercaderiaPosicionCliente from './pages/ListarMercaderiaCliente'
 import FormIngreso from './pages/FormIngreso'
 import FormEgreso from './pages/FormEgreso'
 import ListarMovimientos from './pages/ListarMovimientos'
@@ -29,9 +30,6 @@ import Monetizacion from './pages/Monetizacion'
 import Error404 from './pages/Error404'
 
 function App() {
-  const idPosicion = "TR2"
-  const idCliente = "0001"
-  const idMercaderia="276947079"
   const idAlquiler="1234"
   return (
     <>
@@ -41,8 +39,9 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/seleccionarCliente/:tipo" element={<SeleccionarCliente/>}/>
         <Route path="/listarPosicionesCliente/:tipo/:clienteSeleccionado" element={<ListarPosicionesCliente/>}/>
-        <Route path="/formIngreso" element={<FormIngreso codigoCliente={idCliente} idPosicion={idPosicion}/>}/>
-        <Route path="/formEgreso" element={<FormEgreso codigoCliente={idCliente} idPosicion={idPosicion} mercaderia={idMercaderia}/>}/>
+        <Route path="/formIngreso/:clienteSeleccionado/:idPosicion" element={<FormIngreso/>}/>
+        <Route path="/formEgreso/:tipo/:clienteSeleccionado/:idPosicion/:idMercaderia/:cantidad/:descripcion/:ancho/:largo/:alto" element={<FormEgreso/>}/>
+        <Route path="/listadoMercaderiaPosicionCliente/:tipo/:clienteSeleccionado/:idPosicion" element={<ListadoMercaderiaPosicionCliente/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>
         <Route path='/bajarRack' element={<BajaRack/>}/>
         <Route path="/listarModificarRacks" element={<ListarModificarRack/>}/>

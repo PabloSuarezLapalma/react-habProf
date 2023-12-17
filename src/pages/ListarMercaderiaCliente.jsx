@@ -1,49 +1,40 @@
 import {MagnifyingGlassIcon,HomeIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner} from "@material-tailwind/react";
-import {Link,useNavigate} from "react-router-dom";
+import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {buscarPosicionesAlquiler,buscarPosicion} from "../scripts/posiciones";
-import { useParams } from "react-router-dom";
-import { buscarAlquileresCliente } from "../scripts/alquileres";
+import { buscarMercaderia, obtenerMercaderias } from "../scripts/mercaderia";
 
-const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","Seleccionar"];
+const TABLE_HEAD = ["ID", "Descripcion", "Largo","Ancho", "Alto","Cantidad","Seleccionar"];
 
-export default function ListarPosicionesCliente() {
-  const navigate = useNavigate();
-  const { tipo, clienteSeleccionado } = useParams();
-  const [posiciones, setPosiciones] = useState([]);
-  const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  export default function ListadoMercaderiaPosicionCliente() {
+  const navigate = useNavigate(); // Utilizar useNavigate para la navegación
+  const {tipo,clienteSeleccionado,idPosicion } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
+  const [mercaderias, setMercaderias] = useState([]);
+  const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [cantidad, setCantidad] = useState(0);
 
-  async function fetchPosiciones() {
+  async function fetchMercaderias() {
     try {
-      const alquileres = await buscarAlquileresCliente(clienteSeleccionado);
-      const posicionesFiltradas = [];
-      
-      for (const alquiler of alquileres) {
-        const posicionesAlquiler = await buscarPosicionesAlquiler(alquiler.idAlquiler);
-        posicionesFiltradas.push(...posicionesAlquiler);
-        console.log("Posiciones encontradas:", posicionesAlquiler);
-      }
-
-      setPosiciones(posicionesFiltradas);
-      setLoading(false);
+      const mercaderiasFromDB = await obtenerMercaderias();
+      const mercaderiasFiltradas = mercaderiasFromDB.filter(mercaderia => mercaderia.idPosicion === idPosicion && mercaderia.vaciada!="SI") ;
+      setMercaderias(mercaderiasFiltradas || []);
     } catch (error) {
-      console.error('Error al obtener alquileres:', error);
+      console.error('Error al obtener posiciones:', error);
+    } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    if (clienteSeleccionado) {
-      fetchPosiciones();
-    }
-  }, [clienteSeleccionado]);   
-      
+    fetchMercaderias();
+  }, []);
+
+
   const itemsPerPage = 7; //Numero de clientes por pagina
 
-  const totalItems = posiciones.length;
+  const totalItems = mercaderias.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleNextPage = () => {
@@ -63,40 +54,51 @@ export default function ListarPosicionesCliente() {
     if (value.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
       console.log("Búsqueda vacía");
-      fetchPosiciones();
+      fetchMercaderias();
     } else {
       // Si hay texto en el campo de búsqueda, filtramos los movimientos
       console.log(value);
-      buscarPosicion(value); // Esta función debería filtrar los movimientos en función del texto ingresado
+      buscarMercaderia(value); // Esta función debería filtrar los movimientos en función del texto ingresado
     }
   };
+
 
   const handleSearchClick = async () => {
     if (searchText.trim() === "") {
       // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
-      fetchPosiciones();
+      fetchMercaderias();
     } else {
       try {
-        const posicionEncontrada = await buscarPosicion(searchText);
-        setPosiciones(posicionEncontrada || []);
+        const mercaderiaEncontrada = await buscarMercaderia(searchText);
+        setMercaderias(mercaderiaEncontrada || []);
       } catch (error) {
-        console.error('Error al buscar posiciones:', error);
+        console.error('Error al buscar mercaderias:', error);
       }
     }
   };
 
+  function verificarCantidad(cantidadMercaderia) {
+    if (cantidad > 0 && cantidad <= cantidadMercaderia) {
+        return true;
+    } else {
+        return false;
+    }
+    
+  }
+
   const filteredRows = useMemo(() => {
-    return posiciones.filter((row) =>
-      row.idPosicion && row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
-    );
-}, [searchText, posiciones]);
+      return mercaderias.filter((row) =>
+        row.idPosicion.toLowerCase().includes(searchText.toLowerCase())
+      );
+  }, [searchText, mercaderias]);
 
 
-const paginatedData = useMemo(() => {
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
-  return filteredRows.slice(startIndex, endIndex);
-}, [currentPage, filteredRows]);
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
+    return filteredRows.slice(startIndex, endIndex);
+  }, [currentPage, filteredRows]);
+
 
     return (
       <Card className="lg:h-full lg:w-full">
@@ -104,10 +106,10 @@ const paginatedData = useMemo(() => {
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
-                Lista de Posiciones
+                Lista de Mercaderías de la posición {idPosicion}
               </Typography>
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
-                Seleccione una posición para ver la mercadería a retirar
+                Seleccione una mercaderia a retirar
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
@@ -126,8 +128,8 @@ const paginatedData = useMemo(() => {
                     <HomeIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   
           </Link>
-          <IconButton variant="text"  className="mx-auto mr-20 -mt-28 "
-                    onClick={() => navigate(`/SeleccionarCliente/${tipo}`)}
+                 <IconButton variant="text"  className="mx-auto mr-20 -mt-28 "
+                    onClick={() => navigate(`/listarPosicionesCliente/${tipo}/${clienteSeleccionado}`)}
                   >
                     <ArrowLeftIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   
@@ -156,9 +158,8 @@ const paginatedData = useMemo(() => {
               </tr>
             </thead>
  <tbody>
-        {paginatedData.map((posicion ) => (
-          
-          <tr key={posicion.idPosicion} className="border-b border-blue-gray-50 ">
+        {paginatedData.map((mercaderias) => (
+          <tr key={mercaderias.idMercaderia} className="border-b border-blue-gray-50 ">
             <td className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col">
@@ -167,7 +168,7 @@ const paginatedData = useMemo(() => {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {posicion.idPosicion}
+                    {mercaderias.idMercaderia}
                   </Typography>
                 </div>
               </div>
@@ -180,7 +181,7 @@ const paginatedData = useMemo(() => {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {posicion.letraPosicion}
+                    {mercaderias.descripcion}
                   </Typography>
                 </div>
               </div>
@@ -192,7 +193,7 @@ const paginatedData = useMemo(() => {
                   color="blue-gray"
                   className="font-normal"
                 >
-                {posicion.sector}
+                {mercaderias.largo}
                 </Typography>
               </div>
             </td>
@@ -203,7 +204,7 @@ const paginatedData = useMemo(() => {
                   color="blue-gray"
                   className="font-normal"
                 >
-                {posicion.altura}
+                {mercaderias.ancho}
                 </Typography>
               </div>
             </td>
@@ -214,7 +215,7 @@ const paginatedData = useMemo(() => {
                   color="blue-gray"
                   className="font-normal"
                 >
-                {posicion.volumen}
+                {mercaderias.alto}
                 </Typography>
               </div>
             </td>
@@ -225,27 +226,33 @@ const paginatedData = useMemo(() => {
                   color="blue-gray"
                   className="font-normal"
                 >
-                {posicion.idAlquiler}
+                <Input
+                  placeholder = {`Máximo ${mercaderias.cantidad} unidades`}
+                  type="number"
+                  required
+                  className=" pl-10"
+                  onChange={(e) => {setCantidad(e.target.value)}}
+                  >
+                  </Input>
                 </Typography>
+                
               </div>
             </td>
             <td className="p-4">
-            <Tooltip content="Elegir posición para ver su mercadería">
+            <Tooltip content="Elegir mercadería a retirar">
                 <Button
                   size="sm"
                   color="red"
                   variant="gradient"
                   className="hover:text-red-800"
-                  onClick={() => {
-                    if (tipo === 'ingreso') {
-                      navigate(`/formIngreso/${tipo}/${clienteSeleccionado}/${posicion.idPosicion}`);
-                    } else if (tipo === 'egreso') {
-                      navigate(`/listadoMercaderiaPosicionCliente/${tipo}/${clienteSeleccionado}/${posicion.idPosicion}`);
+                  onClick={() =>  
+                    {if (verificarCantidad(mercaderias.cantidad)) {
+                    navigate(`/formEgreso/${tipo}/${clienteSeleccionado}/${idPosicion}/${mercaderias.idMercaderia}/${cantidad}/${mercaderias.descripcion}/${mercaderias.ancho}/${mercaderias.largo}/${mercaderias.alto}`)
                     } else {
-                      navigate('*')
+                      alert("La cantidad ingresada es incorrecta")
                     }
                   }}
-                >
+                  >
                   Elegir
                 </Button>
             </Tooltip>
@@ -261,7 +268,7 @@ const paginatedData = useMemo(() => {
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Página {currentPage} de {Math.ceil(posiciones.length / itemsPerPage)}
+            Página {currentPage} de {Math.ceil(mercaderias.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button variant="outlined" className="bg-gray-50" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>
@@ -274,5 +281,4 @@ const paginatedData = useMemo(() => {
         </CardFooter>
       </Card>
     );
-    
   }
