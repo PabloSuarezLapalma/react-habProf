@@ -39,7 +39,7 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/seleccionarCliente/:tipo" element={<SeleccionarCliente/>}/>
         <Route path="/listarPosicionesCliente/:tipo/:clienteSeleccionado" element={<ListarPosicionesCliente/>}/>
-        <Route path="/formIngreso/:clienteSeleccionado/:idPosicion" element={<FormIngreso/>}/>
+        <Route path="/formIngreso/:tipo/:clienteSeleccionado/:idPosicion" element={<FormIngreso/>}/>
         <Route path="/formEgreso/:tipo/:clienteSeleccionado/:idPosicion/:idMercaderia/:cantidad/:descripcion/:ancho/:largo/:alto" element={<FormEgreso/>}/>
         <Route path="/listadoMercaderiaPosicionCliente/:tipo/:clienteSeleccionado/:idPosicion" element={<ListadoMercaderiaPosicionCliente/>}/>
         <Route path="/agregarRack" element={<AgregarRack/>}/>

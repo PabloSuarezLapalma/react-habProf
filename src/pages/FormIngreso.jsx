@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { registrarIngreso } from '../scripts/ingreso';
 import { obtenerDatosActuales } from '../scripts/global';
 import {obtenerResponsable} from '../scripts/clientes';
 import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
+import {ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { IconButton } from '@material-tailwind/react';
+
 
 const FormIngreso = () => {
-    const {clienteSeleccionado,idPosicion} = useParams();
+    const navigate = useNavigate();
+    const {tipo,clienteSeleccionado,idPosicion} = useParams();
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
     const [nroRemito, setNroRemito] = useState('');
@@ -17,12 +21,10 @@ const FormIngreso = () => {
     const [acoplado, setAcoplado] = useState('');
     const [cantidad, setCantidad] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [posicion, setPosicion] = useState('');
     const [ancho, setAncho] = useState('');
     const [largo, setLargo] = useState('');
     const [alto, setAlto] = useState('');
     const [codigoBWS, setCodigoBWS] = useState('');
-    const [idCliente, setIDCliente]= useState('');
     const [destino, setDestino] = useState('');
     const [estado, setEstado] = useState('');
     const [tipoUnidad, setTipoUnidad] = useState('');
@@ -41,13 +43,9 @@ const FormIngreso = () => {
         setCodigoBWS(`${clienteSeleccionado}-${idPosicion}-${nroRemito}`);
     }, [clienteSeleccionado, idPosicion, nroRemito]);
 
-    useEffect(() => {
-        setPosicion(`${idPosicion}`);
-    }, [idPosicion]);
+
     
-    useEffect(() => {
-        setIDCliente(`${clienteSeleccionado}`);
-    }, [clienteSeleccionado]);
+
     
     useEffect(() => {
         console.log("codigo: ", codigoBWS);
@@ -144,7 +142,7 @@ const FormIngreso = () => {
         await actualizarPosicion(idPosicion, "volumen",volumenActual+volumen)
         console.log("Volumen Actual: ",volumenActual)
 
-        await registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,idCliente,destino,tipoUnidad,tipoTransporte, posicion, descripcion, largo, ancho, cantidad,alto)
+        await registrarIngreso(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,clienteSeleccionado,destino,tipoUnidad,tipoTransporte, idPosicion, descripcion, largo, ancho, cantidad,alto)
 
 
         //Reiniciar el formulario
@@ -184,10 +182,9 @@ const FormIngreso = () => {
                             name="idCliente" 
                             type="text" 
                             className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
-                            value={idCliente} 
+                            value={clienteSeleccionado} 
                             disabled
                             placeholder='ID Cliente'
-                            onChange={(e) => setIDCliente(e.target.value)}  
                         />
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -354,11 +351,10 @@ const FormIngreso = () => {
                         className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
                         pattern="[A-Za-z]" 
                         maxLength={1} 
-                        value={posicion}
-                        required
+                        value={idPosicion}
+                        
                         placeholder='Posición' 
                         disabled
-                        onChange={(e) => setPosicion(e.target.value)}  
                     />
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
@@ -407,6 +403,21 @@ const FormIngreso = () => {
                     /> 
                 </div>
                 <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
+                    <label htmlFor='tipoUnidad' className='block text-md font-medium leading-6 text-gray-900'>
+                        Tipo de unidad
+                    </label>
+                    <input
+                        id='tipoUnidad'
+                        name="tipoUnidad"  
+                        type="text" 
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" 
+                        value={tipoUnidad}
+                        required
+                        placeholder='Tipo de unidad'
+                        onChange={(e) => setTipoUnidad(e.target.value)} 
+                    />
+                </div>
+                <div className=' w-full md:mx-2 lg:mx-2 xl:mx-2 2xl:mx-2 sm:mx-2 xs:mx-2 sm:w-auto py-5'>
                     <label htmlFor='descripcion' className='block text-md font-medium leading-6 text-gray-900'>
                         Descripción
                     </label>
@@ -423,7 +434,13 @@ const FormIngreso = () => {
                         onChange={(e) => setDescripcion(e.target.value)} 
                     />
                 </div>
+
             </div>
+            <IconButton variant="text"  className="mx-auto flex flex-auto "
+                    onClick={() => navigate(`/listarPosicionesCliente/${tipo}/${clienteSeleccionado}`)}
+                  >
+                    <ArrowLeftIcon className="h-8 w-8 text-red-500" />
+                  </IconButton>
             <input 
                 type="submit"
                 id="movimientos"

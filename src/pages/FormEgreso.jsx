@@ -5,8 +5,13 @@ import {obtenerResponsable} from '../scripts/clientes';
 import {obtenerCantidadMercaderia} from  '../scripts/mercaderia';
 import {actualizarPosicion,obtenerVolumenPosicion} from '../scripts/posiciones';
 import { useParams } from 'react-router-dom';
+import { IconButton } from '@material-tailwind/react';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+
 
 const FormEgreso = () => {
+    const navigate = useNavigate();
     const {tipo,clienteSeleccionado,idPosicion,idMercaderia,cantidad,descripcion,ancho,largo,alto} = useParams();
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState("");
@@ -402,6 +407,11 @@ const FormEgreso = () => {
                 </div>
 
             </div>
+            <IconButton variant="text"  className="mx-auto flex flex-auto "
+                    onClick={() => navigate(`/listadoMercaderiaPosicionCliente/${tipo}/${clienteSeleccionado}/${idPosicion}`)}
+                  >
+                    <ArrowLeftIcon className="h-8 w-8 text-red-500" />
+                  </IconButton>
             <input 
                 type="submit"
                 id="movimientos"
@@ -409,7 +419,9 @@ const FormEgreso = () => {
                 className='bg-red-500 font-semibold mt-5 rounded-md text-white justify-center px-10 py-2 text-lg leading-6 shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500'
             />
         </form>
+        
     </div>
+    
     </div>
 );
 }
