@@ -2,6 +2,7 @@ import {obtenerCostoAlmacenamientoActual} from './global.js';
 import {buscaridPosicionAlquiler} from './posiciones.js';
 import {obtenerMercaderiasPosicion} from './mercaderia.js';
 import {buscarMovimientosMercaderia} from './movimientos.js';
+import { actualizarAlquiler } from './alquileres.js';
 
 export function renuevaAlquiler(idAlquiler,renuevan){
     let renueva=false
@@ -80,4 +81,16 @@ export async function calcularMontoTotalAlquiler(idAlquiler,renuevan,fechaRenova
 
     return total;
 
+}
+
+export async function cierrreMes(renuevan, todoAlquileres){
+  const fechaHoy= new Date();
+  for (const alquiler of renuevan){
+    await actualizarAlquiler(alquiler,'fechaRenovacion', fechaHoy)
+  }
+  const alquileresNoRenovados = todoAlquileres.filter(alquiler => !renuevan.includes(alquiler));
+
+  for (const alquiler of alquileresNoRenovados){
+    await actualizarAlquiler(alquiler,'fechaFin', fechaHoy)
+  }
 }

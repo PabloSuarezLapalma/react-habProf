@@ -1,11 +1,11 @@
 import {HomeIcon,MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Input,Checkbox} from "@material-tailwind/react";
+import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Input,Checkbox,Alert} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import {buscaridPosicionAlquiler } from "../scripts/posiciones";
 import { obtenerAlquileres,buscarAlquilerCliente} from "../scripts/alquileres";
 import {obtenerNombreCliente,buscarCliente} from "../scripts/clientes";
-import {calcularMontoTotalAlquiler} from "../scripts/monetizacion";
+import {calcularMontoTotalAlquiler,cierrreMes} from "../scripts/monetizacion";
 
 const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha de Renovacion", "Monto Total (USD)","Renueva?"];
 
@@ -17,14 +17,42 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   const [posiciones, setPosiciones] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [renuevan, setRenuevan] = useState([]);
+  const [idAlquileres, setIdAlquileres] = useState([]);
   const [montosTotales, setMontosTotales] = useState({});
+  const [open, setOpen] = useState(false);
 
-  //const [mercaderias, setMercaderias] = useState([]);
+  const date = new Date();
+  const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  const currentMonth = monthNames[date.getMonth()];
+
+  function Icon() {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          fillRule="evenodd"
+          d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+          clipRule="evenodd"
+        />
+      </svg>
+    );
+  }
 
   async function fetchAlquileres() {
     try {
       const alquileresFromDB= await obtenerAlquileres();
       setAlquileres(alquileresFromDB || []);
+
+      const todosAlquileres = [];
+      for (const alquiler of alquileresFromDB) {
+        todosAlquileres.push(alquiler.idAlquiler);
+      }
+      setIdAlquileres(todosAlquileres);
 
       const clientes = {};
       for (const alquiler of alquileresFromDB) {
@@ -45,10 +73,6 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
       for (const alquiler of alquileresFromDB) {
         const fechaRenovacion = alquiler.fechaRenovacion ? new Date(alquiler.fechaRenovacion + ' GMT-0300') : null;
         const fechaIngreso = alquiler.fechaIngreso ? new Date(alquiler.fechaIngreso + ' GMT-0300') : null;        
-        console.log("PARAMETROS DEL ALQUILER: ",alquiler.idAlquiler);
-        console.log('CHAT Fecha Renovacion',fechaRenovacion);
-        console.log('CHAT Fecha Ingreso',fechaIngreso);
-
         let monto= await calcularMontoTotalAlquiler(alquiler.idAlquiler, renuevan,fechaRenovacion, fechaIngreso);
         montos[alquiler.idAlquiler] = monto;
       }
@@ -67,7 +91,6 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   }, []);
 
   useEffect(() => {
-    console.log(renuevan);
   }, [renuevan]);
   
 
@@ -145,6 +168,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     }
   };
 
+
     return (
       <Card className="lg:h-full lg:w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -168,19 +192,33 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
 
           </div>
+          {!open && (
           <Button
                   size="lg"
                   color="red"
                   variant="gradient"
+                  onClick={() => {console.log(renuevan);
+                  console.log(idAlquileres);
+                  setOpen(true);
+                  setTimeout(() => {
+                    cierrreMes(renuevan, idAlquileres);
+                    setOpen(false);
+                  }, 5000);
+                }}
                 >
                   Cerrar Mes
                 </Button>
+                 )}
           <Link to="/home" className="mx-auto mr-20 -mt-28 "> 
                   <IconButton variant="text">
                     <HomeIcon className="h-8 w-8 text-red-500" />
                   </IconButton>   
           </Link>
           </div>
+          <Alert open={open} color="green"  icon={<Icon />}
+                        className="rounded-none border-l-4 border-[#2ec946] bg-[#2ec946]/10 font-medium text-[#2ec946]">
+                          MES {currentMonth} CERRADO
+                      </Alert>
         </CardHeader>
         <CardBody className="overflow-scroll px-0 -mt-6">
         {!loading ? ( // Si NO está cargando, se muestra un mensaje o un indicador de carga
