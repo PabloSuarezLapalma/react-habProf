@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { obtenerClientes } from '../scripts/clientes';
-import { useNavigate,Link,} from 'react-router-dom';
+import { useNavigate,} from 'react-router-dom';
 import { Select, Option, Typography,IconButton } from "@material-tailwind/react";
 import {HomeIcon} from "@heroicons/react/24/outline";
 

@@ -1,7 +1,5 @@
 import {MagnifyingGlassIcon,HomeIcon,ArrowLeftIcon} from "@heroicons/react/24/outline";
-import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner,Popover,
-  PopoverHandler,
-  PopoverContent,} from "@material-tailwind/react";
+import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,IconButton,Tooltip,Spinner,Alert} from "@material-tailwind/react";
 import {Link,useParams,useNavigate} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
 import { buscarPosicion} from "../scripts/posiciones";
@@ -21,7 +19,24 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
   const [posiciones, setPosiciones] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [open, setOpen] = useState(false);
 
+  function Icon() {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          fillRule="evenodd"
+          d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+          clipRule="evenodd"
+        />
+      </svg>
+    );
+  }
 
   async function fetchPosiciones() {
     try {
@@ -29,7 +44,7 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
       const alto = mercaderiaFromDB.alto;
       const ancho = mercaderiaFromDB.ancho;
       const largo = mercaderiaFromDB.largo;
-      const volumenFiltro= alto*ancho*largo;
+      const volumenFiltro= alto*ancho*largo*cantidad;
       const alquileres = await buscarAlquileresCliente(codigoCliente);
       const posicionesCliente = [];
       for (const alquiler of alquileres) {
@@ -62,7 +77,8 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
       let nuevoIdMercaderia= Math.floor(Math.random() * 1000000000);
       registrarIngresoRelocalizar(alquiler, posicionNueva, idMercaderia,parseInt(cantidad),nuevoIdMercaderia);
       registrarEgresoRelocalizar(alquiler,idPosicion,idMercaderia,parseInt(cantidad));
-      navigate('/home');
+      setOpen(false);
+      navigate('/seleccionarClienteRelocalizar');
     } catch (error) {
       console.error('Error al eliminar el cliente:', error);
     } finally {
@@ -278,32 +294,20 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
                     ¿Desea relocalizar la mercadería {idMercaderia} de la posición {idPosicion} a la posición {posiciones.idPosicion}?
                   </Typography>
                   <div className="flex justify-end gap-4">
-                  <Popover  animate={{
-                                      mount: { scale: 1, y: 0 },
-                                      unmount: { scale: 0, y: 25 },
-                                    }} placement="bottom">
-                  <PopoverHandler>
-                  <div onClick={() => {
-                  console.log('Button clicked');
-                  confirmarRelocalizar(posiciones.idPosicion)}
-                }}>
+                  {!open && (
                   <Button
                         variant="outlined"
                         className="bg-red-400 text-white"
                         size="sm"
                         onClick={() => {
                           console.log('Button clicked');
-                          confirmarRelocalizar(posiciones.idPosicion)}
-                                  }
+                          setOpen(true);
+                          setTimeout(() => confirmarRelocalizar(posiciones.idPosicion), 5000);}}
                         >
                         Sí
                     </Button>
-                  </PopoverHandler>
-                  <PopoverContent>
-                    Relocalización Exitosa. Volviendo a la pantalla principal
-                  </PopoverContent>
-                </Popover>
-                  
+                     )}
+                  {!open && ( 
                   <Button
                       variant="outlined"
                       className="bg-gray-50"
@@ -312,7 +316,13 @@ const TABLE_HEAD = ["ID", "Posicion", "Sector","Altura", "Volumen","Alquiler","S
                     >
                       No
                   </Button>
+                  )}
                   </div>
+                  <Alert open={open} color="green"  icon={<Icon />}
+                        className="rounded-none border-l-4 border-[#2ec946] bg-[#2ec946]/10 font-medium text-[#2ec946]">
+                          Relocalizado Exitosamente!
+                          ... Volviendo a pantalla de Selección de Clientes
+                      </Alert>
                 </div>
               </div>
             )}
