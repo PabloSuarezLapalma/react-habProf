@@ -1,11 +1,11 @@
-import {MagnifyingGlassIcon,HomeIcon} from "@heroicons/react/24/outline";
+import {HomeIcon} from "@heroicons/react/24/outline";
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
-import {Card,CardHeader,Input,Typography,Button,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
+import {Card,CardHeader,Typography,Button,Option ,Select,CardBody,CardFooter,Tabs,TabsHeader,Tab,IconButton,Tooltip,} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
 import {useState,useMemo,useEffect} from "react";
-import {filtrarMovimiento, obtenerMovimientos,filtrarMovimientosEntreFechas} from "../scripts/movimientos";
+import {obtenerMovimientos,filtrarMovimientosEntreFechas} from "../scripts/movimientos";
 import {obtenerDescripcionMercaderia} from "../scripts/mercaderia";
-import {obtenerNombreCliente,obtenerCodigoCliente} from "../scripts/clientes";
+import {obtenerNombreCliente} from "../scripts/clientes";
 import { Spinner } from "@material-tailwind/react";
 
 const TABS = [{label: "Todos",value: "Todos",},{label: "Ingreso",value: "INGRESO"},{label:"Relocalizar" ,value:"RELOCALIZACION"},{label: "Egreso",value: "EGRESO",},];
@@ -14,13 +14,13 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   export default function SortableTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTab, setSelectedTab] = useState("Todos"); // Por defecto, mostrar todos
-  const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [movimientos, setMovimientos] = useState([]);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [mercaderias, setMercaderias] = useState([]); // Estado para almacenar las mercaderías
   const [clientes, setClientes] = useState([]); // Estado para almacenar los nombres de los Clientes
   const [fechaDesde, setFechaDesde] = useState();
   const [fechaHasta, setFechaHasta] = useState();
+  const [selectedClient,setSelectedClient] = useState(""); // Por defecto, mostrar todos
 
   async function fetchMovimientos() {
     try {
@@ -70,20 +70,6 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
   };
 
-  const handleSearch = (value) => {
-    setSearchText(value);
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar el texto de búsqueda
-  
-    if (value.trim() === "") {
-      // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
-      console.log("Búsqueda vacía, cargando los 100 primeros movimientos");
-      fetchMovimientos();
-    } else {
-      // Si hay texto en el campo de búsqueda, filtramos los movimientos
-      console.log(value);
-      filtrarMovimiento(value); // Esta función debería filtrar los movimientos en función del texto ingresado
-    }
-  };
 
   const handleDateClick = () => {
     if (fechaDesde.trim() === "" || fechaHasta.trim() === "") {
@@ -110,62 +96,25 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
     setMercaderias(mercaderias);
   };
 
-  const cargarNuevosDatos = async () => {
-    const codigoCliente = await obtenerCodigoCliente(searchText);
-    const nuevosMovimientos = await filtrarMovimiento(codigoCliente);
-    setMovimientos(nuevosMovimientos || []);
-     // Obtenemos los nombres de los clientes para cada movimiento
-     const clientes = {};
-     for (const movimiento of nuevosMovimientos) {
-         const nombreCliente = await obtenerNombreCliente(movimiento.codigoCliente);
-         clientes[movimiento.codigoCliente] = nombreCliente;
-     }
-     setClientes(clientes);
-
-     // Obtenemos la descripcion de cada mercaderia para cada movimiento
-     const mercaderias={};
-     for (const movimiento of nuevosMovimientos) {
-       const descripcionMercaderia = await obtenerDescripcionMercaderia(movimiento.idMercaderia);
-       mercaderias[movimiento.idMercaderia] = descripcionMercaderia;
-     }
-     setMercaderias(mercaderias);
-
-  };
 
 
-
-  const handleSearchClick = () => {
-    setFechaDesde("");
-    setFechaHasta("");
-    if (searchText.trim() === "") {
-      fetchMovimientos();
-    } else {
-      cargarNuevosDatos();
-    }
-  };
-
-  
   const filteredRows = useMemo(() => {
     if (selectedTab === "Todos") {
-      return movimientos
-      .filter((row) =>
-       row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+      return movimientos.filter((row) =>
+        row.codigoCliente.toLowerCase().includes(selectedClient.toLowerCase()) &&
         (!fechaDesde || row.fecha >= fechaDesde) &&
         (!fechaHasta || row.fecha <= fechaHasta)
       );
     } else {
       return movimientos.filter(
         (row) =>
-          row.estado === selectedTab 
-
-         &&
-          row.codigoCliente.toLowerCase().includes(searchText.toLowerCase()) &&
+          row.estado === selectedTab &&
+          row.codigoCliente.toLowerCase().includes(selectedClient.toLowerCase()) &&
           (!fechaDesde || row.fecha >= fechaDesde) &&
           (!fechaHasta || row.fecha <= fechaHasta)
-          
       );
     }
-  }, [selectedTab, searchText, movimientos, fechaDesde, fechaHasta]);
+  }, [selectedTab, selectedClient, movimientos, fechaDesde, fechaHasta]);
   
   const handleTabChange = (value) => {
     setSelectedTab(value);
@@ -191,14 +140,6 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
               <Typography variant="h5" color="gray" className="mt-1 font-normal md:text-xl lg:text-2xl xl:text-3xl text-center mb-10 text-white ">
                 Ve información sobre todos los movimientos
               </Typography>
-            </div>
-            <div className="w-full md:w-72 sm:w-11/12  ">
-              <Input
-                label="Buscar"
-                icon={<MagnifyingGlassIcon className="h-5 w-5 cursor-pointer hover:text-red-600" onClick={handleSearchClick}/> }
-                value={searchText}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
             </div>
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
             <Tabs value="all" className="w-full  md:w-max rounded-md shadow-lg ">
@@ -242,6 +183,24 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
           </Link>
           </div>
         </CardHeader>
+        <div className=" flex mx-auto ml-4 ">
+              <Select
+                size="lg"
+                label="Seleccionar Cliente"
+                onChange={(value) => setSelectedClient(value)} // Almacena el cliente seleccionado
+                value={selectedClient} // Establece el valor seleccionado del Select
+              >
+                <Option value="">Todos</Option>
+                {Object.keys(clientes).map((codigo) => (
+                  <Option key={codigo} value={codigo}>
+                    {clientes[codigo]}
+                  </Option>
+
+                ))
+                }
+
+              </Select>
+            </div>
         <CardBody className="overflow-scroll px-0 -mt-6">
         {!loading ? ( // Si NO está cargando, se muestra un mensaje o un indicador de carga
           <table className="mt-4 w-full min-w-max table-auto text-left">
