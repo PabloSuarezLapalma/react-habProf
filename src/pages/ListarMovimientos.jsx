@@ -22,6 +22,19 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const [fechaDesde, setFechaDesde] = useState();
   const [fechaHasta, setFechaHasta] = useState();
 
+  function compararFechas(a, b) {
+    const fechaA = new Date(a.fecha);
+    const fechaB = new Date(b.fecha);
+  
+    if (fechaA > fechaB) {
+      return -1;
+    }
+    if (fechaA < fechaB) {
+      return 1;
+    }
+    return 0;
+  }
+
   async function fetchMovimientos() {
     try {
       const movimientosFromDB = await obtenerMovimientos(); //Solo trae los primeros cien movimientos, no la base de datos completa
@@ -175,7 +188,10 @@ const TABLE_HEAD = ["Cliente", "Tipo de movimiento", "Fecha", "Descripcion", "De
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, filteredRows.length);
-    return filteredRows.slice(startIndex, endIndex);
+    const sortedData = filteredRows.slice().sort(compararFechas); // Copia y ordena los datos
+
+    return sortedData.slice(startIndex, endIndex);
+    //return filteredRows.slice(startIndex, endIndex);
   }, [currentPage, filteredRows]);
 
 
