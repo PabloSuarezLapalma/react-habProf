@@ -39,7 +39,7 @@ if (renueva === false && fechaRenovacion === null || renueva === true && fechaRe
     }
 else if (fechaRenovacion != null){
     cantidadDias = calcularDiferenciaDias(fechaRenovacion);
-    montoAlmacenamiento= (costoAlmacenamiento * cantidadDias).toFixed(1); // Limitar a dos decimales
+    montoAlmacenamiento= (costoAlmacenamiento * cantidadDias); // Limitar a dos decimales
 }
 console.log("Cantidad de Dias: ",cantidadDias);
 console.log("Costo de Almacenamiento: ", costoAlmacenamiento);   
@@ -79,7 +79,7 @@ export async function calcularMontoTotalAlquiler(idAlquiler,renuevan,fechaRenova
     console.log("Monto de Movimientos para:",idAlquiler,",  ", montoPosiciones,"$");
     console.log("------------------------------------------------------------------------");
 
-    return total;
+    return total.toFixed(1);
 
 }
 
