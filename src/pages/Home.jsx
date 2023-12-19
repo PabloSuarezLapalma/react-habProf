@@ -1,7 +1,7 @@
   import { Fragment, useState } from 'react'
   import { Link } from 'react-router-dom'
   import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-  import {Bars3Icon,PlusIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon,CurrencyDollarIcon} from '@heroicons/react/24/outline'
+  import {Bars3Icon,PlusIcon,BanknotesIcon,MinusIcon,ListBulletIcon,MapPinIcon,XMarkIcon,UserPlusIcon,PencilIcon,UserMinusIcon, UserCircleIcon,BuildingOfficeIcon,SquaresPlusIcon,ArrowDownIcon,CurrencyDollarIcon} from '@heroicons/react/24/outline'
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
   import { Typography } from "@material-tailwind/react";
 
@@ -28,6 +28,8 @@
   ]
   const monetizacion = [
     { name: 'Monetizacion de Cliente', description: 'Muestra información con respecto a la monetización de un cliente', href: '/infoMonetizacion', icon:CurrencyDollarIcon },
+    { name: 'Actualizar Costos', description: 'Permite modificar los precios', href: '/modificarCostos', icon:BanknotesIcon },
+    
   ]
 
 

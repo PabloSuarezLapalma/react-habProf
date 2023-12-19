@@ -5,7 +5,7 @@ import { Button} from '@material-tailwind/react';
 import { obtenerClientePorCodigo, actualizarCliente,existeEmailActual,existeUsernameActual } from '../scripts/clientes';
 import { Typography } from "@material-tailwind/react";
 
-export default function DescripcionCliente() {
+export default function ModificarCliente() {
   const { codigo } = useParams();
   const [cliente, setCliente] = useState(null);
   const [mail, setMail] = useState('');

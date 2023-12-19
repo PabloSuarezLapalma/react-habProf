@@ -27,6 +27,7 @@ import ListarPosicionesRelocalizar from './pages/ListarPosicionesRelocalizar'
 import ListarMercaderiaPosicionRelocalizar from './pages/ListarMercaderiaPosicionRelocalizar'
 import ListarPosicionesRelocalizarFin from './pages/ListarPosicionesRelocalizarFin'
 import Monetizacion from './pages/Monetizacion'
+import ModificarCostos from './pages/ModificarCostos'
 import Error404 from './pages/Error404'
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
         <Route path="/listarModificarClientes" element={<ListarModificarCliente/>}/>
         <Route path="/modificarCliente/:codigo" element={<ModificarCliente />} />
         <Route path="/infoMonetizacion" element={<Monetizacion/>}/>
+        <Route path="/modificarCostos" element={<ModificarCostos/>}/>
         <Route path='*' element={<Error404/>}/>
       </Routes>
       </BrowserRouter>
