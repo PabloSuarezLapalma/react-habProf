@@ -1,7 +1,7 @@
 import {HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Checkbox,Alert,Select,Option} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
-import {useState,useMemo,useEffect,useRef} from "react";
+import {useState,useMemo,useEffect} from "react";
 import {buscaridPosicionAlquiler } from "../scripts/posiciones";
 import { obtenerAlquileres} from "../scripts/alquileres";
 import {obtenerNombreCliente} from "../scripts/clientes";
@@ -23,6 +23,8 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posición", "Fech
   const [montosTotales, setMontosTotales] = useState({});
   const [open, setOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [finalizados,setFinalizados] = useState(true);
+
 
   const date = new Date();
   const currentYear = date.getFullYear();
@@ -55,7 +57,12 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posición", "Fech
         const fechaB = new Date(b.fechaIngreso + ' GMT-0300');
         return fechaA - fechaB;
       });
-      setAlquileres(alquileresFromDB || []);
+      if (finalizados){
+        setAlquileres(alquileresFromDB || []);
+        }else{
+          const alquileresActivos = alquileresFromDB.filter(alquiler => alquiler.fechaFin === null);
+          setAlquileres(alquileresActivos || []);
+        }
 
       const todosAlquileres = [];
       for (const alquiler of alquileresFromDB) {
@@ -95,14 +102,19 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posición", "Fech
     }
   }
 
+
   useEffect(() => {
     fetchAlquileres();
-  }, []);
+  },[]);
+  
+  useEffect(() => {
+    fetchAlquileres(finalizados);
+  }, [finalizados]);
 
   useEffect(() => {
   }, [renuevan]);
   
-
+  
   const itemsPerPage = 7; //Numero de clientes por pagina
 
   const totalItems = alquileres.length;
@@ -213,6 +225,16 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posición", "Fech
                   Cerrar Mes
                 </Button>
                  )}
+
+                <Button
+                  size="lg"
+                  color="amber"
+                  variant="gradient"
+                  onClick={() => {setFinalizados(!finalizados);
+                }}
+                >
+                  {finalizados ? 'Con Alquileres Finalizados' : 'Solo Activos'}
+                </Button>
           <Link to="/home" className="mx-auto mr-20 -mt-28 "> 
                   <IconButton variant="text">
                     <HomeIcon className="h-8 w-8 text-red-500" />
