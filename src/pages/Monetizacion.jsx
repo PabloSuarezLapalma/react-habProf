@@ -20,7 +20,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   const [idAlquileres, setIdAlquileres] = useState([]);
   const [montosTotales, setMontosTotales] = useState({});
   const [open, setOpen] = useState(false);
-  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [selectedClient, setSelectedClient] = useState(null);
 
 
   const date = new Date();
@@ -132,11 +132,16 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
   };
 
-
   const filteredRows = useMemo(() => {
-      return alquileres.filter((row) =>
-      row.codigoCliente.toString().includes(searchText));
-  }, [searchText,alquileres]);
+    if (selectedClient === "") {
+      return alquileres
+    } else {
+      return alquileres.filter(
+        (row) =>
+          row.codigoCliente.toLowerCase().includes(selectedClient.toLowerCase()) 
+      );
+    }
+  }, [selectedClient, alquileres]);
 
 
   const paginatedData = useMemo(() => {
@@ -174,26 +179,20 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
             <div className='flex'>
-                                  <Select
-                                    label="Selecionar Cliente"
-                                    selected={(element) =>
-                                      element &&
-                                      React.cloneElement(element, {
-                                        disabled: true,
-                                        className:
-                                          "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
-                                            })
-                                        }
-                                    onChange={(value) => {
-                                      setClienteSeleccionado(value);
-                                      console.log(value);
-                                      }}
+                                <Select
+                                    size="lg"
+                                    label="Seleccionar Cliente"
+                                    onChange={(value) => setSelectedClient(value)} // Almacena el cliente seleccionado
+                                    value={selectedClient} // Establece el valor seleccionado del Select
                                   >
-                                    {clientes.map(({ nombreCliente, codigo }) => (
-                                      <Option key={codigo} value={codigo} className="flex items-center gap-2">
-                                        {nombreCliente}
+                                    <Option value="">Todos</Option>
+                                    {Object.keys(clientes).map((codigo) => (
+                                      <Option key={codigo} value={codigo}>
+                                        {clientes[codigo]}
                                       </Option>
-                                    ))}
+
+                                    ))
+                                    }
                                   </Select>
                               </div>
             </div>
