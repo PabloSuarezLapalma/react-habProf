@@ -1,17 +1,17 @@
-import {HomeIcon,MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Input,Checkbox,Alert} from "@material-tailwind/react";
+import {HomeIcon} from "@heroicons/react/24/outline";
+import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Checkbox,Alert,Select,Option} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
-import {useState,useMemo,useEffect} from "react";
+import React, {useState,useMemo,useEffect} from "react";
 import {buscaridPosicionAlquiler } from "../scripts/posiciones";
-import { obtenerAlquileres,buscarAlquilerCliente} from "../scripts/alquileres";
-import {obtenerNombreCliente,buscarCliente} from "../scripts/clientes";
+import { obtenerAlquileres} from "../scripts/alquileres";
+import {obtenerNombreCliente} from "../scripts/clientes";
 import {calcularMontoTotalAlquiler,cierrreMes} from "../scripts/monetizacion";
+import {obtenerClientes} from "../scripts/clientes";
 
 const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha de Renovacion", "Monto Total (USD)","Renueva?"];
 
   export default function Monetizacion() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState(""); // Nuevo estado para el texto de búsqueda
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const [alquileres, setAlquileres] = useState([]);
   const [posiciones, setPosiciones] = useState([]);
@@ -20,6 +20,8 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   const [idAlquileres, setIdAlquileres] = useState([]);
   const [montosTotales, setMontosTotales] = useState({});
   const [open, setOpen] = useState(false);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+
 
   const date = new Date();
   const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -42,6 +44,22 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
       </svg>
     );
   }
+
+  async function fetchClientes() {
+    try {
+      const clientesFromDB = await obtenerClientes();
+      const clientesFiltrados = clientesFromDB.filter(cliente => cliente.baja === "0");
+      setClientes(clientesFiltrados || []);
+    } catch (error) {
+      console.error('Error al obtener clientes:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchClientes();
+  }, []);
 
   async function fetchAlquileres() {
     try {
@@ -115,38 +133,6 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   };
 
 
-  const handleSearch = (value) => {
-    setSearchText(value);
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar el texto de búsqueda
-  
-    if (value.trim() === "") {
-      // Si el campo de búsqueda está vacío, cargamos los primeros 100 movimientos
-      console.log("Búsqueda vacía, cargando alquileres");
-      fetchAlquileres();
-    } else {
-      // Si hay texto en el campo de búsqueda, filtramos los movimientos
-      console.log(value);
-      buscarAlquilerCliente(value); // Esta función debería filtrar los movimientos en función del texto ingresado
-    }
-  };
-
-
-  const handleSearchClick = async () => {
-    if (searchText.trim() === "") {
-      // Si el campo de búsqueda está vacío, cargamos los primeros 100 clientes
-      fetchAlquileres();
-    } else {
-      try {
-        const cliente = await buscarCliente(searchText);
-        const alquileresEncontrados = await buscarAlquilerCliente(cliente.codigo);
-        setAlquileres(alquileresEncontrados || []);
-      } catch (error) {
-        console.error('Error al buscar clientes:', error);
-      }
-    }
-  };
-
-  
   const filteredRows = useMemo(() => {
       return alquileres.filter((row) =>
       row.codigoCliente.toString().includes(searchText));
@@ -187,12 +173,29 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
-              <Input
-                label="Buscar"
-                icon={<MagnifyingGlassIcon className="h-5 w-5 cursor-pointer hover:text-red-600" onClick={handleSearchClick}/> }
-                value={searchText}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
+            <div className='flex'>
+                                  <Select
+                                    label="Selecionar Cliente"
+                                    selected={(element) =>
+                                      element &&
+                                      React.cloneElement(element, {
+                                        disabled: true,
+                                        className:
+                                          "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
+                                            })
+                                        }
+                                    onChange={(value) => {
+                                      setClienteSeleccionado(value);
+                                      console.log(value);
+                                      }}
+                                  >
+                                    {clientes.map(({ nombreCliente, codigo }) => (
+                                      <Option key={codigo} value={codigo} className="flex items-center gap-2">
+                                        {nombreCliente}
+                                      </Option>
+                                    ))}
+                                  </Select>
+                              </div>
             </div>
             <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
 
