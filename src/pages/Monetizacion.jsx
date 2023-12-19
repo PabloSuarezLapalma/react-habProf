@@ -46,6 +46,11 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   async function fetchAlquileres() {
     try {
       const alquileresFromDB= await obtenerAlquileres();
+      alquileresFromDB.sort((a, b) => {
+        const fechaA = new Date(a.fechaIngreso + ' GMT-0300');
+        const fechaB = new Date(b.fechaIngreso + ' GMT-0300');
+        return fechaA - fechaB;
+      });
       setAlquileres(alquileresFromDB || []);
 
       const todosAlquileres = [];
@@ -204,6 +209,11 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                     cierrreMes(renuevan, idAlquileres);
                     setOpen(false);
                   }, 5000);
+                  setTimeout(() => {
+                    fetchAlquileres();
+                  }, 7000);
+                  setRenuevan([]);
+
                 }}
                 >
                   Cerrar Mes
@@ -336,7 +346,9 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                         variant="text"
                         className="hover:text-red-800"
                     >
-                    <Checkbox color="red" className="h-5 w-5 " value={alquileres.idAlquiler} onChange={handleCheckboxChange} />
+                    <Checkbox color="red" className="h-5 w-5 " value={alquileres.idAlquiler} onChange={handleCheckboxChange} 
+                      checked={renuevan.includes(alquileres.idAlquiler)}
+                      />
                     </IconButton>            
             </td>
           </tr>

@@ -42,7 +42,8 @@ else if (fechaRenovacion != null){
     montoAlmacenamiento= (costoAlmacenamiento * cantidadDias); // Limitar a dos decimales
 }
 console.log("Cantidad de Dias: ",cantidadDias);
-console.log("Costo de Almacenamiento: ", costoAlmacenamiento);   
+console.log("Costo de Almacenamiento: ", costoAlmacenamiento);  
+console.log("Monto Total de Almacenamiento: ",montoAlmacenamiento); 
 return montoAlmacenamiento;
 }
 
@@ -75,11 +76,13 @@ export async function calcularMontoTotalAlquiler(idAlquiler,renuevan,fechaRenova
     let montoAlmacenamiento= await calcularMontoAlquiler(fechaRenovacion,fechaIngreso,renueva);
     let montoPosiciones = await calcularMontoAlquilerPosiciones(idAlquiler);
     total=montoAlmacenamiento+montoPosiciones;
+    console.log("------------------------------------------------------------------------")
     console.log("Monto de Alquiler para:",idAlquiler, ",  ",montoAlmacenamiento,"$");
     console.log("Monto de Movimientos para:",idAlquiler,",  ", montoPosiciones,"$");
+    console.log("Monto TOTAL para:",idAlquiler,",  ", total,"$");
     console.log("------------------------------------------------------------------------");
 
-    return total.toFixed(1);
+    return total.toFixed(2);
 
 }
 

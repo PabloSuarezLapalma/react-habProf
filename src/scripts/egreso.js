@@ -5,7 +5,7 @@ export async function registrarEgreso(codigoBWS,nroRemito,estado,nombreResponsab
     ){
     let descripcion =  await obtenerDescripcionMercaderia(idMercaderia)
     await agregarMovimiento(codigoBWS,nroRemito,estado,nombreResponsable,transporte,chasis,chofer,acoplado,costo,idMercaderia,fecha,hora,codigoCliente,destino,tipoUnidad,tipoTransporte)
-    let mercaderia= await buscarMercaderia(idMercaderia)
+    const mercaderia= await buscarMercaderia(idMercaderia)
     const cantidadVieja= mercaderia.cantidad;
     const diferencia= cantidadNueva-cantidadVieja
     if (diferencia === 0) {

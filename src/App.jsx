@@ -28,9 +28,9 @@ import Error404 from './pages/Error404'
 import SeleccionarClienteRelocalizar from './pages/SeleccionarClienteRelocalizar'
 
 function App() {
-  const idPosicion = "TR2"
+  const idPosicion = "AH2"
   const idCliente = "0001"
-  const idMercaderia="276947079"
+  const idMercaderia="299558612"
   const idAlquiler="1234"
   return (
     <>

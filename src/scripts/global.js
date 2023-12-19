@@ -10,12 +10,12 @@ export  async function obtenerDatosActuales() {
         let { data: Global, error } = await supabase
             .from('Global')
             .select('*')
+            .order('fechaActualizacion', { ascending: false })
         if (error) {
             throw new Error(error.message);
         }
         let listaGlobal = Global.map(item => {return item;});
-        let ultimo= listaGlobal.length-1;
-        return listaGlobal[ultimo];
+        return listaGlobal[0];
     } catch (error) {
         console.error(error);
     }
@@ -91,13 +91,13 @@ export  async function obtenerCostoAlmacenamientoActual() {
 }
 
 
-export  async function agregarDatosGlobales(fechaActualizacion, costoIngreso, costoEgreso, costoRelocalizar,costoAlmacenamiento){
+export  async function agregarDatosGlobales(costoIngreso, costoEgreso, costoRelocalizacion,costoAlmacenamiento){
     let code=0;
     try {
         const {error} = await supabase
             .from('Global')
             .insert([
-                {fechaActualizacion:fechaActualizacion, costoIngreso:costoIngreso, costoEgreso:costoEgreso, costoRelocalizar:costoRelocalizar,costoAlmacenamiento:costoAlmacenamiento},
+                {costoIngreso:costoIngreso, costoEgreso:costoEgreso, costoRelocalizacion:costoRelocalizacion,costoAlmacenamiento:costoAlmacenamiento},
             ])
             .select()
         if (error) {
