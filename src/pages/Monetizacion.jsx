@@ -1,14 +1,16 @@
 import {HomeIcon} from "@heroicons/react/24/outline";
 import {Card,CardHeader,Typography,Button,CardBody,CardFooter,IconButton,Checkbox,Alert,Select,Option} from "@material-tailwind/react";
 import {Link} from "react-router-dom";
-import React, {useState,useMemo,useEffect} from "react";
+import {useState,useMemo,useEffect,useRef} from "react";
 import {buscaridPosicionAlquiler } from "../scripts/posiciones";
 import { obtenerAlquileres} from "../scripts/alquileres";
 import {obtenerNombreCliente} from "../scripts/clientes";
 import {calcularMontoTotalAlquiler,cierrreMes} from "../scripts/monetizacion";
-import {obtenerClientes} from "../scripts/clientes";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
-const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha de Renovacion", "Monto Total (USD)","Renueva?"];
+
+const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posición", "Fecha de Renovación", "Monto Total (USD)","Renueva?"];
 
   export default function Monetizacion() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,8 +24,8 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   const [open, setOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
 
-
   const date = new Date();
+  const currentYear = date.getFullYear();
   const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const currentMonth = monthNames[date.getMonth()];
@@ -148,10 +150,35 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     }
   };
 
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    const tableColumn = ["Cliente", "Alquiler", "Fecha de Ingreso","Posición", "Fecha de Renovación", "Monto Total (USD)", "Renuevan"]; // Aquí debes poner los nombres de las columnas de tu tabla
+    const tableRows = []; // Aquí debes poner los datos de tu tabla
+    // Llena la tabla con datos
+    filteredRows.forEach(alquileres => {
+      const alquilerData = [
+        clientes[alquileres.codigoCliente],
+        alquileres.idAlquiler,
+        alquileres.fechaIngreso,
+        posiciones[alquileres.idAlquiler],
+        alquileres.fechaRenovacion ? alquileres.fechaRenovacion : 'Sin Fecha de Renovación',
+        montosTotales[alquileres.idAlquiler].toString(),
+        renuevan.includes(alquileres.idAlquiler) ? 'Sí' : 'No'
+      ];
+      tableRows.push(alquilerData);
+    });
+
+     // Dibuja la tabla en el PDF
+   autoTable(doc, { head: [tableColumn], body: tableRows });
+
+  // Guarda el PDF
+  doc.save(`${currentYear}-BWS-Monetizacion-${currentMonth}.pdf`);
+};
+
 
     return (
       <Card className="lg:h-full lg:w-full">
-        <CardHeader floated={false} shadow={false} className="rounded-none">
+        <CardHeader floated={false} shadow={false} className="rounded-none"> 
           <div className="mb-8 flex items-center justify-between  gap-8">
             <div className="shadow-md bg-red-500  rounded-md  xl:w-2/4">
               <Typography className=" md:text-3xl lg:text-4xl xl:text-6xl font-bold  text-center  pt-4  text-white " variant="h2" color="blue-gray">
@@ -172,6 +199,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                   console.log(idAlquileres);
                   setOpen(true);
                   setTimeout(() => {
+                    exportToPDF();
                     cierrreMes(renuevan, idAlquileres);
                     setOpen(false);
                   }, 5000);
