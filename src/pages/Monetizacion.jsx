@@ -45,22 +45,6 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
     );
   }
 
-  async function fetchClientes() {
-    try {
-      const clientesFromDB = await obtenerClientes();
-      const clientesFiltrados = clientesFromDB.filter(cliente => cliente.baja === "0");
-      setClientes(clientesFiltrados || []);
-    } catch (error) {
-      console.error('Error al obtener clientes:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchClientes();
-  }, []);
-
   async function fetchAlquileres() {
     try {
       const alquileresFromDB= await obtenerAlquileres();
@@ -133,12 +117,12 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
   };
 
   const filteredRows = useMemo(() => {
-    if (selectedClient === "") {
+    if (selectedClient === "" || !selectedClient) {
       return alquileres
     } else {
       return alquileres.filter(
         (row) =>
-          row.codigoCliente.toLowerCase().includes(selectedClient.toLowerCase()) 
+        row.codigoCliente && row.codigoCliente.toLowerCase().includes(selectedClient.toLowerCase())
       );
     }
   }, [selectedClient, alquileres]);
@@ -178,27 +162,7 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
               </Typography>
             </div>
             <div className="w-full md:w-72 sm:w-11/12  ">
-            <div className='flex'>
-                                <Select
-                                    size="lg"
-                                    label="Seleccionar Cliente"
-                                    onChange={(value) => setSelectedClient(value)} // Almacena el cliente seleccionado
-                                    value={selectedClient} // Establece el valor seleccionado del Select
-                                  >
-                                    <Option value="">Todos</Option>
-                                    {Object.keys(clientes).map((codigo) => (
-                                      <Option key={codigo} value={codigo}>
-                                        {clientes[codigo]}
-                                      </Option>
-
-                                    ))
-                                    }
-                                  </Select>
-                              </div>
             </div>
-            <div className="flex flex-col items-center rounded-md mx-auto justify-between gap-4 md:flex-row ">
-
-          </div>
           {!open && (
           <Button
                   size="lg"
@@ -231,6 +195,25 @@ const TABLE_HEAD = ["Cliente", "Alquiler", "Fecha de Ingreso","Posicion", "Fecha
                         className="rounded-none border-l-4 border-[#2ec946] bg-[#2ec946]/10 font-medium text-[#2ec946]">
                           MES {currentMonth} CERRADO
                       </Alert>
+            <div className="w-full md:w-72 sm:w-11/12  ">
+            <div className='flex'>
+                                <Select
+                                    size="lg"
+                                    label="Seleccionar Cliente"
+                                    onChange={(value) => setSelectedClient(value)} // Almacena el cliente seleccionado
+                                    value={selectedClient} // Establece el valor seleccionado del Select
+                                  >
+                                    <Option value="">Todos</Option>
+                                    {Object.keys(clientes).map((codigo) => (
+                                      <Option key={codigo} value={codigo}>
+                                        {clientes[codigo]}
+                                      </Option>
+
+                                    ))
+                                    }
+                                  </Select>
+                              </div>
+            </div>
         </CardHeader>
         <CardBody className="overflow-scroll px-0 -mt-6">
         {!loading ? ( // Si NO está cargando, se muestra un mensaje o un indicador de carga
